@@ -1,6 +1,7 @@
 # internal coverage PR comment and badge v0.0.2
 # badge and comment job logic should be tuned for personal vs org use
 # (see badge job comments below)
+# as of Nov 2021: broken on forks, needs much refactoring for previous behavior
 name: Coverage
 
 on:
@@ -169,8 +170,8 @@ jobs:
         output: 'both'
 
     - name: Add Coverage PR Comment
-      uses: marocchino/sticky-pull-request-comment@v2.1.1
-      if: ${{ github.event_name == 'pull_request' }}
+      uses: marocchino/sticky-pull-request-comment@v2.2.0
+      if: ${{ github.event_name == 'pull_request' && github.actor == github.repository_owner }}
       with:
         header: coverage
         recreate: true
@@ -200,6 +201,7 @@ jobs:
     name: Comment on PR with coverage delta
     runs-on: ubuntu-20.04
     needs: [test, base]
+    if: ${{ github.actor == github.repository_owner }}
 
     steps:
     - name: Environment
@@ -258,7 +260,7 @@ jobs:
         fi
 
     - name: Comment PR with test coverage delta
-      uses: marocchino/sticky-pull-request-comment@v2.1.1
+      uses: marocchino/sticky-pull-request-comment@v2.2.0
       if: env.HAVE_BASE_COVERAGE == 'true'
       with:
         header: delta
