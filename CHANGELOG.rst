@@ -1,3 +1,12 @@
+v0.6.5 (2023-08-19)
+-------------------
+
+Other
+~~~~~
+
+- Keep changelog up to date manually as I don't know how to autogenerate. [Thomas David Baker]
+- Remove versioningit because it makes packaging hard for Linux distrubutions. [Thomas David Baker]
+
 v0.6.4 (2023-08-13)
 -------------------
 
