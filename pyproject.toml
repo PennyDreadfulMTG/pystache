@@ -1,7 +1,7 @@
 [build-system]
 requires = [
     "setuptools>=42",
-    "versioningit >= 1.1.1",
+    "setuptools_scm[toml]>=6.2",
 ]
 
 build-backend = "setuptools.build_meta"
@@ -65,13 +65,5 @@ force_grid_wrap = 0
 use_parentheses = true
 ensure_newline_before_comments = true
 
-[tool.versioningit.next-version]
-method = "smallest"
-
-[tool.versioningit.format]
-distance = "{next_version}.dev{distance}"
-dirty = "{version}+d{build_date:%Y%m%d}"
-distance-dirty = "{next_version}.dev{distance}"
-
-[tool.versioningit.write]
-file = "pystache/_version.py"
+[tool.setuptools_scm]
+write_to = "pystache/_version.py"
