@@ -1,0 +1,7 @@
+pystache.tests.examples.lambdas module
+======================================
+
+.. automodule:: pystache.tests.examples.lambdas
+   :members:
+   :undoc-members:
+   :show-inheritance:

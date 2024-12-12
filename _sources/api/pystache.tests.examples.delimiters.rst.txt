@@ -1,0 +1,7 @@
+pystache.tests.examples.delimiters module
+=========================================
+
+.. automodule:: pystache.tests.examples.delimiters
+   :members:
+   :undoc-members:
+   :show-inheritance:

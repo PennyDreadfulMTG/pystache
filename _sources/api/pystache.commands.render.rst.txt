@@ -1,0 +1,7 @@
+pystache.commands.render module
+===============================
+
+.. automodule:: pystache.commands.render
+   :members:
+   :undoc-members:
+   :show-inheritance:

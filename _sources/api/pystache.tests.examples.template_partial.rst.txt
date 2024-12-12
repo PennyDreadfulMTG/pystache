@@ -1,0 +1,7 @@
+pystache.tests.examples.template\_partial module
+================================================
+
+.. automodule:: pystache.tests.examples.template_partial
+   :members:
+   :undoc-members:
+   :show-inheritance:

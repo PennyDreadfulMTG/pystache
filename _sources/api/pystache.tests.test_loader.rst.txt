@@ -1,0 +1,7 @@
+pystache.tests.test\_loader module
+==================================
+
+.. automodule:: pystache.tests.test_loader
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+pystache.init module
+====================
+
+.. automodule:: pystache.init
+   :members:
+   :undoc-members:
+   :show-inheritance:

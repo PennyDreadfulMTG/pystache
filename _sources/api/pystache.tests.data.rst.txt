@@ -1,0 +1,26 @@
+pystache.tests.data package
+===========================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pystache.tests.data.locator
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pystache.tests.data.views
+
+Module contents
+---------------
+
+.. automodule:: pystache.tests.data
+   :members:
+   :undoc-members:
+   :show-inheritance:
