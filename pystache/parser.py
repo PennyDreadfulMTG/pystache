@@ -237,17 +237,12 @@ class _Parser(object):
     def parse(self, template):
         """
         Parse a template string starting at some index.
-
         This method uses the current tag delimiter.
 
         Arguments:
-
           template: a unicode string that is the template to parse.
 
-          index: the index at which to start parsing.
-
         Returns:
-
           a ParsedTemplate instance.
 
         """
@@ -336,6 +331,10 @@ class _Parser(object):
                 node = self._make_interpolation_node(tag_type, tag_key, leading_whitespace)
 
             parsed_template.add(node)
+
+        # Some open/close tags were mismatched.
+        if states:
+            raise ParsingError('Tag mismatch.')
 
         # Avoid adding spurious empty strings to the parse tree.
         if start_index != len(template):
