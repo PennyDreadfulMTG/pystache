@@ -1,0 +1,7 @@
+pystache.specloader module
+==========================
+
+.. automodule:: pystache.specloader
+   :members:
+   :undoc-members:
+   :show-inheritance:

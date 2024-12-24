@@ -1,0 +1,7 @@
+pystache.tests.main module
+==========================
+
+.. automodule:: pystache.tests.main
+   :members:
+   :undoc-members:
+   :show-inheritance:

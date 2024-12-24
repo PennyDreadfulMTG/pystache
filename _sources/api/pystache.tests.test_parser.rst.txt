@@ -1,0 +1,7 @@
+pystache.tests.test\_parser module
+==================================
+
+.. automodule:: pystache.tests.test_parser
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+pystache.tests.examples.double\_section module
+==============================================
+
+.. automodule:: pystache.tests.examples.double_section
+   :members:
+   :undoc-members:
+   :show-inheritance:

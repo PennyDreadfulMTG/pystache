@@ -1,0 +1,7 @@
+pystache
+========
+
+.. toctree::
+   :maxdepth: 4
+
+   pystache

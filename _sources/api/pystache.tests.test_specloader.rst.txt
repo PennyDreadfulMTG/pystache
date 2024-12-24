@@ -1,0 +1,7 @@
+pystache.tests.test\_specloader module
+======================================
+
+.. automodule:: pystache.tests.test_specloader
+   :members:
+   :undoc-members:
+   :show-inheritance:
