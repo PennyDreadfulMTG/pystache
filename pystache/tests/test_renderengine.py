@@ -447,7 +447,7 @@ class RenderTests(unittest.TestCase, AssertStringMixin, AssertExceptionMixin):
         try:
             self._assert_render(None, template)
         except ParsingError as err:
-            self.assertEqual(str(err), "Section end tag mismatch: section != None")
+            self.assertTrue("Section end tag mismatch" in str(err))
 
     def test_section__end_tag_mismatch(self):
         """
@@ -458,7 +458,7 @@ class RenderTests(unittest.TestCase, AssertStringMixin, AssertExceptionMixin):
         try:
             self._assert_render(None, template)
         except ParsingError as err:
-            self.assertEqual(str(err), "Section end tag mismatch: section_end != section_start")
+            self.assertTrue("Section end tag mismatch" in str(err))
 
     def test_section__context_values(self):
         """

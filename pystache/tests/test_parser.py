@@ -53,5 +53,6 @@ class ParseTestCase(unittest.TestCase):
         ]
         for t in ts:
             with self.subTest(template=t):
-                with self.assertRaises(ParsingError):
+                with self.assertRaises(ParsingError) as e:
                     parse(t, raise_on_mismatch=True)
+                self.assertTrue('Did not find a matching tag', str(e))

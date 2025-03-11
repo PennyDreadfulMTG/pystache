@@ -72,7 +72,20 @@ def _compile_template_re(delimiters):
 
 
 class ParsingError(Exception):
-    pass
+    def __init__(self, message, info = None):
+        super().__init__(message)
+        self._info = info
+
+    @property
+    def info(self):
+        """
+        :returns: Additional information about the error.
+        :rtype: tuple[str, int, str] | None
+        The first tuple member is the tag type, for example "/"
+        The second one - the position in the template where the parsing failure has happened
+        The third one - the tag key, for example "em"
+        """
+        return self._info
 
 
 ## Node types
@@ -255,6 +268,7 @@ class _Parser(object):
 
         states = []
 
+        tag_key = ""
         while True:
             match = self._template_re.search(template, start_index)
 
@@ -308,7 +322,21 @@ class _Parser(object):
 
             if tag_type == '/':
                 if tag_key != section_key:
-                    raise ParsingError('Section end tag mismatch: %s != %s' % (tag_key, section_key))
+                    exc_state = (
+                        tag_type,
+                        start_index,
+                        tag_key,
+                    )
+                    raise ParsingError(
+                        'Section end tag mismatch at the position %d. Found {{%s%s}}, expected {{%s%s}}' % (
+                            start_index,
+                            tag_type,
+                            tag_key,
+                            tag_type if section_key else '#',
+                            section_key or tag_key,
+                        ),
+                        exc_state
+                    )
 
                 # Restore previous state with newly found section data.
                 parsed_section = parsed_template
@@ -335,7 +363,17 @@ class _Parser(object):
 
         # Some open/close tags were mismatched.
         if self._raise_on_mismatch and states:
-            raise ParsingError('Tag mismatch.')
+            exc_state = (
+                states[0][0],
+                states[0][1],
+                states[0][2] or tag_key,
+            )
+            raise ParsingError(
+                "Did not find a matching tag for {{%s%s}}. Its section starts at the position %d" % (
+                    exc_state[0], exc_state[2], exc_state[1]
+                ),
+                exc_state
+            )
 
         # Avoid adding spurious empty strings to the parse tree.
         if start_index != len(template):
