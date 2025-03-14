@@ -335,7 +335,7 @@ class _Parser(object):
             if tag_type == '/':
                 if tag_key != section_key:
                     error_details = ParsingErrorDetails(
-                        tag_type if section_key else '#',
+                        tag_type,
                         start_index,
                         tag_key,
                     )
