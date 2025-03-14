@@ -1,0 +1,7 @@
+pystache.template\_spec module
+==============================
+
+.. automodule:: pystache.template_spec
+   :members:
+   :undoc-members:
+   :show-inheritance:

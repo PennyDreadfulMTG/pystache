@@ -1,0 +1,7 @@
+pystache.tests.test\_locator module
+===================================
+
+.. automodule:: pystache.tests.test_locator
+   :members:
+   :undoc-members:
+   :show-inheritance:

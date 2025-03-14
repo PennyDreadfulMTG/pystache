@@ -1,0 +1,7 @@
+pystache.tests.examples.inverted module
+=======================================
+
+.. automodule:: pystache.tests.examples.inverted
+   :members:
+   :undoc-members:
+   :show-inheritance:

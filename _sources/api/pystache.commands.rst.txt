@@ -1,0 +1,19 @@
+pystache.commands package
+=========================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pystache.commands.render
+   pystache.commands.test
+
+Module contents
+---------------
+
+.. automodule:: pystache.commands
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+pystache.tests.examples.escaped module
+======================================
+
+.. automodule:: pystache.tests.examples.escaped
+   :members:
+   :undoc-members:
+   :show-inheritance:

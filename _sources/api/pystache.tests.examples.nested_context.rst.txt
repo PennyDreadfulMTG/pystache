@@ -1,0 +1,7 @@
+pystache.tests.examples.nested\_context module
+==============================================
+
+.. automodule:: pystache.tests.examples.nested_context
+   :members:
+   :undoc-members:
+   :show-inheritance:

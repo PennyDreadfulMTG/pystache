@@ -1,0 +1,7 @@
+pystache.tests.test\_renderer module
+====================================
+
+.. automodule:: pystache.tests.test_renderer
+   :members:
+   :undoc-members:
+   :show-inheritance:
