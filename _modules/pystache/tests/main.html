@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.tests.main &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.tests.main</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.tests.main</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Exposes a main() function that runs all tests in the project.</span>
+
+<span class="sd">This module is for our test console script.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">unittest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">unittest</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestCase</span><span class="p">,</span> <span class="n">TestProgram</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pystache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.tests.common</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PACKAGE_DIR</span><span class="p">,</span>
+    <span class="n">PROJECT_DIR</span><span class="p">,</span>
+    <span class="n">UNITTEST_FILE_PREFIX</span><span class="p">,</span>
+    <span class="n">get_module_names</span><span class="p">,</span>
+    <span class="n">get_spec_test_dir</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.tests.doctesting</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_doctests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.tests.spectesting</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_spec_tests</span>
+
+<span class="c1"># If this command option is present, then the spec test and doctest directories</span>
+<span class="c1"># will be inserted if not provided.</span>
+<span class="n">FROM_SOURCE_OPTION</span> <span class="o">=</span> <span class="s2">&quot;--from-source&quot;</span>
+
+
+<div class="viewcode-block" id="make_extra_tests">
+<a class="viewcode-back" href="../../../api/pystache.tests.main.html#pystache.tests.main.make_extra_tests">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_extra_tests</span><span class="p">(</span><span class="n">text_doctest_dir</span><span class="p">,</span> <span class="n">spec_test_dir</span><span class="p">):</span>
+    <span class="n">tests</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">text_doctest_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">doctest_suites</span> <span class="o">=</span> <span class="n">get_doctests</span><span class="p">(</span><span class="n">text_doctest_dir</span><span class="p">)</span>
+        <span class="n">tests</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">doctest_suites</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">spec_test_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">spec_testcases</span> <span class="o">=</span> <span class="n">get_spec_tests</span><span class="p">(</span><span class="n">spec_test_dir</span><span class="p">)</span>
+        <span class="n">tests</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">spec_testcases</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">unittest</span><span class="o">.</span><span class="n">TestSuite</span><span class="p">(</span><span class="n">tests</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="make_test_program_class">
+<a class="viewcode-back" href="../../../api/pystache.tests.main.html#pystache.tests.main.make_test_program_class">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_test_program_class</span><span class="p">(</span><span class="n">extra_tests</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a subclass of unittest.TestProgram.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># The function unittest.main() is an alias for unittest.TestProgram&#39;s</span>
+    <span class="c1"># constructor.  TestProgram&#39;s constructor does the following:</span>
+    <span class="c1">#</span>
+    <span class="c1"># 1. calls self.parseArgs(argv),</span>
+    <span class="c1"># 2. which in turn calls self.createTests().</span>
+    <span class="c1"># 3. then the constructor calls self.runTests().</span>
+    <span class="c1">#</span>
+    <span class="c1"># The createTests() method sets the self.test attribute by calling one</span>
+    <span class="c1"># of self.testLoader&#39;s &quot;loadTests&quot; methods.  Each loadTest method returns</span>
+    <span class="c1"># a unittest.TestSuite instance.  Thus, self.test is set to a TestSuite</span>
+    <span class="c1"># instance prior to calling runTests().</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">PystacheTestProgram</span><span class="p">(</span><span class="n">TestProgram</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Instantiating an instance of this class runs all tests.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">createTests</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Load tests and set self.test to a unittest.TestSuite instance</span>
+
+<span class="sd">            Compare--</span>
+
+<span class="sd">              http://docs.python.org/library/unittest.html#unittest.TestSuite</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">PystacheTestProgram</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">createTests</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">addTests</span><span class="p">(</span><span class="n">extra_tests</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">PystacheTestProgram</span></div>
+
+
+
+<span class="c1"># Do not include &quot;test&quot; in this function&#39;s name to avoid it getting</span>
+<span class="c1"># picked up by nosetests.</span>
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../../api/pystache.tests.main.html#pystache.tests.main.main">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">sys_argv</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run all tests in the project.</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">      sys_argv: a reference to sys.argv.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO: use logging module</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pystache: running tests: argv: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">sys_argv</span><span class="p">))</span>
+
+    <span class="n">should_source_exist</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">spec_test_dir</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">project_dir</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys_argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">sys_argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">FROM_SOURCE_OPTION</span><span class="p">:</span>
+        <span class="c1"># This usually means the test_pystache.py convenience script</span>
+        <span class="c1"># in the source directory was run.</span>
+        <span class="n">should_source_exist</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">sys_argv</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># TODO: use optparse command options instead.</span>
+        <span class="n">project_dir</span> <span class="o">=</span> <span class="n">sys_argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">sys_argv</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">should_source_exist</span><span class="p">:</span>
+            <span class="n">project_dir</span> <span class="o">=</span> <span class="n">PROJECT_DIR</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># TODO: use optparse command options instead.</span>
+        <span class="n">spec_test_dir</span> <span class="o">=</span> <span class="n">sys_argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">sys_argv</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">project_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Then auto-detect the spec test directory.</span>
+            <span class="n">_spec_test_dir</span> <span class="o">=</span> <span class="n">get_spec_test_dir</span><span class="p">(</span><span class="n">project_dir</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">_spec_test_dir</span><span class="p">):</span>
+                <span class="c1"># Then the user is probably using a downloaded sdist rather</span>
+                <span class="c1"># than a repository clone (since the sdist does not include</span>
+                <span class="c1"># the spec test directory).</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pystache: skipping spec tests: spec test directory &quot;</span>
+                      <span class="s2">&quot;not found&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">spec_test_dir</span> <span class="o">=</span> <span class="n">_spec_test_dir</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys_argv</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">sys_argv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">):</span>
+        <span class="c1"># Then no explicit module or test names were provided, so</span>
+        <span class="c1"># auto-detect all unit tests.</span>
+        <span class="n">module_names</span> <span class="o">=</span> <span class="n">_discover_test_modules</span><span class="p">(</span><span class="n">PACKAGE_DIR</span><span class="p">)</span>
+        <span class="n">sys_argv</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">module_names</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">project_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Add the current module for unit tests contained here</span>
+            <span class="n">sys_argv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+    <span class="n">extra_tests</span> <span class="o">=</span> <span class="n">make_extra_tests</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="n">spec_test_dir</span><span class="p">)</span>
+    <span class="n">test_program_class</span> <span class="o">=</span> <span class="n">make_test_program_class</span><span class="p">(</span><span class="n">extra_tests</span><span class="p">)</span>
+
+    <span class="c1"># We pass None for the module because we do not want the unittest</span>
+    <span class="c1"># module to resolve module names relative to a given module.</span>
+    <span class="c1"># (This would require importing all of the unittest modules from</span>
+    <span class="c1"># this module.)  See the loadTestsFromName() method of the</span>
+    <span class="c1"># unittest.TestLoader class for more details on this parameter.</span>
+    <span class="n">test_program_class</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="n">sys_argv</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+
+    <span class="c1"># No need to return since unitttest.main() exits.</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_discover_test_modules</span><span class="p">(</span><span class="n">package_dir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Discover and return a sorted list of the names of unit-test modules.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_unittest_module</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">file_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">UNITTEST_FILE_PREFIX</span><span class="p">)</span>
+
+    <span class="n">names</span> <span class="o">=</span> <span class="n">get_module_names</span><span class="p">(</span><span class="n">package_dir</span><span class="o">=</span><span class="n">package_dir</span><span class="p">,</span> <span class="n">should_include</span><span class="o">=</span><span class="n">is_unittest_module</span><span class="p">)</span>
+
+    <span class="c1"># This is a sanity check to ensure that the unit-test discovery</span>
+    <span class="c1"># methods are working.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No unit-test modules found--</span><span class="se">\n</span><span class="s2">  in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">package_dir</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">names</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

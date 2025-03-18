@@ -1,0 +1,320 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.context module &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pystache.defaults module" href="pystache.defaults.html" />
+    <link rel="prev" title="pystache.common module" href="pystache.common.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pystache</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pystache.html">pystache package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pystache.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="pystache.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pystache.common.html">pystache.common module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pystache.context module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.defaults.html">pystache.defaults module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.init.html">pystache.init module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.loader.html">pystache.loader module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.locator.html">pystache.locator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.parsed.html">pystache.parsed module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.parser.html">pystache.parser module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.renderengine.html">pystache.renderengine module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.renderer.html">pystache.renderer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.specloader.html">pystache.specloader module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.template_spec.html">pystache.template_spec module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.html#module-pystache">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pystache</a></li>
+          <li class="breadcrumb-item"><a href="pystache.html">pystache package</a></li>
+      <li class="breadcrumb-item active">pystache.context module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/pystache.context.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pystache.context">
+<span id="pystache-context-module"></span><h1>pystache.context module<a class="headerlink" href="#module-pystache.context" title="Link to this heading"></a></h1>
+<p>Exposes a ContextStack class.</p>
+<p>The Mustache spec makes a special distinction between two types of context
+stack elements: hashes and objects.  For the purposes of interpreting the
+spec, we define these categories mutually exclusively as follows:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Hash: an item whose type is a subclass of dict.</p></li>
+<li><p>Object: an item that is neither a hash nor an instance of a
+built-in type.</p></li>
+</ol>
+</div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.context.ContextStack">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.context.</span></span><span class="sig-name descname"><span class="pre">ContextStack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/context.html#ContextStack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.context.ContextStack" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Provides dictionary-like access to a stack of zero or more items.</p>
+<p>Instances of this class are meant to act as the rendering context
+when rendering Mustache templates in accordance with mustache(5)
+and the Mustache spec.</p>
+<p>Instances encapsulate a private stack of hashes, objects, and built-in
+type instances.  Querying the stack for the value of a key queries
+the items in the stack in order from last-added objects to first
+(last in, first out).</p>
+<p>Caution: this class does not currently support recursive nesting in
+that items in the stack cannot themselves be ContextStack instances.</p>
+<p>See the docstrings of the methods of this class for more details.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.context.ContextStack.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/context.html#ContextStack.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.context.ContextStack.copy" title="Link to this definition"></a></dt>
+<dd><p>Return a copy of this instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.context.ContextStack.create">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/context.html#ContextStack.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.context.ContextStack.create" title="Link to this definition"></a></dt>
+<dd><p>Build a ContextStack instance from a sequence of context-like items.</p>
+<p>This factory-style method is more general than the ContextStack class’s
+constructor in that, unlike the constructor, the argument list
+can itself contain ContextStack instances.</p>
+<p>Here is an example illustrating various aspects of this method:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;animal&#39;</span><span class="p">:</span> <span class="s1">&#39;cat&#39;</span><span class="p">,</span> <span class="s1">&#39;vegetable&#39;</span><span class="p">:</span> <span class="s1">&#39;carrot&#39;</span><span class="p">,</span> <span class="s1">&#39;mineral&#39;</span><span class="p">:</span> <span class="s1">&#39;copper&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obj2</span> <span class="o">=</span> <span class="n">ContextStack</span><span class="p">({</span><span class="s1">&#39;vegetable&#39;</span><span class="p">:</span> <span class="s1">&#39;spinach&#39;</span><span class="p">,</span> <span class="s1">&#39;mineral&#39;</span><span class="p">:</span> <span class="s1">&#39;silver&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">context</span> <span class="o">=</span> <span class="n">ContextStack</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">obj1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">obj2</span><span class="p">,</span> <span class="n">mineral</span><span class="o">=</span><span class="s1">&#39;gold&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;animal&#39;</span><span class="p">)</span>
+<span class="go">&#39;cat&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vegetable&#39;</span><span class="p">)</span>
+<span class="go">&#39;spinach&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mineral&#39;</span><span class="p">)</span>
+<span class="go">&#39;gold&#39;</span>
+</pre></div>
+</div>
+<p>Arguments:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">context<span class="colon">:</span></dt>
+<dd class="field-odd"><p>zero or more dictionaries, ContextStack instances, or objects
+with which to populate the initial context stack.  None
+arguments will be skipped.  Items in the context list are
+added to the stack in order so that later items in the argument
+list take precedence over earlier items.  This behavior is the
+same as the constructor.</p>
+</dd>
+<dt class="field-even">kwargs<span class="colon">:</span></dt>
+<dd class="field-even"><p>additional key-value data to add to the context stack.
+As these arguments appear after all items in the context list,
+in the case of key conflicts these values take precedence over
+all items in the context list.  This behavior is the same as
+the constructor’s.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.context.ContextStack.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/context.html#ContextStack.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.context.ContextStack.get" title="Link to this definition"></a></dt>
+<dd><p>Resolve a dotted name against the current context stack.</p>
+<p>This function follows the rules outlined in the section of the
+spec regarding tag interpolation.  This function returns the value
+as is and does not coerce the return value to a string.</p>
+<p>Arguments:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">name<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a dotted or non-dotted name.</p>
+</dd>
+<dt class="field-even">default<span class="colon">:</span></dt>
+<dd class="field-even"><p>the value to return if name resolution fails at any point.
+Defaults to the empty string per the Mustache spec.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>This method queries items in the stack in order from last-added
+objects to first (last in, first out).  The value returned is
+the value of the key in the first item that contains the key.
+If the key is not found in any item in the stack, then the default
+value is returned.  The default value defaults to None.</p>
+<p>In accordance with the spec, this method queries items in the
+stack for a key differently depending on whether the item is a
+hash, object, or neither (as defined in the module docstring):</p>
+<ol class="arabic simple">
+<li><p>Hash: if the item is a hash, then the key’s value is the
+dictionary value of the key.  If the dictionary doesn’t contain
+the key, then the key is considered not found.</p></li>
+<li><p>Object: if the item is an an object, then the method looks for
+an attribute with the same name as the key.  If an attribute
+with that name exists, the value of the attribute is returned.
+If the attribute is callable, however (i.e. if the attribute
+is a method), then the attribute is called with no arguments
+and that value is returned.  If there is no attribute with
+the same name as the key, then the key is considered not found.</p></li>
+<li><p>Neither: if the item is neither a hash nor an object, then
+the key is considered not found.</p></li>
+</ol>
+<p><em>Caution</em>:</p>
+<blockquote>
+<div><p>Callables are handled differently depending on whether they are
+dictionary values, as in (1) above, or attributes, as in (2).
+The former are returned as-is, while the latter are first
+called and that value returned.</p>
+<p>Here is an example to illustrate:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">greet</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="s2">&quot;Hi Bob!&quot;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Greeter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">greet</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dct</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;greet&#39;</span><span class="p">:</span> <span class="n">greet</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">Greeter</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">greet</span> <span class="o">=</span> <span class="n">greet</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dct</span><span class="p">[</span><span class="s1">&#39;greet&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="n">obj</span><span class="o">.</span><span class="n">greet</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ContextStack</span><span class="p">(</span><span class="n">dct</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;greet&#39;</span><span class="p">)</span>  
+<span class="go">&lt;function greet at 0x...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ContextStack</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;greet&#39;</span><span class="p">)</span>
+<span class="go">&#39;Hi Bob!&#39;</span>
+</pre></div>
+</div>
+<p>TODO: explain the rationale for this difference in treatment.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.context.ContextStack.pop">
+<span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/context.html#ContextStack.pop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.context.ContextStack.pop" title="Link to this definition"></a></dt>
+<dd><p>Pop an item off of the stack, and return it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.context.ContextStack.push">
+<span class="sig-name descname"><span class="pre">push</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/context.html#ContextStack.push"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.context.ContextStack.push" title="Link to this definition"></a></dt>
+<dd><p>Push an item onto the stack.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.context.ContextStack.top">
+<span class="sig-name descname"><span class="pre">top</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/context.html#ContextStack.top"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.context.ContextStack.top" title="Link to this definition"></a></dt>
+<dd><p>Return the item last added to the stack.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="pystache.context.KeyNotFoundError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.context.</span></span><span class="sig-name descname"><span class="pre">KeyNotFoundError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/context.html#KeyNotFoundError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.context.KeyNotFoundError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="pystache.common.html#pystache.common.PystacheError" title="pystache.common.PystacheError"><code class="xref py py-class docutils literal notranslate"><span class="pre">PystacheError</span></code></a></p>
+<p>An exception raised when a key is not found in a context stack.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.context.NotFound">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.context.</span></span><span class="sig-name descname"><span class="pre">NotFound</span></span><a class="reference internal" href="../_modules/pystache/context.html#NotFound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.context.NotFound" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pystache.common.html" class="btn btn-neutral float-left" title="pystache.common module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pystache.defaults.html" class="btn btn-neutral float-right" title="pystache.defaults module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

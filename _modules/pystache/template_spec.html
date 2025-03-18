@@ -1,0 +1,167 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.template_spec &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.template_spec</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.template_spec</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Provides a class to customize template information on a per-view basis.</span>
+
+<span class="sd">To customize template properties for a particular view, create that view</span>
+<span class="sd">from a class that subclasses TemplateSpec.  The &quot;spec&quot; in TemplateSpec</span>
+<span class="sd">stands for &quot;special&quot; or &quot;specified&quot; template information.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="TemplateSpec">
+<a class="viewcode-back" href="../../api/pystache.template_spec.html#pystache.TemplateSpec">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TemplateSpec</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A mixin or interface for specifying custom template information.</span>
+
+<span class="sd">    The &quot;spec&quot; in TemplateSpec can be taken to mean that the template</span>
+<span class="sd">    information is either &quot;specified&quot; or &quot;special.&quot;</span>
+
+<span class="sd">    A view should subclass this class only if customized template loading</span>
+<span class="sd">    is needed.  The following attributes allow one to customize/override</span>
+<span class="sd">    template information on a per view basis.  A None value means to use</span>
+<span class="sd">    default behavior for that value and perform no customization.  All</span>
+<span class="sd">    attributes are initialized to None.</span>
+
+<span class="sd">    Attributes:</span>
+
+<span class="sd">      template: the template as a string.</span>
+
+<span class="sd">      template_encoding: the encoding used by the template.</span>
+
+<span class="sd">      template_extension: the template file extension.  Defaults to &quot;mustache&quot;.</span>
+<span class="sd">        Pass False for no extension (i.e. extensionless template files).</span>
+
+<span class="sd">      template_name: the name of the template.</span>
+
+<span class="sd">      template_path: absolute path to the template.</span>
+
+<span class="sd">      template_rel_directory: the directory containing the template file,</span>
+<span class="sd">        relative to the directory containing the module defining the class.</span>
+
+<span class="sd">      template_rel_path: the path to the template file, relative to the</span>
+<span class="sd">        directory containing the module defining the class.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">template</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">template_encoding</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">template_extension</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">template_path</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">template_rel_directory</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">template_rel_path</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

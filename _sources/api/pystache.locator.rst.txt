@@ -1,0 +1,7 @@
+pystache.locator module
+=======================
+
+.. automodule:: pystache.locator
+   :members:
+   :undoc-members:
+   :show-inheritance:

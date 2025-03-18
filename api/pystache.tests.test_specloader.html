@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.tests.test_specloader module &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pystache.common module" href="pystache.common.html" />
+    <link rel="prev" title="pystache.tests.test_simple module" href="pystache.tests.test_simple.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pystache</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pystache.html">pystache package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pystache.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pystache.commands.html">pystache.commands package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="pystache.tests.html">pystache.tests package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.html#module-pystache">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pystache</a></li>
+          <li class="breadcrumb-item"><a href="pystache.html">pystache package</a></li>
+          <li class="breadcrumb-item"><a href="pystache.tests.html">pystache.tests package</a></li>
+      <li class="breadcrumb-item active">pystache.tests.test_specloader module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/pystache.tests.test_specloader.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pystache.tests.test_specloader">
+<span id="pystache-tests-test-specloader-module"></span><h1>pystache.tests.test_specloader module<a class="headerlink" href="#module-pystache.tests.test_specloader" title="Link to this heading"></a></h1>
+<p>Unit tests for template_spec.py.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.AssertPathsMixin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.tests.test_specloader.</span></span><span class="sig-name descname"><span class="pre">AssertPathsMixin</span></span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#AssertPathsMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.AssertPathsMixin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A unittest.TestCase mixin to check path equality.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.AssertPathsMixin.assertPaths">
+<span class="sig-name descname"><span class="pre">assertPaths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actual</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#AssertPathsMixin.assertPaths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.AssertPathsMixin.assertPaths" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.SpecLoaderTests">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.tests.test_specloader.</span></span><span class="sig-name descname"><span class="pre">SpecLoaderTests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#SpecLoaderTests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.SpecLoaderTests" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code>, <a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.AssertIsMixin" title="pystache.tests.common.AssertIsMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssertIsMixin</span></code></a>, <a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.AssertStringMixin" title="pystache.tests.common.AssertStringMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssertStringMixin</span></code></a>, <a class="reference internal" href="#pystache.tests.test_specloader.AssertPathsMixin" title="pystache.tests.test_specloader.AssertPathsMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssertPathsMixin</span></code></a></p>
+<p>Tests template_spec.SpecLoader.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.SpecLoaderTests.test_find__template_path">
+<span class="sig-name descname"><span class="pre">test_find__template_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#SpecLoaderTests.test_find__template_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.SpecLoaderTests.test_find__template_path" title="Link to this definition"></a></dt>
+<dd><p>Test _find() with TemplateSpec.template_path.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.SpecLoaderTests.test_init__defaults">
+<span class="sig-name descname"><span class="pre">test_init__defaults</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#SpecLoaderTests.test_init__defaults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.SpecLoaderTests.test_init__defaults" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.SpecLoaderTests.test_init__loader">
+<span class="sig-name descname"><span class="pre">test_init__loader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#SpecLoaderTests.test_init__loader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.SpecLoaderTests.test_init__loader" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.SpecLoaderTests.test_load__template__correct_loader">
+<span class="sig-name descname"><span class="pre">test_load__template__correct_loader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#SpecLoaderTests.test_load__template__correct_loader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.SpecLoaderTests.test_load__template__correct_loader" title="Link to this definition"></a></dt>
+<dd><p>Test that reader.unicode() is called correctly.</p>
+<p>This test tests that the correct reader is called with the correct
+arguments.  This is a catch-all test to supplement the other
+test cases.  It tests SpecLoader.load() independent of reader.unicode()
+being implemented correctly (and tested).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.SpecLoaderTests.test_load__template__type_str">
+<span class="sig-name descname"><span class="pre">test_load__template__type_str</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#SpecLoaderTests.test_load__template__type_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.SpecLoaderTests.test_load__template__type_str" title="Link to this definition"></a></dt>
+<dd><p>Test the template attribute: str string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.SpecLoaderTests.test_load__template__type_unicode">
+<span class="sig-name descname"><span class="pre">test_load__template__type_unicode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#SpecLoaderTests.test_load__template__type_unicode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.SpecLoaderTests.test_load__template__type_unicode" title="Link to this definition"></a></dt>
+<dd><p>Test the template attribute: unicode string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.SpecLoaderTests.test_load__template__unicode_non_ascii">
+<span class="sig-name descname"><span class="pre">test_load__template__unicode_non_ascii</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#SpecLoaderTests.test_load__template__unicode_non_ascii"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.SpecLoaderTests.test_load__template__unicode_non_ascii" title="Link to this definition"></a></dt>
+<dd><p>Test the template attribute: non-ascii unicode string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.SpecLoaderTests.test_load__template__with_template_encoding">
+<span class="sig-name descname"><span class="pre">test_load__template__with_template_encoding</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#SpecLoaderTests.test_load__template__with_template_encoding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.SpecLoaderTests.test_load__template__with_template_encoding" title="Link to this definition"></a></dt>
+<dd><p>Test the template attribute: with template encoding attribute.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.TemplateSpecTests">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.tests.test_specloader.</span></span><span class="sig-name descname"><span class="pre">TemplateSpecTests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#TemplateSpecTests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.TemplateSpecTests" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code>, <a class="reference internal" href="#pystache.tests.test_specloader.AssertPathsMixin" title="pystache.tests.test_specloader.AssertPathsMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssertPathsMixin</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.TemplateSpecTests.test_find__with_directory">
+<span class="sig-name descname"><span class="pre">test_find__with_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#TemplateSpecTests.test_find__with_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.TemplateSpecTests.test_find__with_directory" title="Link to this definition"></a></dt>
+<dd><p>Test _find() with a view that has a directory specified.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.TemplateSpecTests.test_find__without_directory">
+<span class="sig-name descname"><span class="pre">test_find__without_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#TemplateSpecTests.test_find__without_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.TemplateSpecTests.test_find__without_directory" title="Link to this definition"></a></dt>
+<dd><p>Test _find() with a view that doesn’t have a directory specified.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.TemplateSpecTests.test_find_relative">
+<span class="sig-name descname"><span class="pre">test_find_relative</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#TemplateSpecTests.test_find_relative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative" title="Link to this definition"></a></dt>
+<dd><p>Test _find_relative(): default behavior (no attributes set).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_extension">
+<span class="sig-name descname"><span class="pre">test_find_relative__template_extension</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#TemplateSpecTests.test_find_relative__template_extension"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_extension" title="Link to this definition"></a></dt>
+<dd><p>Test _find_relative(): template_extension attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_name">
+<span class="sig-name descname"><span class="pre">test_find_relative__template_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#TemplateSpecTests.test_find_relative__template_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_name" title="Link to this definition"></a></dt>
+<dd><p>Test _find_relative(): template_name attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_rel_directory">
+<span class="sig-name descname"><span class="pre">test_find_relative__template_rel_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#TemplateSpecTests.test_find_relative__template_rel_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_rel_directory" title="Link to this definition"></a></dt>
+<dd><p>Test _find_relative(): template_rel_directory attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_rel_path__file_name_only">
+<span class="sig-name descname"><span class="pre">test_find_relative__template_rel_path__file_name_only</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#TemplateSpecTests.test_find_relative__template_rel_path__file_name_only"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_rel_path__file_name_only" title="Link to this definition"></a></dt>
+<dd><p>Test _find_relative(): template_rel_path attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_rel_path__file_name_with_directory">
+<span class="sig-name descname"><span class="pre">test_find_relative__template_rel_path__file_name_with_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#TemplateSpecTests.test_find_relative__template_rel_path__file_name_with_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_rel_path__file_name_with_directory" title="Link to this definition"></a></dt>
+<dd><p>Test _find_relative(): template_rel_path attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.TemplateSpecTests.test_get_template">
+<span class="sig-name descname"><span class="pre">test_get_template</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#TemplateSpecTests.test_get_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.TemplateSpecTests.test_get_template" title="Link to this definition"></a></dt>
+<dd><p>Test get_template(): default behavior (no attributes set).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.TemplateSpecTests.test_get_template__template_encoding">
+<span class="sig-name descname"><span class="pre">test_get_template__template_encoding</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#TemplateSpecTests.test_get_template__template_encoding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.TemplateSpecTests.test_get_template__template_encoding" title="Link to this definition"></a></dt>
+<dd><p>Test get_template(): template_encoding attribute.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.Thing">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.tests.test_specloader.</span></span><span class="sig-name descname"><span class="pre">Thing</span></span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#Thing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.Thing" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.ViewTestCase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.tests.test_specloader.</span></span><span class="sig-name descname"><span class="pre">ViewTestCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#ViewTestCase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.ViewTestCase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code>, <a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.AssertStringMixin" title="pystache.tests.common.AssertStringMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssertStringMixin</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.ViewTestCase.test_accessing_properties_on_parent_object_from_child_objects">
+<span class="sig-name descname"><span class="pre">test_accessing_properties_on_parent_object_from_child_objects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#ViewTestCase.test_accessing_properties_on_parent_object_from_child_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.ViewTestCase.test_accessing_properties_on_parent_object_from_child_objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.ViewTestCase.test_basic_method_calls">
+<span class="sig-name descname"><span class="pre">test_basic_method_calls</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#ViewTestCase.test_basic_method_calls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.ViewTestCase.test_basic_method_calls" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.ViewTestCase.test_complex">
+<span class="sig-name descname"><span class="pre">test_complex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#ViewTestCase.test_complex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.ViewTestCase.test_complex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.ViewTestCase.test_hierarchical_partials_with_lambdas">
+<span class="sig-name descname"><span class="pre">test_hierarchical_partials_with_lambdas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#ViewTestCase.test_hierarchical_partials_with_lambdas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.ViewTestCase.test_hierarchical_partials_with_lambdas" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.ViewTestCase.test_higher_order_lambda">
+<span class="sig-name descname"><span class="pre">test_higher_order_lambda</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#ViewTestCase.test_higher_order_lambda"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.ViewTestCase.test_higher_order_lambda" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.ViewTestCase.test_higher_order_replace">
+<span class="sig-name descname"><span class="pre">test_higher_order_replace</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#ViewTestCase.test_higher_order_replace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.ViewTestCase.test_higher_order_replace" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.ViewTestCase.test_higher_order_rot13">
+<span class="sig-name descname"><span class="pre">test_higher_order_rot13</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#ViewTestCase.test_higher_order_rot13"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.ViewTestCase.test_higher_order_rot13" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.ViewTestCase.test_inverted">
+<span class="sig-name descname"><span class="pre">test_inverted</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#ViewTestCase.test_inverted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.ViewTestCase.test_inverted" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.ViewTestCase.test_inverted_lists">
+<span class="sig-name descname"><span class="pre">test_inverted_lists</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#ViewTestCase.test_inverted_lists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.ViewTestCase.test_inverted_lists" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.ViewTestCase.test_non_callable_attributes">
+<span class="sig-name descname"><span class="pre">test_non_callable_attributes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#ViewTestCase.test_non_callable_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.ViewTestCase.test_non_callable_attributes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.ViewTestCase.test_partials_with_lambda">
+<span class="sig-name descname"><span class="pre">test_partials_with_lambda</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#ViewTestCase.test_partials_with_lambda"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.ViewTestCase.test_partials_with_lambda" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.ViewTestCase.test_template_path_for_partials">
+<span class="sig-name descname"><span class="pre">test_template_path_for_partials</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#ViewTestCase.test_template_path_for_partials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.ViewTestCase.test_template_path_for_partials" title="Link to this definition"></a></dt>
+<dd><p>Test that View.template_rel_path is respected for partials.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_specloader.ViewTestCase.test_template_rel_directory">
+<span class="sig-name descname"><span class="pre">test_template_rel_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_specloader.html#ViewTestCase.test_template_rel_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_specloader.ViewTestCase.test_template_rel_directory" title="Link to this definition"></a></dt>
+<dd><p>Test that View.template_rel_directory is respected.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pystache.tests.test_simple.html" class="btn btn-neutral float-left" title="pystache.tests.test_simple module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pystache.common.html" class="btn btn-neutral float-right" title="pystache.common module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

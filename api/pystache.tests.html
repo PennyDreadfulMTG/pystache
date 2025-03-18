@@ -1,0 +1,667 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.tests package &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pystache.tests.data package" href="pystache.tests.data.html" />
+    <link rel="prev" title="pystache.commands.test module" href="pystache.commands.test.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pystache</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pystache.html">pystache package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pystache.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pystache.commands.html">pystache.commands package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pystache.tests package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.html#module-pystache">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pystache</a></li>
+          <li class="breadcrumb-item"><a href="pystache.html">pystache package</a></li>
+      <li class="breadcrumb-item active">pystache.tests package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/pystache.tests.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pystache-tests-package">
+<h1>pystache.tests package<a class="headerlink" href="#pystache-tests-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.data.html">pystache.tests.data package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.data.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.data.locator.html">pystache.tests.data.locator package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.data.locator.html#module-pystache.tests.data.locator">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.data.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.data.views.html">pystache.tests.data.views module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.data.views.html#pystache.tests.data.views.NonAscii"><code class="docutils literal notranslate"><span class="pre">NonAscii</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.data.views.html#pystache.tests.data.views.SampleView"><code class="docutils literal notranslate"><span class="pre">SampleView</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.data.views.html#pystache.tests.data.views.SayHello"><code class="docutils literal notranslate"><span class="pre">SayHello</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.data.html#module-pystache.tests.data">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.examples.html">pystache.tests.examples package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.examples.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.comments.html">pystache.tests.examples.comments module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.comments.html#pystache.tests.examples.comments.Comments"><code class="docutils literal notranslate"><span class="pre">Comments</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.complex.html">pystache.tests.examples.complex module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.complex.html#pystache.tests.examples.complex.Complex"><code class="docutils literal notranslate"><span class="pre">Complex</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.delimiters.html">pystache.tests.examples.delimiters module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.delimiters.html#pystache.tests.examples.delimiters.Delimiters"><code class="docutils literal notranslate"><span class="pre">Delimiters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.double_section.html">pystache.tests.examples.double_section module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.double_section.html#pystache.tests.examples.double_section.DoubleSection"><code class="docutils literal notranslate"><span class="pre">DoubleSection</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.escaped.html">pystache.tests.examples.escaped module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.escaped.html#pystache.tests.examples.escaped.Escaped"><code class="docutils literal notranslate"><span class="pre">Escaped</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.inverted.html">pystache.tests.examples.inverted module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.inverted.html#pystache.tests.examples.inverted.Inverted"><code class="docutils literal notranslate"><span class="pre">Inverted</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.inverted.html#pystache.tests.examples.inverted.InvertedLists"><code class="docutils literal notranslate"><span class="pre">InvertedLists</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.lambdas.html">pystache.tests.examples.lambdas module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.lambdas.html#pystache.tests.examples.lambdas.Lambdas"><code class="docutils literal notranslate"><span class="pre">Lambdas</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.lambdas.html#pystache.tests.examples.lambdas.replace"><code class="docutils literal notranslate"><span class="pre">replace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.lambdas.html#pystache.tests.examples.lambdas.rot"><code class="docutils literal notranslate"><span class="pre">rot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.nested_context.html">pystache.tests.examples.nested_context module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.nested_context.html#pystache.tests.examples.nested_context.NestedContext"><code class="docutils literal notranslate"><span class="pre">NestedContext</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.partials_with_lambdas.html">pystache.tests.examples.partials_with_lambdas module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.partials_with_lambdas.html#pystache.tests.examples.partials_with_lambdas.PartialsWithLambdas"><code class="docutils literal notranslate"><span class="pre">PartialsWithLambdas</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.readme.html">pystache.tests.examples.readme module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.readme.html#pystache.tests.examples.readme.SayHello"><code class="docutils literal notranslate"><span class="pre">SayHello</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.simple.html">pystache.tests.examples.simple module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.simple.html#pystache.tests.examples.simple.Simple"><code class="docutils literal notranslate"><span class="pre">Simple</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.template_partial.html">pystache.tests.examples.template_partial module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.template_partial.html#pystache.tests.examples.template_partial.TemplatePartial"><code class="docutils literal notranslate"><span class="pre">TemplatePartial</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.unescaped.html">pystache.tests.examples.unescaped module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.unescaped.html#pystache.tests.examples.unescaped.Unescaped"><code class="docutils literal notranslate"><span class="pre">Unescaped</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.unicode_input.html">pystache.tests.examples.unicode_input module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.unicode_input.html#pystache.tests.examples.unicode_input.UnicodeInput"><code class="docutils literal notranslate"><span class="pre">UnicodeInput</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.unicode_output.html">pystache.tests.examples.unicode_output module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.unicode_output.html#pystache.tests.examples.unicode_output.UnicodeOutput"><code class="docutils literal notranslate"><span class="pre">UnicodeOutput</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.examples.html#module-pystache.tests.examples">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.benchmark.html">pystache.tests.benchmark module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.benchmark.html#pystache.tests.benchmark.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.benchmark.html#pystache.tests.benchmark.make_test_function"><code class="docutils literal notranslate"><span class="pre">make_test_function()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.common.html">pystache.tests.common module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.AssertExceptionMixin"><code class="docutils literal notranslate"><span class="pre">AssertExceptionMixin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.AssertExceptionMixin.assertException"><code class="docutils literal notranslate"><span class="pre">AssertExceptionMixin.assertException()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.AssertIsMixin"><code class="docutils literal notranslate"><span class="pre">AssertIsMixin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.AssertIsMixin.assertIs"><code class="docutils literal notranslate"><span class="pre">AssertIsMixin.assertIs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.AssertStringMixin"><code class="docutils literal notranslate"><span class="pre">AssertStringMixin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.AssertStringMixin.assertString"><code class="docutils literal notranslate"><span class="pre">AssertStringMixin.assertString()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.Attachable"><code class="docutils literal notranslate"><span class="pre">Attachable</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.SetupDefaults"><code class="docutils literal notranslate"><span class="pre">SetupDefaults</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.SetupDefaults.setup_defaults"><code class="docutils literal notranslate"><span class="pre">SetupDefaults.setup_defaults()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.SetupDefaults.teardown_defaults"><code class="docutils literal notranslate"><span class="pre">SetupDefaults.teardown_defaults()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.get_data_path"><code class="docutils literal notranslate"><span class="pre">get_data_path()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.get_module_names"><code class="docutils literal notranslate"><span class="pre">get_module_names()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.get_spec_test_dir"><code class="docutils literal notranslate"><span class="pre">get_spec_test_dir()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.html_escape"><code class="docutils literal notranslate"><span class="pre">html_escape()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.doctesting.html">pystache.tests.doctesting module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.doctesting.html#pystache.tests.doctesting.get_doctests"><code class="docutils literal notranslate"><span class="pre">get_doctests()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.main.html">pystache.tests.main module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.main.html#pystache.tests.main.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.main.html#pystache.tests.main.make_extra_tests"><code class="docutils literal notranslate"><span class="pre">make_extra_tests()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.main.html#pystache.tests.main.make_test_program_class"><code class="docutils literal notranslate"><span class="pre">make_test_program_class()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.spectesting.html">pystache.tests.spectesting module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.spectesting.html#pystache.tests.spectesting.SpecTestBase"><code class="docutils literal notranslate"><span class="pre">SpecTestBase</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.spectesting.html#pystache.tests.spectesting.get_spec_tests"><code class="docutils literal notranslate"><span class="pre">get_spec_tests()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.spectesting.html#pystache.tests.spectesting.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.test___init__.html">pystache.tests.test___init__ module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test___init__.html#pystache.tests.test___init__.InitTests"><code class="docutils literal notranslate"><span class="pre">InitTests</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test___init__.html#pystache.tests.test___init__.InitTests.test___all__"><code class="docutils literal notranslate"><span class="pre">InitTests.test___all__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test___init__.html#pystache.tests.test___init__.InitTests.test_version_defined"><code class="docutils literal notranslate"><span class="pre">InitTests.test_version_defined()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.test_commands.html">pystache.tests.test_commands module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_commands.html#pystache.tests.test_commands.CommandsTestCase"><code class="docutils literal notranslate"><span class="pre">CommandsTestCase</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_commands.html#pystache.tests.test_commands.CommandsTestCase.callScript"><code class="docutils literal notranslate"><span class="pre">CommandsTestCase.callScript()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_commands.html#pystache.tests.test_commands.CommandsTestCase.setUp"><code class="docutils literal notranslate"><span class="pre">CommandsTestCase.setUp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_commands.html#pystache.tests.test_commands.CommandsTestCase.tearDown"><code class="docutils literal notranslate"><span class="pre">CommandsTestCase.tearDown()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_commands.html#pystache.tests.test_commands.CommandsTestCase.testMainSimple"><code class="docutils literal notranslate"><span class="pre">CommandsTestCase.testMainSimple()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_commands.html#pystache.tests.test_commands.MockStdout"><code class="docutils literal notranslate"><span class="pre">MockStdout</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_commands.html#pystache.tests.test_commands.MockStdout.write"><code class="docutils literal notranslate"><span class="pre">MockStdout.write()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.test_context.html">pystache.tests.test_context module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test__repr"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test__repr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test__str"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test__str()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_copy"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_copy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_create__context"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_create__context()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_create__dictionary"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_create__dictionary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_create__kwarg"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_create__kwarg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_create__none"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_create__none()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_create__object"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_create__object()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_create__precedence_keyword"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_create__precedence_keyword()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_create__precedence_positional"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_create__precedence_positional()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_dot_notation__autocall"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_dot_notation__autocall()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_dot_notation__dict"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_dot_notation__dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_dot_notation__missing_attr_or_key"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_dot_notation__missing_attr_or_key()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_dot_notation__missing_part_terminates_search"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_dot_notation__missing_part_terminates_search()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_dot_notation__mixed_dict_and_obj"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_dot_notation__mixed_dict_and_obj()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_dot_notation__user_object"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_dot_notation__user_object()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_get__fallback"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_get__fallback()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_get__key_missing"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_get__key_missing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_get__key_present"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_get__key_present()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_get__precedence"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_get__precedence()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_get__single_dot"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_get__single_dot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_get__single_dot__missing"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_get__single_dot__missing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_init__many_elements"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_init__many_elements()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_init__no_elements"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_init__no_elements()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_pop"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_pop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_push"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_push()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase.test_top"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase.test_top()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.DictLike"><code class="docutils literal notranslate"><span class="pre">DictLike</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase.assertNotFound"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase.assertNotFound()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase.test_built_in_type__integer"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase.test_built_in_type__integer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase.test_built_in_type__list"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase.test_built_in_type__list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase.test_built_in_type__string"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase.test_built_in_type__string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase.test_dictionary__attributes_not_checked"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase.test_dictionary__attributes_not_checked()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase.test_dictionary__callable_not_called"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase.test_dictionary__callable_not_called()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase.test_dictionary__dict_subclass"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase.test_dictionary__dict_subclass()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase.test_dictionary__key_missing"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase.test_dictionary__key_missing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase.test_dictionary__key_present"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase.test_dictionary__key_present()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase.test_object__attribute_is_callable"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase.test_object__attribute_is_callable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase.test_object__attribute_missing"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase.test_object__attribute_missing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase.test_object__attribute_present"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase.test_object__attribute_present()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase.test_object__dict_like"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase.test_object__dict_like()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase.test_object__non_built_in_type"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase.test_object__non_built_in_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase.test_object__property__raising_exception"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase.test_object__property__raising_exception()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.SimpleObject"><code class="docutils literal notranslate"><span class="pre">SimpleObject</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.SimpleObject.foo_callable"><code class="docutils literal notranslate"><span class="pre">SimpleObject.foo_callable()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.test_defaults.html">pystache.tests.test_defaults module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_defaults.html#pystache.tests.test_defaults.DefaultsConfigurableTestCase"><code class="docutils literal notranslate"><span class="pre">DefaultsConfigurableTestCase</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_defaults.html#pystache.tests.test_defaults.DefaultsConfigurableTestCase.setUp"><code class="docutils literal notranslate"><span class="pre">DefaultsConfigurableTestCase.setUp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_defaults.html#pystache.tests.test_defaults.DefaultsConfigurableTestCase.tearDown"><code class="docutils literal notranslate"><span class="pre">DefaultsConfigurableTestCase.tearDown()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_defaults.html#pystache.tests.test_defaults.DefaultsConfigurableTestCase.test_delimiters"><code class="docutils literal notranslate"><span class="pre">DefaultsConfigurableTestCase.test_delimiters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_defaults.html#pystache.tests.test_defaults.DefaultsConfigurableTestCase.test_missing_tags"><code class="docutils literal notranslate"><span class="pre">DefaultsConfigurableTestCase.test_missing_tags()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_defaults.html#pystache.tests.test_defaults.DefaultsConfigurableTestCase.test_tag_escape"><code class="docutils literal notranslate"><span class="pre">DefaultsConfigurableTestCase.test_tag_escape()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.test_examples.html">pystache.tests.test_examples module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_examples.html#pystache.tests.test_examples.TestView"><code class="docutils literal notranslate"><span class="pre">TestView</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_examples.html#pystache.tests.test_examples.TestView.test_comments"><code class="docutils literal notranslate"><span class="pre">TestView.test_comments()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_examples.html#pystache.tests.test_examples.TestView.test_delimiters"><code class="docutils literal notranslate"><span class="pre">TestView.test_delimiters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_examples.html#pystache.tests.test_examples.TestView.test_double_section"><code class="docutils literal notranslate"><span class="pre">TestView.test_double_section()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_examples.html#pystache.tests.test_examples.TestView.test_escaping"><code class="docutils literal notranslate"><span class="pre">TestView.test_escaping()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_examples.html#pystache.tests.test_examples.TestView.test_literal"><code class="docutils literal notranslate"><span class="pre">TestView.test_literal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_examples.html#pystache.tests.test_examples.TestView.test_nested_context"><code class="docutils literal notranslate"><span class="pre">TestView.test_nested_context()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_examples.html#pystache.tests.test_examples.TestView.test_nested_context_is_available_in_view"><code class="docutils literal notranslate"><span class="pre">TestView.test_nested_context_is_available_in_view()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_examples.html#pystache.tests.test_examples.TestView.test_partial_in_partial_has_access_to_grand_parent_context"><code class="docutils literal notranslate"><span class="pre">TestView.test_partial_in_partial_has_access_to_grand_parent_context()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_examples.html#pystache.tests.test_examples.TestView.test_template_partial"><code class="docutils literal notranslate"><span class="pre">TestView.test_template_partial()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_examples.html#pystache.tests.test_examples.TestView.test_template_partial_extension"><code class="docutils literal notranslate"><span class="pre">TestView.test_template_partial_extension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_examples.html#pystache.tests.test_examples.TestView.test_unicode_input"><code class="docutils literal notranslate"><span class="pre">TestView.test_unicode_input()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_examples.html#pystache.tests.test_examples.TestView.test_unicode_output"><code class="docutils literal notranslate"><span class="pre">TestView.test_unicode_output()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.test_loader.html">pystache.tests.test_loader module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests"><code class="docutils literal notranslate"><span class="pre">LoaderTests</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.setUp"><code class="docutils literal notranslate"><span class="pre">LoaderTests.setUp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.tearDown"><code class="docutils literal notranslate"><span class="pre">LoaderTests.tearDown()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_init__extension"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_init__extension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_init__extension__default"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_init__extension__default()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_init__file_encoding"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_init__file_encoding()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_init__file_encoding__default"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_init__file_encoding__default()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_init__to_unicode"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_init__to_unicode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_init__to_unicode__default"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_init__to_unicode__default()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_load_file"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_load_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_load_name"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_load_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_read"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_read()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_read__encoding__argument"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_read__encoding__argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_read__file_encoding__attribute"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_read__file_encoding__attribute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_read__to_unicode__attribute"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_read__to_unicode__attribute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_unicode__basic__input_str"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_unicode__basic__input_str()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_unicode__basic__input_unicode"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_unicode__basic__input_unicode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_unicode__basic__input_unicode_subclass"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_unicode__basic__input_unicode_subclass()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_unicode__encoding_argument"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_unicode__encoding_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_unicode__to_unicode__attribute"><code class="docutils literal notranslate"><span class="pre">LoaderTests.test_unicode__to_unicode__attribute()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.test_locator.html">pystache.tests.test_locator module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests"><code class="docutils literal notranslate"><span class="pre">LocatorTests</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests.test_find_file"><code class="docutils literal notranslate"><span class="pre">LocatorTests.test_find_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests.test_find_name"><code class="docutils literal notranslate"><span class="pre">LocatorTests.test_find_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests.test_find_name__non_existent_template_fails"><code class="docutils literal notranslate"><span class="pre">LocatorTests.test_find_name__non_existent_template_fails()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests.test_find_name__precedence"><code class="docutils literal notranslate"><span class="pre">LocatorTests.test_find_name__precedence()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests.test_find_name__using_list_of_paths"><code class="docutils literal notranslate"><span class="pre">LocatorTests.test_find_name__using_list_of_paths()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests.test_find_object"><code class="docutils literal notranslate"><span class="pre">LocatorTests.test_find_object()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests.test_find_object__none_file_name"><code class="docutils literal notranslate"><span class="pre">LocatorTests.test_find_object__none_file_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests.test_find_object__none_object_directory"><code class="docutils literal notranslate"><span class="pre">LocatorTests.test_find_object__none_object_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests.test_get_object_directory"><code class="docutils literal notranslate"><span class="pre">LocatorTests.test_get_object_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests.test_get_object_directory__not_hasattr_module"><code class="docutils literal notranslate"><span class="pre">LocatorTests.test_get_object_directory__not_hasattr_module()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests.test_init__extension"><code class="docutils literal notranslate"><span class="pre">LocatorTests.test_init__extension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests.test_make_file_name"><code class="docutils literal notranslate"><span class="pre">LocatorTests.test_make_file_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests.test_make_file_name__template_extension_argument"><code class="docutils literal notranslate"><span class="pre">LocatorTests.test_make_file_name__template_extension_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests.test_make_template_name"><code class="docutils literal notranslate"><span class="pre">LocatorTests.test_make_template_name()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.test_parser.html">pystache.tests.test_parser module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_parser.html#pystache.tests.test_parser.ParseTestCase"><code class="docutils literal notranslate"><span class="pre">ParseTestCase</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_parser.html#pystache.tests.test_parser.ParseTestCase.test_parse_fail"><code class="docutils literal notranslate"><span class="pre">ParseTestCase.test_parse_fail()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_parser.html#pystache.tests.test_parser.ParseTestCase.test_parse_okay"><code class="docutils literal notranslate"><span class="pre">ParseTestCase.test_parse_okay()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_parser.html#pystache.tests.test_parser.RegularExpressionTestCase"><code class="docutils literal notranslate"><span class="pre">RegularExpressionTestCase</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_parser.html#pystache.tests.test_parser.RegularExpressionTestCase.test_re"><code class="docutils literal notranslate"><span class="pre">RegularExpressionTestCase.test_re()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.test_pystache.html">pystache.tests.test_pystache module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests"><code class="docutils literal notranslate"><span class="pre">PystacheTests</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.non_strings_expected"><code class="docutils literal notranslate"><span class="pre">PystacheTests.non_strings_expected</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.setUp"><code class="docutils literal notranslate"><span class="pre">PystacheTests.setUp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.tearDown"><code class="docutils literal notranslate"><span class="pre">PystacheTests.tearDown()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test__section__non_false_value"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test__section__non_false_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test_basic"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test_basic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test_comments"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test_comments()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test_even_less_basic"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test_even_less_basic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test_false_sections_are_hidden"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test_false_sections_are_hidden()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test_ignores_misses"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test_ignores_misses()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test_implicit_iterator"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test_implicit_iterator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test_kwargs"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test_kwargs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test_later_list_section_with_escapable_character"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test_later_list_section_with_escapable_character()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test_less_basic"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test_less_basic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test_non_strings"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test_non_strings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test_render_zero"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test_render_zero()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test_sections"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test_sections()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test_surrounding_whitepace_not_altered"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test_surrounding_whitepace_not_altered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test_true_sections_are_shown"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test_true_sections_are_shown()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests.test_unicode"><code class="docutils literal notranslate"><span class="pre">PystacheTests.test_unicode()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.test_renderengine.html">pystache.tests.test_renderengine module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderEngineTestCase"><code class="docutils literal notranslate"><span class="pre">RenderEngineTestCase</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderEngineTestCase.test_init"><code class="docutils literal notranslate"><span class="pre">RenderEngineTestCase.test_init()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests"><code class="docutils literal notranslate"><span class="pre">RenderTests</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test__escape"><code class="docutils literal notranslate"><span class="pre">RenderTests.test__escape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test__escape_does_not_call_literal"><code class="docutils literal notranslate"><span class="pre">RenderTests.test__escape_does_not_call_literal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test__escape_preserves_unicode_subclasses"><code class="docutils literal notranslate"><span class="pre">RenderTests.test__escape_preserves_unicode_subclasses()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test__literal"><code class="docutils literal notranslate"><span class="pre">RenderTests.test__literal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test__non_basestring__literal_and_escaped"><code class="docutils literal notranslate"><span class="pre">RenderTests.test__non_basestring__literal_and_escaped()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test__resolve_partial"><code class="docutils literal notranslate"><span class="pre">RenderTests.test__resolve_partial()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_comment__multiline"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_comment__multiline()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_custom_delimiters__not_retroactive"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_custom_delimiters__not_retroactive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_custom_delimiters__sections"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_custom_delimiters__sections()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_dot_notation"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_dot_notation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_dot_notation__missing_part_terminates_search"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_dot_notation__missing_part_terminates_search()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_dot_notation__multiple_levels"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_dot_notation__multiple_levels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_implicit_iterator__escaped"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_implicit_iterator__escaped()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_implicit_iterator__literal"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_implicit_iterator__literal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_interpolation__built_in_type__integer"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_interpolation__built_in_type__integer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_interpolation__built_in_type__list"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_interpolation__built_in_type__list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_interpolation__built_in_type__string"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_interpolation__built_in_type__string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_interpolation__falsey__none"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_interpolation__falsey__none()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_interpolation__falsey__zero"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_interpolation__falsey__zero()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_interpolation__nonascii_nonunicode"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_interpolation__nonascii_nonunicode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_lambda__returning_nonascii_nonunicode"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_lambda__returning_nonascii_nonunicode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_literal__in_partial"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_literal__in_partial()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_literal__in_section"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_literal__in_section()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_literal__sigil"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_literal__sigil()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_partial"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_partial()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_partial__context_values"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_partial__context_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_render"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__context_precedence"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__context_precedence()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__context_values"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__context_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__end_tag_mismatch"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__end_tag_mismatch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__end_tag_with_no_start_tag"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__end_tag_with_no_start_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__iterable"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__iterable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__lambda()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda__list"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__lambda__list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda__mixed_list"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__lambda__mixed_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda__no_reinterpolation"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__lambda__no_reinterpolation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda__not_on_context_stack"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__lambda__not_on_context_stack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda__returning_nonascii_nonunicode"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__lambda__returning_nonascii_nonunicode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda__returning_nonstring"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__lambda__returning_nonstring()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda__tag_in_output"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__lambda__tag_in_output()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__list_referencing_outer_context"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__list_referencing_outer_context()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__nested_truthy"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__nested_truthy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__nested_with_same_keys"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__nested_with_same_keys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__nonascii_nonunicode"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__nonascii_nonunicode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__output_not_interpolated"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__output_not_interpolated()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__string_values_not_lists"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_section__string_values_not_lists()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_tag__output_not_interpolated"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_tag__output_not_interpolated()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_tag__output_not_interpolated__section"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_tag__output_not_interpolated__section()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_to_str"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_to_str()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_to_str__lambda"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_to_str__lambda()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_to_str__section_lambda"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_to_str__section_lambda()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_to_str__section_list"><code class="docutils literal notranslate"><span class="pre">RenderTests.test_to_str__section_list()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.mock_literal"><code class="docutils literal notranslate"><span class="pre">mock_literal()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.test_renderer.html">pystache.tests.test_renderer module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_decode_errors"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_decode_errors()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_decode_errors__default"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_decode_errors__default()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_escape"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_escape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_escape__default"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_escape__default()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_file_encoding"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_file_encoding()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_file_encoding__default"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_file_encoding__default()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_file_extension"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_file_extension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_file_extension__default"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_file_extension__default()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_missing_tags"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_missing_tags()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_missing_tags__default"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_missing_tags__default()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_partials"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_partials()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_partials__default"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_partials__default()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_search_dirs__default"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_search_dirs__default()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_search_dirs__list"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_search_dirs__list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_search_dirs__string"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_search_dirs__string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_string_encoding"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_string_encoding()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_string_encoding__default"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase.test_string_encoding__default()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests"><code class="docutils literal notranslate"><span class="pre">RendererTests</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test__make_loader__attributes"><code class="docutils literal notranslate"><span class="pre">RendererTests.test__make_loader__attributes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test__make_loader__return_type"><code class="docutils literal notranslate"><span class="pre">RendererTests.test__make_loader__return_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_custom_string_coercion_via_assignment"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_custom_string_coercion_via_assignment()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_custom_string_coercion_via_subclassing"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_custom_string_coercion_via_subclassing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_make_resolve_partial"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_make_resolve_partial()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_make_resolve_partial__unicode"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_make_resolve_partial__unicode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__context"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_render__context()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__context_and_kwargs"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_render__context_and_kwargs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__context_and_kwargs__precedence"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_render__context_and_kwargs__precedence()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__kwargs_and_no_context"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_render__kwargs_and_no_context()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__kwargs_does_not_modify_context"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_render__kwargs_does_not_modify_context()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__non_ascii_character"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_render__non_ascii_character()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__nonascii_template"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_render__nonascii_template()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__object"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_render__object()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__return_type"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_render__return_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__str"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_render__str()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__template_spec"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_render__template_spec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__unicode"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_render__unicode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__view"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_render__view()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render_name"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_render_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render_path"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_render_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_unicode__decode_errors"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_unicode__decode_errors()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_unicode__string_encoding"><code class="docutils literal notranslate"><span class="pre">RendererTests.test_unicode__string_encoding()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__escape__has_access_to_original_unicode_subclass"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests.test__escape__has_access_to_original_unicode_subclass()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__escape__returns_unicode"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests.test__escape__returns_unicode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__escape__uses_renderer_escape"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests.test__escape__uses_renderer_escape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__escape__uses_renderer_unicode"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests.test__escape__uses_renderer_unicode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__literal__handles_unicode"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests.test__literal__handles_unicode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__literal__returns_unicode"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests.test__literal__returns_unicode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__literal__uses_renderer_unicode"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests.test__literal__uses_renderer_unicode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__missing_tags__unknown_value"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests.test__missing_tags__unknown_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__resolve_context"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests.test__resolve_context()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__resolve_context__missing_tags_strict"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests.test__resolve_context__missing_tags_strict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__resolve_partial__not_found"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests.test__resolve_partial__not_found()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__resolve_partial__not_found__missing_tags_strict"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests.test__resolve_partial__not_found__missing_tags_strict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__resolve_partial__not_found__partials_dict"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests.test__resolve_partial__not_found__partials_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__resolve_partial__not_found__partials_dict__missing_tags_strict"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests.test__resolve_partial__not_found__partials_dict__missing_tags_strict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__resolve_partial__returns_unicode"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests.test__resolve_partial__returns_unicode()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.mock_unicode"><code class="docutils literal notranslate"><span class="pre">mock_unicode()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.test_simple.html">pystache.tests.test_simple module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple"><code class="docutils literal notranslate"><span class="pre">TestSimple</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple.test_callables"><code class="docutils literal notranslate"><span class="pre">TestSimple.test_callables()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple.test_empty_context"><code class="docutils literal notranslate"><span class="pre">TestSimple.test_empty_context()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple.test_looping_and_negation_context"><code class="docutils literal notranslate"><span class="pre">TestSimple.test_looping_and_negation_context()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple.test_nested_context"><code class="docutils literal notranslate"><span class="pre">TestSimple.test_nested_context()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple.test_non_existent_value_renders_blank"><code class="docutils literal notranslate"><span class="pre">TestSimple.test_non_existent_value_renders_blank()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple.test_rendering_partial"><code class="docutils literal notranslate"><span class="pre">TestSimple.test_rendering_partial()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple.test_template_partial_extension"><code class="docutils literal notranslate"><span class="pre">TestSimple.test_template_partial_extension()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.test_specloader.html">pystache.tests.test_specloader module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.AssertPathsMixin"><code class="docutils literal notranslate"><span class="pre">AssertPathsMixin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.AssertPathsMixin.assertPaths"><code class="docutils literal notranslate"><span class="pre">AssertPathsMixin.assertPaths()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests"><code class="docutils literal notranslate"><span class="pre">SpecLoaderTests</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_find__template_path"><code class="docutils literal notranslate"><span class="pre">SpecLoaderTests.test_find__template_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_init__defaults"><code class="docutils literal notranslate"><span class="pre">SpecLoaderTests.test_init__defaults()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_init__loader"><code class="docutils literal notranslate"><span class="pre">SpecLoaderTests.test_init__loader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_load__template__correct_loader"><code class="docutils literal notranslate"><span class="pre">SpecLoaderTests.test_load__template__correct_loader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_load__template__type_str"><code class="docutils literal notranslate"><span class="pre">SpecLoaderTests.test_load__template__type_str()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_load__template__type_unicode"><code class="docutils literal notranslate"><span class="pre">SpecLoaderTests.test_load__template__type_unicode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_load__template__unicode_non_ascii"><code class="docutils literal notranslate"><span class="pre">SpecLoaderTests.test_load__template__unicode_non_ascii()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_load__template__with_template_encoding"><code class="docutils literal notranslate"><span class="pre">SpecLoaderTests.test_load__template__with_template_encoding()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests"><code class="docutils literal notranslate"><span class="pre">TemplateSpecTests</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find__with_directory"><code class="docutils literal notranslate"><span class="pre">TemplateSpecTests.test_find__with_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find__without_directory"><code class="docutils literal notranslate"><span class="pre">TemplateSpecTests.test_find__without_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative"><code class="docutils literal notranslate"><span class="pre">TemplateSpecTests.test_find_relative()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_extension"><code class="docutils literal notranslate"><span class="pre">TemplateSpecTests.test_find_relative__template_extension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_name"><code class="docutils literal notranslate"><span class="pre">TemplateSpecTests.test_find_relative__template_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_rel_directory"><code class="docutils literal notranslate"><span class="pre">TemplateSpecTests.test_find_relative__template_rel_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_rel_path__file_name_only"><code class="docutils literal notranslate"><span class="pre">TemplateSpecTests.test_find_relative__template_rel_path__file_name_only()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_rel_path__file_name_with_directory"><code class="docutils literal notranslate"><span class="pre">TemplateSpecTests.test_find_relative__template_rel_path__file_name_with_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_get_template"><code class="docutils literal notranslate"><span class="pre">TemplateSpecTests.test_get_template()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_get_template__template_encoding"><code class="docutils literal notranslate"><span class="pre">TemplateSpecTests.test_get_template__template_encoding()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.Thing"><code class="docutils literal notranslate"><span class="pre">Thing</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase"><code class="docutils literal notranslate"><span class="pre">ViewTestCase</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_accessing_properties_on_parent_object_from_child_objects"><code class="docutils literal notranslate"><span class="pre">ViewTestCase.test_accessing_properties_on_parent_object_from_child_objects()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_basic_method_calls"><code class="docutils literal notranslate"><span class="pre">ViewTestCase.test_basic_method_calls()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_complex"><code class="docutils literal notranslate"><span class="pre">ViewTestCase.test_complex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_hierarchical_partials_with_lambdas"><code class="docutils literal notranslate"><span class="pre">ViewTestCase.test_hierarchical_partials_with_lambdas()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_higher_order_lambda"><code class="docutils literal notranslate"><span class="pre">ViewTestCase.test_higher_order_lambda()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_higher_order_replace"><code class="docutils literal notranslate"><span class="pre">ViewTestCase.test_higher_order_replace()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_higher_order_rot13"><code class="docutils literal notranslate"><span class="pre">ViewTestCase.test_higher_order_rot13()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_inverted"><code class="docutils literal notranslate"><span class="pre">ViewTestCase.test_inverted()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_inverted_lists"><code class="docutils literal notranslate"><span class="pre">ViewTestCase.test_inverted_lists()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_non_callable_attributes"><code class="docutils literal notranslate"><span class="pre">ViewTestCase.test_non_callable_attributes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_partials_with_lambda"><code class="docutils literal notranslate"><span class="pre">ViewTestCase.test_partials_with_lambda()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_template_path_for_partials"><code class="docutils literal notranslate"><span class="pre">ViewTestCase.test_template_path_for_partials()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_template_rel_directory"><code class="docutils literal notranslate"><span class="pre">ViewTestCase.test_template_rel_directory()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-pystache.tests">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pystache.tests" title="Link to this heading"></a></h2>
+<p>TODO: add a docstring.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pystache.commands.test.html" class="btn btn-neutral float-left" title="pystache.commands.test module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pystache.tests.data.html" class="btn btn-neutral float-right" title="pystache.tests.data package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

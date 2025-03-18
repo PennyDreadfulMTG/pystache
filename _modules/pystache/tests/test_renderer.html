@@ -1,0 +1,1015 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.tests.test_renderer &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.tests.test_renderer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.tests.test_renderer</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Unit tests of template.py.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">codecs</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">unittest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache</span><span class="w"> </span><span class="kn">import</span> <span class="n">Renderer</span><span class="p">,</span> <span class="n">TemplateSpec</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemplateNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContextStack</span><span class="p">,</span> <span class="n">KeyNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">Loader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.tests.common</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AssertExceptionMixin</span><span class="p">,</span>
+    <span class="n">AssertStringMixin</span><span class="p">,</span>
+    <span class="n">get_data_path</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.tests.data.views</span><span class="w"> </span><span class="kn">import</span> <span class="n">SayHello</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.examples.simple</span><span class="w"> </span><span class="kn">import</span> <span class="n">Simple</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_make_renderer</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a default Renderer instance for testing purposes.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">string_encoding</span><span class="o">=</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="n">file_encoding</span><span class="o">=</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">renderer</span>
+
+
+<div class="viewcode-block" id="mock_unicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.mock_unicode">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">mock_unicode</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">encoding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;ascii&#39;</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="RendererInitTestCase">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RendererInitTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests the Renderer.__init__() method.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RendererInitTestCase.test_partials__default">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_partials__default">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_partials__default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the default value.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">partials</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_partials">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_partials">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_partials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that the attribute is set correctly.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">partials</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">partials</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_escape__default">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_escape__default">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_escape__default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">escape</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span><span class="o">.</span><span class="n">escape</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">escape</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">),</span> <span class="s2">&quot;&amp;gt;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">escape</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">),</span> <span class="s2">&quot;&amp;quot;&quot;</span><span class="p">)</span>
+        <span class="c1"># Single quotes are escaped only in Python 3.2 and later.</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">expected</span> <span class="o">=</span> <span class="s2">&quot;&#39;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">expected</span> <span class="o">=</span> <span class="s1">&#39;&amp;#x27;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">escape</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">),</span> <span class="n">expected</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_escape">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_escape">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_escape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">escape</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="s2">&quot;**&quot;</span> <span class="o">+</span> <span class="n">s</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">escape</span><span class="o">=</span><span class="n">escape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">),</span> <span class="s2">&quot;**bar&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_decode_errors__default">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_decode_errors__default">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_decode_errors__default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check the default value.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">decode_errors</span><span class="p">,</span> <span class="s1">&#39;strict&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_decode_errors">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_decode_errors">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_decode_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that the constructor sets the attribute correctly.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">decode_errors</span><span class="o">=</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">decode_errors</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_file_encoding__default">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_file_encoding__default">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_file_encoding__default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check the file_encoding default.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">file_encoding</span><span class="p">,</span> <span class="n">renderer</span><span class="o">.</span><span class="n">string_encoding</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_file_encoding">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_file_encoding">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_file_encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that the file_encoding attribute is set correctly.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">file_encoding</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">file_encoding</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_file_extension__default">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_file_extension__default">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_file_extension__default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check the file_extension default.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">file_extension</span><span class="p">,</span> <span class="s1">&#39;mustache&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_file_extension">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_file_extension">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_file_extension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that the file_encoding attribute is set correctly.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">file_extension</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">file_extension</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_missing_tags">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_missing_tags">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_missing_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that the missing_tags attribute is set correctly.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">missing_tags</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">missing_tags</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_missing_tags__default">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_missing_tags__default">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_missing_tags__default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check the missing_tags default.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">missing_tags</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_search_dirs__default">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_search_dirs__default">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_search_dirs__default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check the search_dirs default.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">search_dirs</span><span class="p">,</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">curdir</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_search_dirs__string">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_search_dirs__string">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_search_dirs__string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that the search_dirs attribute is set correctly when a string.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">search_dirs</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">search_dirs</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_search_dirs__list">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_search_dirs__list">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_search_dirs__list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that the search_dirs attribute is set correctly when a list.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">search_dirs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">search_dirs</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_string_encoding__default">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_string_encoding__default">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_string_encoding__default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check the default value.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">string_encoding</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">getdefaultencoding</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="RendererInitTestCase.test_string_encoding">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase.test_string_encoding">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_string_encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that the constructor sets the attribute correctly.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">string_encoding</span><span class="o">=</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">string_encoding</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="RendererTests">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RendererTests</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">,</span> <span class="n">AssertStringMixin</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the Renderer class.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_renderer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Renderer</span><span class="p">()</span>
+
+    <span class="c1">## Test Renderer.unicode().</span>
+
+<div class="viewcode-block" id="RendererTests.test_unicode__string_encoding">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_unicode__string_encoding">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_unicode__string_encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that the string_encoding attribute is respected.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">()</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="s2">&quot;é&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="n">renderer</span><span class="o">.</span><span class="n">string_encoding</span> <span class="o">=</span> <span class="s2">&quot;ascii&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">UnicodeDecodeError</span><span class="p">,</span> <span class="n">renderer</span><span class="o">.</span><span class="n">str</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+        <span class="n">renderer</span><span class="o">.</span><span class="n">string_encoding</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">str</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="s2">&quot;é&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_unicode__decode_errors">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_unicode__decode_errors">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_unicode__decode_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that the decode_errors attribute is respected.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">string_encoding</span> <span class="o">=</span> <span class="s2">&quot;ascii&quot;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="s2">&quot;déf&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="n">renderer</span><span class="o">.</span><span class="n">decode_errors</span> <span class="o">=</span> <span class="s2">&quot;ignore&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">str</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="s2">&quot;df&quot;</span><span class="p">)</span>
+
+        <span class="n">renderer</span><span class="o">.</span><span class="n">decode_errors</span> <span class="o">=</span> <span class="s2">&quot;replace&quot;</span>
+        <span class="c1"># U+FFFD is the official Unicode replacement character.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">str</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="sa">u</span><span class="s1">&#39;d</span><span class="se">\ufffd\ufffd</span><span class="s1">f&#39;</span><span class="p">)</span></div>
+
+
+    <span class="c1">## Test the _make_loader() method.</span>
+
+<div class="viewcode-block" id="RendererTests.test__make_loader__return_type">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test__make_loader__return_type">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__make_loader__return_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that _make_loader() returns a Loader.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">()</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_loader</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">loader</span><span class="p">),</span> <span class="n">Loader</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test__make_loader__attributes">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test__make_loader__attributes">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__make_loader__attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that _make_loader() sets all attributes correctly..</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">unicode_</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span>
+
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">file_encoding</span> <span class="o">=</span> <span class="s1">&#39;enc&#39;</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">file_extension</span> <span class="o">=</span> <span class="s1">&#39;ext&#39;</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">str</span> <span class="o">=</span> <span class="n">unicode_</span>
+
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_loader</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">extension</span><span class="p">,</span> <span class="s1">&#39;ext&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">file_encoding</span><span class="p">,</span> <span class="s1">&#39;enc&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">to_unicode</span><span class="p">,</span> <span class="n">unicode_</span><span class="p">)</span></div>
+
+
+    <span class="c1">## Test the render() method.</span>
+
+<div class="viewcode-block" id="RendererTests.test_render__return_type">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__return_type">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render__return_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that render() returns a string of type unicode.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">()</span>
+        <span class="n">rendered</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">rendered</span><span class="p">),</span> <span class="nb">str</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_render__unicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__unicode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render__unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_render__str">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__str">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render__str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_render__non_ascii_character">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__non_ascii_character">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render__non_ascii_character</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;Poincaré&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;Poincaré&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_render__context">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__context">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render__context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test render(): passing a context.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;Hi {{person}}&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;person&#39;</span><span class="p">:</span> <span class="s1">&#39;Mom&#39;</span><span class="p">}),</span> <span class="s1">&#39;Hi Mom&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_render__context_and_kwargs">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__context_and_kwargs">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render__context_and_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test render(): passing a context and kwargs.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">()</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;Hi {{person1}} and {{person2}}&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;person1&#39;</span><span class="p">:</span> <span class="s1">&#39;Mom&#39;</span><span class="p">},</span> <span class="n">person2</span><span class="o">=</span><span class="s1">&#39;Dad&#39;</span><span class="p">),</span> <span class="s1">&#39;Hi Mom and Dad&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_render__kwargs_and_no_context">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__kwargs_and_no_context">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render__kwargs_and_no_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test render(): passing kwargs and no context.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;Hi {{person}}&#39;</span><span class="p">,</span> <span class="n">person</span><span class="o">=</span><span class="s1">&#39;Mom&#39;</span><span class="p">),</span> <span class="s1">&#39;Hi Mom&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_render__context_and_kwargs__precedence">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__context_and_kwargs__precedence">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render__context_and_kwargs__precedence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test render(): kwargs takes precedence over context.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;Hi {{person}}&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;person&#39;</span><span class="p">:</span> <span class="s1">&#39;Mom&#39;</span><span class="p">},</span> <span class="n">person</span><span class="o">=</span><span class="s1">&#39;Dad&#39;</span><span class="p">),</span> <span class="s1">&#39;Hi Dad&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_render__kwargs_does_not_modify_context">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__kwargs_does_not_modify_context">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render__kwargs_does_not_modify_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test render(): passing kwargs does not modify the passed context.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;Hi {{person}}&#39;</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span> <span class="n">foo</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="p">{})</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_render__nonascii_template">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__nonascii_template">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render__nonascii_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test passing a non-unicode template with non-ascii characters.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">_make_renderer</span><span class="p">()</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;déf&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Check that decode_errors and string_encoding are both respected.</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">decode_errors</span> <span class="o">=</span> <span class="s1">&#39;ignore&#39;</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">string_encoding</span> <span class="o">=</span> <span class="s1">&#39;ascii&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template</span><span class="p">),</span> <span class="s2">&quot;df&quot;</span><span class="p">)</span>
+
+        <span class="n">renderer</span><span class="o">.</span><span class="n">string_encoding</span> <span class="o">=</span> <span class="s1">&#39;utf_8&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template</span><span class="p">),</span> <span class="s2">&quot;déf&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_make_resolve_partial">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_make_resolve_partial">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_make_resolve_partial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the _make_resolve_partial() method.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">partials</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
+        <span class="n">resolve_partial</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_resolve_partial</span><span class="p">()</span>
+
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">resolve_partial</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">actual</span><span class="p">),</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;RenderEngine requires that &quot;</span>
+            <span class="s2">&quot;resolve_partial return unicode strings.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_make_resolve_partial__unicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_make_resolve_partial__unicode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_make_resolve_partial__unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test _make_resolve_partial(): that resolve_partial doesn&#39;t &quot;double-decode&quot; Unicode.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+
+        <span class="n">renderer</span><span class="o">.</span><span class="n">partials</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;partial&#39;</span><span class="p">:</span> <span class="s1">&#39;foo&#39;</span><span class="p">}</span>
+        <span class="n">resolve_partial</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_resolve_partial</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">resolve_partial</span><span class="p">(</span><span class="s2">&quot;partial&quot;</span><span class="p">),</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Now with a value that is already unicode.</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">partials</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;partial&#39;</span><span class="p">:</span> <span class="s1">&#39;foo&#39;</span><span class="p">}</span>
+        <span class="n">resolve_partial</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_resolve_partial</span><span class="p">()</span>
+        <span class="c1"># If the next line failed, we would get the following error:</span>
+        <span class="c1">#   TypeError: decoding Unicode is not supported</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">resolve_partial</span><span class="p">(</span><span class="s2">&quot;partial&quot;</span><span class="p">),</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_render_name">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test the render_name() method.&quot;&quot;&quot;</span>
+        <span class="n">data_dir</span> <span class="o">=</span> <span class="n">get_data_path</span><span class="p">()</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">search_dirs</span><span class="o">=</span><span class="n">data_dir</span><span class="p">)</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render_name</span><span class="p">(</span><span class="s2">&quot;say_hello&quot;</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;Hello, foo&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_render_path">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render_path">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the render_path() method.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">get_data_path</span><span class="p">(</span><span class="s1">&#39;say_hello.mustache&#39;</span><span class="p">)</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;Hello, foo&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_render__object">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__object">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render__object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test rendering an object instance.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+
+        <span class="n">say_hello</span> <span class="o">=</span> <span class="n">SayHello</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">say_hello</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;Hello, World&#39;</span><span class="p">,</span> <span class="n">actual</span><span class="p">)</span>
+
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">say_hello</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="s1">&#39;Mars&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;Hello, Mars&#39;</span><span class="p">,</span> <span class="n">actual</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_render__template_spec">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__template_spec">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render__template_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test rendering a TemplateSpec instance.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+
+        <span class="k">class</span><span class="w"> </span><span class="nc">Spec</span><span class="p">(</span><span class="n">TemplateSpec</span><span class="p">):</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;hello, {{to}}&quot;</span>
+            <span class="n">to</span> <span class="o">=</span> <span class="s1">&#39;world&#39;</span>
+
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">Spec</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;hello, world&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_render__view">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_render__view">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render__view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test rendering a View instance.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+
+        <span class="n">view</span> <span class="o">=</span> <span class="n">Simple</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;Hi pizza!&#39;</span><span class="p">,</span> <span class="n">actual</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_custom_string_coercion_via_assignment">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_custom_string_coercion_via_assignment">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_custom_string_coercion_via_assignment</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that string coercion can be customized via attribute assignment.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">()</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">to_str</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">val</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;{{value}}&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span> <span class="s1">&#39;None&#39;</span><span class="p">)</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">str_coerce</span> <span class="o">=</span> <span class="n">to_str</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;{{value}}&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererTests.test_custom_string_coercion_via_subclassing">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests.test_custom_string_coercion_via_subclassing">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_custom_string_coercion_via_subclassing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that string coercion can be customized via subclassing.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">MyRenderer</span><span class="p">(</span><span class="n">Renderer</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">str_coerce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">val</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="n">renderer1</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">renderer2</span> <span class="o">=</span> <span class="n">MyRenderer</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer1</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;{{value}}&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span> <span class="s1">&#39;None&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">renderer2</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;{{value}}&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="c1"># By testing that Renderer.render() constructs the right RenderEngine,</span>
+<span class="c1"># we no longer need to exercise all rendering code paths through</span>
+<span class="c1"># the Renderer.  It suffices to test rendering paths through the</span>
+<span class="c1"># RenderEngine for the same amount of code coverage.</span>
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Renderer_MakeRenderEngineTests</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">,</span> <span class="n">AssertStringMixin</span><span class="p">,</span> <span class="n">AssertExceptionMixin</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check the RenderEngine returned by Renderer._make_render_engine().</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_renderer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a default Renderer instance for testing purposes.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_make_renderer</span><span class="p">()</span>
+
+    <span class="c1">## Test the engine&#39;s resolve_partial attribute.</span>
+
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests.test__resolve_partial__returns_unicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__resolve_partial__returns_unicode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__resolve_partial__returns_unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that resolve_partial returns unicode (and not a subclass).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">MyUnicode</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">string_encoding</span> <span class="o">=</span> <span class="s1">&#39;ascii&#39;</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">partials</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;str&#39;</span><span class="p">:</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;subclass&#39;</span><span class="p">:</span> <span class="n">MyUnicode</span><span class="p">(</span><span class="s1">&#39;abc&#39;</span><span class="p">)}</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">resolve_partial</span><span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">actual</span><span class="p">),</span> <span class="nb">str</span><span class="p">)</span>
+
+        <span class="c1"># Check that unicode subclasses are not preserved.</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">resolve_partial</span><span class="p">(</span><span class="s1">&#39;subclass&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;abc&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">actual</span><span class="p">),</span> <span class="nb">str</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests.test__resolve_partial__not_found">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__resolve_partial__not_found">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__resolve_partial__not_found</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that resolve_partial returns the empty string when a template is not found.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+        <span class="n">resolve_partial</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">resolve_partial</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">resolve_partial</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests.test__resolve_partial__not_found__missing_tags_strict">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__resolve_partial__not_found__missing_tags_strict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__resolve_partial__not_found__missing_tags_strict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that resolve_partial provides a nice message when a template is not found.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">missing_tags</span> <span class="o">=</span> <span class="s1">&#39;strict&#39;</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+        <span class="n">resolve_partial</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">resolve_partial</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertException</span><span class="p">(</span><span class="n">TemplateNotFoundError</span><span class="p">,</span> <span class="s2">&quot;File &#39;foo.mustache&#39; not found in dirs: [&#39;.&#39;]&quot;</span><span class="p">,</span>
+                             <span class="n">resolve_partial</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests.test__resolve_partial__not_found__partials_dict">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__resolve_partial__not_found__partials_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__resolve_partial__not_found__partials_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that resolve_partial returns the empty string when a template is not found.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">partials</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+        <span class="n">resolve_partial</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">resolve_partial</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">resolve_partial</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests.test__resolve_partial__not_found__partials_dict__missing_tags_strict">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__resolve_partial__not_found__partials_dict__missing_tags_strict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__resolve_partial__not_found__partials_dict__missing_tags_strict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that resolve_partial provides a nice message when a template is not found.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">missing_tags</span> <span class="o">=</span> <span class="s1">&#39;strict&#39;</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">partials</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+        <span class="n">resolve_partial</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">resolve_partial</span>
+
+       <span class="c1"># Include dict directly since str(dict) is different in Python 2 and 3:</span>
+       <span class="c1">#   &lt;type &#39;dict&#39;&gt; versus &lt;class &#39;dict&#39;&gt;, respectively.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertException</span><span class="p">(</span><span class="n">TemplateNotFoundError</span><span class="p">,</span> <span class="s2">&quot;Name &#39;foo&#39; not found in partials: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">dict</span><span class="p">,</span>
+                             <span class="n">resolve_partial</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span></div>
+
+
+    <span class="c1">## Test the engine&#39;s literal attribute.</span>
+
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests.test__literal__uses_renderer_unicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__literal__uses_renderer_unicode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__literal__uses_renderer_unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that literal uses the renderer&#39;s unicode function.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">str</span> <span class="o">=</span> <span class="n">mock_unicode</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+        <span class="n">literal</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">literal</span>
+
+        <span class="n">b</span> <span class="o">=</span> <span class="s2">&quot;foo&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">literal</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="s2">&quot;FOO&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests.test__literal__handles_unicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__literal__handles_unicode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__literal__handles_unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that literal doesn&#39;t try to &quot;double decode&quot; unicode.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">string_encoding</span> <span class="o">=</span> <span class="s1">&#39;ascii&#39;</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+        <span class="n">literal</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">literal</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">literal</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">),</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests.test__literal__returns_unicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__literal__returns_unicode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__literal__returns_unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that literal returns unicode (and not a subclass).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">string_encoding</span> <span class="o">=</span> <span class="s1">&#39;ascii&#39;</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+        <span class="n">literal</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">literal</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">literal</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)),</span> <span class="nb">str</span><span class="p">)</span>
+
+        <span class="k">class</span><span class="w"> </span><span class="nc">MyUnicode</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="n">MyUnicode</span><span class="p">(</span><span class="s2">&quot;abc&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">MyUnicode</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">literal</span><span class="p">(</span><span class="n">s</span><span class="p">)),</span> <span class="nb">str</span><span class="p">)</span></div>
+
+
+    <span class="c1">## Test the engine&#39;s escape attribute.</span>
+
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests.test__escape__uses_renderer_escape">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__escape__uses_renderer_escape">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__escape__uses_renderer_escape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that escape uses the renderer&#39;s escape function.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">escape</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="s2">&quot;**&quot;</span> <span class="o">+</span> <span class="n">s</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+        <span class="n">escape</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">escape</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">escape</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">),</span> <span class="s2">&quot;**foo&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests.test__escape__uses_renderer_unicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__escape__uses_renderer_unicode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__escape__uses_renderer_unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that escape uses the renderer&#39;s unicode function.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">str</span> <span class="o">=</span> <span class="n">mock_unicode</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+        <span class="n">escape</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">escape</span>
+
+        <span class="n">b</span> <span class="o">=</span> <span class="s2">&quot;foo&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">escape</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="s2">&quot;FOO&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests.test__escape__has_access_to_original_unicode_subclass">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__escape__has_access_to_original_unicode_subclass">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__escape__has_access_to_original_unicode_subclass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that escape receives strings with the unicode subclass intact.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">escape</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+        <span class="n">escape</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">escape</span>
+
+        <span class="k">class</span><span class="w"> </span><span class="nc">MyUnicode</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">escape</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)),</span> <span class="nb">str</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">escape</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">escape</span><span class="p">(</span><span class="n">MyUnicode</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)),</span> <span class="n">MyUnicode</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests.test__escape__returns_unicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__escape__returns_unicode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__escape__returns_unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that literal returns unicode (and not a subclass).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">string_encoding</span> <span class="o">=</span> <span class="s1">&#39;ascii&#39;</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+        <span class="n">escape</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">escape</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">escape</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)),</span> <span class="nb">str</span><span class="p">)</span>
+
+        <span class="c1"># Check that literal doesn&#39;t preserve unicode subclasses.</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">MyUnicode</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="n">MyUnicode</span><span class="p">(</span><span class="s2">&quot;abc&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">MyUnicode</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">escape</span><span class="p">(</span><span class="n">s</span><span class="p">)),</span> <span class="nb">str</span><span class="p">)</span></div>
+
+
+    <span class="c1">## Test the missing_tags attribute.</span>
+
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests.test__missing_tags__unknown_value">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__missing_tags__unknown_value">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__missing_tags__unknown_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check missing_tags attribute: setting an unknown value.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">missing_tags</span> <span class="o">=</span> <span class="s1">&#39;foo&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="s2">&quot;Unsupported &#39;missing_tags&#39; value: &#39;foo&#39;&quot;</span><span class="p">,</span>
+                             <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">)</span></div>
+
+
+    <span class="c1">## Test the engine&#39;s resolve_context attribute.</span>
+
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests.test__resolve_context">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__resolve_context">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__resolve_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check resolve_context(): default arguments.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+
+        <span class="n">stack</span> <span class="o">=</span> <span class="n">ContextStack</span><span class="p">({</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">.</span><span class="n">resolve_context</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">.</span><span class="n">resolve_context</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="s1">&#39;missing&#39;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Renderer_MakeRenderEngineTests.test__resolve_context__missing_tags_strict">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests.test__resolve_context__missing_tags_strict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__resolve_context__missing_tags_strict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check resolve_context(): missing_tags &#39;strict&#39;.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">renderer</span><span class="o">.</span><span class="n">missing_tags</span> <span class="o">=</span> <span class="s1">&#39;strict&#39;</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+
+        <span class="n">stack</span> <span class="o">=</span> <span class="n">ContextStack</span><span class="p">({</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">.</span><span class="n">resolve_context</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertException</span><span class="p">(</span><span class="n">KeyNotFoundError</span><span class="p">,</span> <span class="s2">&quot;Key &#39;missing&#39; not found: first part&quot;</span><span class="p">,</span>
+                             <span class="n">engine</span><span class="o">.</span><span class="n">resolve_context</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span> <span class="s1">&#39;missing&#39;</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

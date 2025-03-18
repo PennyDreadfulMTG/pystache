@@ -1,0 +1,216 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.tests.benchmark &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.tests.benchmark</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.tests.benchmark</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A rudimentary backward- and forward-compatible script to benchmark pystache.</span>
+
+<span class="sd">Usage:</span>
+
+<span class="sd">tests/benchmark.py 10000</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">timeit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Timer</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">chevron</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pystache</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using module: chevron&#39;</span><span class="p">)</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">):</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pystache</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using module: pystache&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pystache</span>
+
+<span class="c1"># TODO: make the example realistic.</span>
+
+<span class="n">examples</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># Test case: 1</span>
+    <span class="p">(</span><span class="s2">&quot;&quot;&quot;{{#person}}Hi {{name}}{{/person}}&quot;&quot;&quot;</span><span class="p">,</span>
+    <span class="p">{</span><span class="s2">&quot;person&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jon&quot;</span><span class="p">}},</span>
+    <span class="s2">&quot;Hi Jon&quot;</span><span class="p">),</span>
+
+    <span class="c1"># Test case: 2</span>
+    <span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">&lt;div class=&quot;comments&quot;&gt;</span>
+<span class="s2">&lt;h3&gt;{{header}}&lt;/h3&gt;</span>
+<span class="s2">&lt;ul&gt;</span>
+<span class="s2">{{#comments}}&lt;li class=&quot;comment&quot;&gt;</span>
+<span class="s2">&lt;h5&gt;{{name}}&lt;/h5&gt;&lt;p&gt;{{body}}&lt;/p&gt;</span>
+<span class="s2">&lt;/li&gt;{{/comments}}</span>
+<span class="s2">&lt;/ul&gt;</span>
+<span class="s2">&lt;/div&gt;&quot;&quot;&quot;</span><span class="p">,</span>
+    <span class="p">{</span><span class="s1">&#39;header&#39;</span><span class="p">:</span> <span class="s2">&quot;My Post Comments&quot;</span><span class="p">,</span>
+     <span class="s1">&#39;comments&#39;</span><span class="p">:</span> <span class="p">[</span>
+         <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s2">&quot;Joe&quot;</span><span class="p">,</span> <span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="s2">&quot;Thanks for this post!&quot;</span><span class="p">},</span>
+         <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s2">&quot;Sam&quot;</span><span class="p">,</span> <span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="s2">&quot;Thanks for this post!&quot;</span><span class="p">},</span>
+         <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s2">&quot;Heather&quot;</span><span class="p">,</span> <span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="s2">&quot;Thanks for this post!&quot;</span><span class="p">},</span>
+         <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s2">&quot;Kathy&quot;</span><span class="p">,</span> <span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="s2">&quot;Thanks for this post!&quot;</span><span class="p">},</span>
+         <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s2">&quot;George&quot;</span><span class="p">,</span> <span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="s2">&quot;Thanks for this post!&quot;</span><span class="p">}]},</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;\</span>
+<span class="sd">&lt;div class=&quot;comments&quot;&gt;</span>
+<span class="sd">&lt;h3&gt;My Post Comments&lt;/h3&gt;</span>
+<span class="sd">&lt;ul&gt;</span>
+<span class="sd">&lt;li class=&quot;comment&quot;&gt;</span>
+<span class="sd">&lt;h5&gt;Joe&lt;/h5&gt;&lt;p&gt;Thanks for this post!&lt;/p&gt;</span>
+<span class="sd">&lt;/li&gt;&lt;li class=&quot;comment&quot;&gt;</span>
+<span class="sd">&lt;h5&gt;Sam&lt;/h5&gt;&lt;p&gt;Thanks for this post!&lt;/p&gt;</span>
+<span class="sd">&lt;/li&gt;&lt;li class=&quot;comment&quot;&gt;</span>
+<span class="sd">&lt;h5&gt;Heather&lt;/h5&gt;&lt;p&gt;Thanks for this post!&lt;/p&gt;</span>
+<span class="sd">&lt;/li&gt;&lt;li class=&quot;comment&quot;&gt;</span>
+<span class="sd">&lt;h5&gt;Kathy&lt;/h5&gt;&lt;p&gt;Thanks for this post!&lt;/p&gt;</span>
+<span class="sd">&lt;/li&gt;&lt;li class=&quot;comment&quot;&gt;</span>
+<span class="sd">&lt;h5&gt;George&lt;/h5&gt;&lt;p&gt;Thanks for this post!&lt;/p&gt;</span>
+<span class="sd">&lt;/li&gt;</span>
+<span class="sd">&lt;/ul&gt;</span>
+<span class="sd">&lt;/div&gt;&quot;&quot;&quot;</span><span class="p">),</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="make_test_function">
+<a class="viewcode-back" href="../../../api/pystache.tests.benchmark.html#pystache.tests.benchmark.make_test_function">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_test_function</span><span class="p">(</span><span class="n">example</span><span class="p">):</span>
+
+    <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">expected</span> <span class="o">=</span> <span class="n">example</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test</span><span class="p">():</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">pystache</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">actual</span> <span class="o">!=</span> <span class="n">expected</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Benchmark mismatch: </span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s2">*** != ***</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">actual</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">test</span></div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../../api/pystache.tests.benchmark.html#pystache.tests.benchmark.main">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">sys_argv</span><span class="p">):</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">sys_argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Benchmarking: </span><span class="si">%s</span><span class="s2">x&quot;</span> <span class="o">%</span> <span class="n">count</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">:</span>
+
+        <span class="n">test</span> <span class="o">=</span> <span class="n">make_test_function</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="n">test</span><span class="p">,)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">repeat</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="n">count</span><span class="p">)))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

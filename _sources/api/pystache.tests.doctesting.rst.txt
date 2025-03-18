@@ -1,0 +1,7 @@
+pystache.tests.doctesting module
+================================
+
+.. automodule:: pystache.tests.doctesting
+   :members:
+   :undoc-members:
+   :show-inheritance:

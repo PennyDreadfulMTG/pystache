@@ -1,0 +1,590 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pystache &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog Generation" href="dev/generate-changelog.html" />
+    <link rel="prev" title="Welcome to the pystache documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#quick-start">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-it">Install It</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-it">Use It</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unicode">Unicode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#develop">Develop</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#making-changes-contributing">Making Changes &amp; Contributing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#change-history-recent">Change history (recent)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v0-6-6-2024-12-12">v0.6.6 (2024-12-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-6-5-2023-08-26">v0.6.5 (2023-08-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-6-4-2023-08-13">v0.6.4 (2023-08-13)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#other">Other</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-6-3-2023-08-13">v0.6.3 (2023-08-13)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#new">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fixes">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Other</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-6-2-2022-09-14">v0.6.2  (2022-09-14)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#changes">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Other</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-6-1-2021-11-24">v0.6.1 (2021-11-24)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Fixes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Pystache</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/readme_include.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pystache">
+<h1>Pystache<a class="headerlink" href="#pystache" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://github.com/PennyDreadfulMTG/pystache/actions/workflows/ci.yml"><img alt="CI Status" src="https://github.com/PennyDreadfulMTG/pystache/actions/workflows/ci.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/PennyDreadfulMTG/pystache/actions/workflows/conda.yml"><img alt="Conda Status" src="https://github.com/PennyDreadfulMTG/pystache/actions/workflows/conda.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/PennyDreadfulMTG/pystache/actions/workflows/coverage.yml"><img alt="Coverage workflow" src="https://github.com/PennyDreadfulMTG/pystache/actions/workflows/coverage.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/PennyDreadfulMTG/pystache/actions/workflows/bandit.yml"><img alt="Security check - Bandit" src="https://github.com/PennyDreadfulMTG/pystache/actions/workflows/bandit.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/PennyDreadfulMTG/pystache/actions/workflows/release.yml"><img alt="Release Status" src="https://github.com/PennyDreadfulMTG/pystache/actions/workflows/release.yml/badge.svg" /></a></p>
+<p><a class="reference external" href="https://github.com/pre-commit/pre-commit"><img alt="pre-commit" src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&amp;amp;logoColor=white" /></a> <a class="reference external" href="https://github.com/PennyDreadfulMTG/pystache/"><img alt="Test coverage" src="https://raw.githubusercontent.com/PennyDreadfulMTG/pystache/badges/master/test-coverage.svg" /></a> <a class="reference external" href="https://github.com/PennyDreadfulMTG/pystache/actions/workflows/pylint.yml"><img alt="Pylint Score" src="https://raw.githubusercontent.com/PennyDreadfulMTG/pystache/badges/master/pylint-score.svg" /></a></p>
+<p><a class="reference external" href="https://github.com/PennyDreadfulMTG/pystache/releases"><img alt="GitHub tag" src="https://img.shields.io/github/v/tag/PennyDreadfulMTG/pystache?color=green&amp;include_prereleases&amp;label=latest%20release" /></a> <a class="reference external" href="https://github.com/PennyDreadfulMTG/pystache/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/PennyDreadfulMTG/pystache" /></a> <a class="reference external" href="https://www.python.org/downloads/"><img alt="Python" src="https://img.shields.io/badge/python-3.6+-blue.svg" /></a></p>
+<p>This updated fork of Pystache is currently tested on Python 3.8+ and in
+Conda, on Linux, Macos, and Windows.</p>
+<p><img alt="logo" src="_images/logo_phillips_small.png" /></p>
+<p><a class="reference external" href="https://github.com/PennyDreadfulMTG/pystache">Pystache</a> is a Python
+implementation of <a class="reference external" href="https://github.com/mustache/mustache/">Mustache</a>.
+Mustache is a framework-agnostic, logic-free templating system inspired
+by <a class="reference external" href="https://code.google.com/p/google-ctemplate/">ctemplate</a> and
+et. Like ctemplate, Mustache “emphasizes separating logic from presentation:
+it is impossible to embed application logic in this template language.”</p>
+<p>The <a class="reference external" href="https://mustache.github.io/mustache.5.html">mustache(5)</a> man
+page provides a good introduction to Mustache’s syntax. For a more
+complete (and more current) description of Mustache’s behavior, see the
+official <a class="reference external" href="https://github.com/mustache/spec">Mustache spec</a>.</p>
+<p>Pystache is <a class="reference external" href="https://semver.org">semantically versioned</a> and older
+versions can still be found on <a class="reference external" href="https://pypi.python.org/pypi/pystache">PyPI</a>.
+This version of Pystache now passes all tests in <a class="reference external" href="https://github.com/mustache/spec/tree/v1.1.3">version 1.1.3</a> of the spec.</p>
+</section>
+<section id="requirements">
+<h1>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h1>
+<p>Pystache is tested with:</p>
+<ul class="simple">
+<li><p>Python 3.8</p></li>
+<li><p>Python 3.9</p></li>
+<li><p>Python 3.10</p></li>
+<li><p>Python 3.11</p></li>
+<li><p>Python 3.12</p></li>
+<li><p>Python 3.13</p></li>
+<li><p>Conda (py38 and py310)</p></li>
+</ul>
+<p>JSON support is needed only for the command-line interface and to run
+the spec tests; PyYAML can still be used (see the Develop section).</p>
+<p>Official support for Python 2 has ended with Pystache version 0.6.0.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This project uses <a class="reference external" href="https://github.com/pypa/setuptools_scm">setuptools_scm</a> to generate and maintain the
+version file, which only gets included in the sdist/wheel
+packages. In a fresh clone, running any of the <a class="reference external" href="https://github.com/tox-dev/tox">tox</a> commands
+should generate the current version file.</p>
+</div>
+</section>
+<section id="quick-start">
+<h1>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h1>
+<p>Be sure to get the latest release from either Pypi or Github.</p>
+<section id="install-it">
+<h2>Install It<a class="headerlink" href="#install-it" title="Link to this heading"></a></h2>
+<p>From Pypi:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install pystache
+</pre></div>
+</div>
+<p>Or Github:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install -U pystache -f https://github.com/PennyDreadfulMTG/pystache/releases/
+</pre></div>
+</div>
+<p>And test it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pystache-test
+</pre></div>
+</div>
+<p>To install and test from source (e.g. from GitHub), see the Develop
+section.</p>
+</section>
+<section id="use-it">
+<h2>Use It<a class="headerlink" href="#use-it" title="Link to this heading"></a></h2>
+<p>Open a python console:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pystache</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pystache</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;Hi {{person}}!&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;person&#39;</span><span class="p">:</span> <span class="s1">&#39;Mom&#39;</span><span class="p">}))</span>
+<span class="go">Hi Mom!</span>
+</pre></div>
+</div>
+<p>You can also create dedicated view classes to hold your view logic.</p>
+<p>Here’s your view class (in ../pystache/tests/examples/readme.py):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SayHello</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Pizza&quot;</span>
+</pre></div>
+</div>
+<p>Instantiating like so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pystache.tests.examples.readme</span><span class="w"> </span><span class="kn">import</span> <span class="n">SayHello</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hello</span> <span class="o">=</span> <span class="n">SayHello</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Then your template, say_hello.mustache (by default in the same directory
+as your class definition):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Hello, {{to}}!
+</pre></div>
+</div>
+<p>Pull it together:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">renderer</span> <span class="o">=</span> <span class="n">pystache</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">hello</span><span class="p">))</span>
+<span class="go">Hello, Pizza!</span>
+</pre></div>
+</div>
+<p>For greater control over rendering (e.g. to specify a custom template
+directory), use the <code class="docutils literal notranslate"><span class="pre">Renderer</span></code> class like above. One can pass
+attributes to the Renderer class constructor or set them on a Renderer
+instance. To customize template loading on a per-view basis, subclass
+<code class="docutils literal notranslate"><span class="pre">TemplateSpec</span></code>. See the docstrings of the
+<a class="reference external" href="https://github.com/PennyDreadfulMTG/pystache/blob/master/pystache/renderer.py">Renderer</a>
+class and
+<a class="reference external" href="https://github.com/PennyDreadfulMTG/pystache/blob/master/pystache/template_spec.py">TemplateSpec</a>
+class for more information.</p>
+<p>You can also pre-parse a template:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parsed</span> <span class="o">=</span> <span class="n">pystache</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;Hey {{#who}}{{.}}!{{/who}}&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">parsed</span><span class="p">)</span>
+<span class="go">[&#39;Hey &#39;, _SectionNode(key=&#39;who&#39;, index_begin=12, index_end=18, parsed=[_EscapeNode(key=&#39;.&#39;), &#39;!&#39;])]</span>
+</pre></div>
+</div>
+<p>And then:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">parsed</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;who&#39;</span><span class="p">:</span> <span class="s1">&#39;Pops&#39;</span><span class="p">}))</span>
+<span class="go">Hey Pops!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">parsed</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;who&#39;</span><span class="p">:</span> <span class="s1">&#39;you&#39;</span><span class="p">}))</span>
+<span class="go">Hey you!</span>
+</pre></div>
+</div>
+</section>
+<section id="unicode">
+<h2>Unicode<a class="headerlink" href="#unicode" title="Link to this heading"></a></h2>
+<p>This section describes how Pystache handles unicode, strings, and
+encodings.</p>
+<p>Internally, Pystache uses <a class="reference external" href="https://docs.python.org/howto/unicode.html#tips-for-writing-unicode-aware-programs">only unicode strings</a> (<code class="docutils literal notranslate"><span class="pre">str</span></code> in Python 3).
+For input, Pystache accepts byte strings (<code class="docutils literal notranslate"><span class="pre">bytes</span></code> in Python 3).
+For output, Pystache’s template rendering methods return only unicode.</p>
+<p>Pystache’s <code class="docutils literal notranslate"><span class="pre">Renderer</span></code> class supports a number of attributes to control
+how Pystache converts byte strings to unicode on input. These include
+the <code class="docutils literal notranslate"><span class="pre">file_encoding</span></code>, <code class="docutils literal notranslate"><span class="pre">string_encoding</span></code>, and <code class="docutils literal notranslate"><span class="pre">decode_errors</span></code> attributes.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">file_encoding</span></code> attribute is the encoding the renderer uses to
+convert to unicode any files read from the file system. Similarly,
+<code class="docutils literal notranslate"><span class="pre">string_encoding</span></code> is the encoding the renderer uses to convert any other
+byte strings encountered during the rendering process into unicode (e.g.
+context values that are encoded byte strings).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">decode_errors</span></code> attribute is what the renderer passes as the
+<code class="docutils literal notranslate"><span class="pre">errors</span></code> argument to Python’s built-in unicode-decoding function
+(<code class="docutils literal notranslate"><span class="pre">str()</span></code> in Python 3). The valid values for this argument are
+<code class="docutils literal notranslate"><span class="pre">strict</span></code>, <code class="docutils literal notranslate"><span class="pre">ignore</span></code>, and <code class="docutils literal notranslate"><span class="pre">replace</span></code>.</p>
+<p>Each of these attributes can be set via the <code class="docutils literal notranslate"><span class="pre">Renderer</span></code> class’s
+constructor using a keyword argument of the same name. See the Renderer
+class’s docstrings for further details. In addition, the <code class="docutils literal notranslate"><span class="pre">file_encoding</span></code>
+attribute can be controlled on a per-view basis by subclassing the
+<code class="docutils literal notranslate"><span class="pre">TemplateSpec</span></code> class. When not specified explicitly, these attributes
+default to values set in Pystache’s <code class="docutils literal notranslate"><span class="pre">defaults</span></code> module.</p>
+</section>
+</section>
+<section id="develop">
+<h1>Develop<a class="headerlink" href="#develop" title="Link to this heading"></a></h1>
+<p>To test from a source distribution (without installing):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python test_pystache.py
+</pre></div>
+</div>
+<p>To test Pystache with multiple versions of Python (with a single
+command!) and different platforms, you can use [tox](<a class="reference external" href="https://pypi.python.org/pypi/tox">https://pypi.python.org/pypi/tox</a>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install tox
+$ tox -e py
+</pre></div>
+</div>
+<p>To run tests on multiple versions with coverage, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tox -e py38-linux,py39-linux  # for example
+</pre></div>
+</div>
+<p>(substitute your platform above, eg, macos or windows)</p>
+<p>The source distribution tests also include doctests and tests from the
+Mustache spec. To include tests from the Mustache spec in your test
+runs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git submodule update --init
+</pre></div>
+</div>
+<p>The test harness parses the spec’s (more human-readable) yaml files if
+<a class="reference external" href="http://pypi.python.org/pypi/PyYAML">PyYAML</a> is present. Otherwise,
+it parses the json files. To install PyYAML:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install pyyaml  # note this is installed automatically by tox
+</pre></div>
+</div>
+<p>Once the submodule is available, you can run the full test set with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tox -e setup -- ext/spec/specs
+</pre></div>
+</div>
+<section id="making-changes-contributing">
+<h2>Making Changes &amp; Contributing<a class="headerlink" href="#making-changes-contributing" title="Link to this heading"></a></h2>
+<p>We use the <a class="reference external" href="https://github.com/sarnold/gitchangelog-action">gitchangelog</a> action to generate our github Release page, as
+well as the gitchangelog message format to help it categorize/filter
+commits for a tidier release page. Please use the appropriate ACTION
+modifiers in any Pull Requests.</p>
+<p>This repo is also <a class="reference external" href="https://pre-commit.com/">pre-commit</a> enabled for various linting and format
+checks.  The checks run automatically on commit and will fail the
+commit (if not clean) with some checks performing simple file corrections.</p>
+<p>If other checks fail on commit, the failure display should explain the error
+types and line numbers. Note you must fix any fatal errors for the
+commit to succeed; some errors should be fixed automatically (use
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">status</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">diff</span></code> to review any changes).</p>
+<p>Note <code class="docutils literal notranslate"><span class="pre">pylint</span></code> is the primary check that requires your own input, as well
+as a decision as to the appropriate fix action.  You must fix any <code class="docutils literal notranslate"><span class="pre">pylint</span></code>
+warnings (relative to the baseline config score) for the commit to succeed.</p>
+<p>See the following pages for more information on gitchangelog and pre-commit.</p>
+<p>You will need to install pre-commit before contributing any changes;
+installing it using your system’s package manager is recommended,
+otherwise install with pip into your usual virtual environment using
+something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo emerge pre-commit  --or--
+$ pip install pre-commit
+</pre></div>
+</div>
+<p>then install it into the repo you just cloned:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/PennyDreadfulMTG/pystache
+$ cd pystache/
+$ pre-commit install
+</pre></div>
+</div>
+<p>It’s usually a good idea to update the hooks to the latest version:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pre</span><span class="o">-</span><span class="n">commit</span> <span class="n">autoupdate</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="credits">
+<h1>Credits<a class="headerlink" href="#credits" title="Link to this heading"></a></h1>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pystache</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">context</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Chris Wanstrath&#39;</span><span class="p">,</span> <span class="s1">&#39;maintainer&#39;</span><span class="p">:</span> <span class="s1">&#39;Chris Jerdonek&#39;</span><span class="p">,</span><span class="s1">&#39;refurbisher&#39;</span><span class="p">:</span> <span class="s1">&#39;Steve Arnold&#39;</span><span class="p">,</span> <span class="s1">&#39;new_maintainer&#39;</span><span class="p">:</span> <span class="s1">&#39;Thomas David Baker&#39;</span> <span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pystache</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">&quot;Author: {{author}}</span><span class="se">\n</span><span class="s2">Maintainer: {{maintainer}}</span><span class="se">\n</span><span class="s2">Refurbisher: {{refurbisher}}</span><span class="se">\n</span><span class="s2">New maintainer: {{new_maintainer}}&quot;</span><span class="p">,</span> <span class="n">context</span><span class="p">))</span>
+<span class="go">Author: Chris Wanstrath</span>
+<span class="go">Maintainer: Chris Jerdonek</span>
+<span class="go">Refurbisher: Steve Arnold</span>
+<span class="go">New maintainer: Thomas David Baker</span>
+</pre></div>
+</div>
+<p>Pystache logo by <a class="reference external" href="http://davidphillips.us/">David Phillips</a> is
+licensed under a <a class="reference external" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0 Unported
+License</a>.</p>
+<p><img alt="ccbysa" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></p>
+</section>
+<section id="change-history-recent">
+<h1>Change history (recent)<a class="headerlink" href="#change-history-recent" title="Link to this heading"></a></h1>
+<section id="v0-6-6-2024-12-12">
+<h2>v0.6.6 (2024-12-12)<a class="headerlink" href="#v0-6-6-2024-12-12" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Update README to match supported versions. [Thomas David Baker]</p></li>
+<li><p>Update pre-commit. [Thomas David Baker]</p></li>
+<li><p>Update pyproject.toml with 3.12 and 3.13 Python versions. [Alvaro Crespo]</p></li>
+<li><p>Update tox config to use Python 3.12 and 3.13 versions. [Alvaro Crespo]</p></li>
+<li><p>Update yml files with Python 3.12 and 3.13. [Alvaro Crespo]</p></li>
+<li><p>Update changelog for v0.6.5 a bit belatedly. [Thomas David Baker]</p></li>
+</ul>
+</section>
+<section id="v0-6-5-2023-08-26">
+<h2>v0.6.5 (2023-08-26)<a class="headerlink" href="#v0-6-5-2023-08-26" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Bump the version bits called out in the readme. [Stephen L Arnold]</p></li>
+<li><p>Keep changelog up to date manually as I don’t know how to
+autogenerate. [Thomas David Baker]</p></li>
+</ul>
+</section>
+<section id="v0-6-4-2023-08-13">
+<h2>v0.6.4 (2023-08-13)<a class="headerlink" href="#v0-6-4-2023-08-13" title="Link to this heading"></a></h2>
+<section id="other">
+<h3>Other<a class="headerlink" href="#other" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Merge pull request #23 from PennyDreadfulMTG/more-fixes. [Thomas David Baker]</p></li>
+<li><p>Use the content-type for RST that pypi now wants</p></li>
+<li><p>Use the content-type for RST that pypi now wants. [Thomas David Baker]</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-6-3-2023-08-13">
+<h2>v0.6.3 (2023-08-13)<a class="headerlink" href="#v0-6-3-2023-08-13" title="Link to this heading"></a></h2>
+<section id="new">
+<h3>New<a class="headerlink" href="#new" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Add full sphinx apidoc build, include readme/extras. [Stephen L Arnold]</dt><dd><ul>
+<li><p>add new tox commands for ‘docs’ and ‘docs-lint’</p></li>
+<li><p>cleanup link errors found by docs-lint</p></li>
+<li><p>add sphinx doc build workflow, update ci workflow</p></li>
+<li><p>remove new version var from init.py globals</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Display repo state in docs build, include CHANGELOG. [Stephen L Arnold]</dt><dd><ul>
+<li><p>add sphinx_git extension to docs conf and setup deps</p></li>
+<li><p>display branch/commit/state docs were built from</p></li>
+<li><p>include CHANGELOG (but not HISTORY) in docs build/toc</p></li>
+<li><p>Convert readme.md to readme.rst, move extra docs. [Stephen L Arnold]</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="fixes">
+<h3>Fixes<a class="headerlink" href="#fixes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fix included filename and link cleanup. [Stephen L Arnold]</p></li>
+<li><p>Remove more py2 cruft from doctesting (py3.10 warnings) [Stephen L Arnold]</p></li>
+<li><dl class="simple">
+<dt>Update maintainer info and spec test cmd. [Stephen L Arnold]</dt><dd><ul>
+<li><p>update coverage value for delta/base, allow digits only</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Use updated bandit action and workflow excludes (exclude test) [Stephen L Arnold]</dt><dd><ul>
+<li><p>also fix missing PR event check in coverage workflow</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Use current org-level coverage workflow. [Stephen L Arnold]</dt><dd><ul>
+<li><p>increase fetch depth and update regex</p></li>
+<li><p>updated action deps, relaxed run criteria</p></li>
+<li><p>go back to “normal” tokens, remove permission hacks</p></li>
+<li><p>still needs more job isolation =&gt; refactor for another day</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id1">
+<h3>Other<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Merge pull request #21 from PennyDreadfulMTG/update-pypi. [Thomas David Baker]</p></li>
+<li><p>Update a few small things before making a release for pypi</p></li>
+<li><p>Update location of flake8 for pre-commit, official location has moved. [Thomas David Baker]</p></li>
+<li><p>Correct small issue in README. [Thomas David Baker]</p></li>
+<li><p>Specify passenv in a way that tox is happy with. [Thomas David Baker]</p></li>
+<li><p>Ignore PyCharm dir. [Thomas David Baker]</p></li>
+<li><p>Update TODO to remove some things that have been TODOne. [Thomas David Baker]</p></li>
+<li><p>Merge pull request #20 from VCTLabs/new-docs-cleanup. [Katelyn Gigante]</p></li>
+<li><p>New docs cleanup</p></li>
+<li><p>Merge pull request #19 from VCTLabs/auto-docs. [Thomas David Baker]</p></li>
+<li><p>New docs and automation, more modernization</p></li>
+<li><dl class="simple">
+<dt>Do pre-release (manual) updates for changes and conda recipe. [Stephen L Arnold]</dt><dd><ul>
+<li><p>create changes file: gitchangelog v0.6.0.. &gt; CHANGELOG.rst</p></li>
+<li><p>edit top line in CHANGELOG.rst using current date/new tag</p></li>
+<li><p>edit conda/meta.yaml using new tag, then tag this commit</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>Merge pull request #18 from VCTLabs/mst-upstream. [Thomas David Baker]</p></li>
+<li><p>Workflow and test driver fixes</p></li>
+<li><p>Use buildbot account. [Katelyn Gigante]</p></li>
+<li><p>Merge pull request #16 from PennyDreadfulMTG/fix-coverage. [Katelyn Gigante]</p></li>
+<li><p>Use ACCESS_TOKEN secret rather than provided GITHUB_TOKEN</p></li>
+<li><p>Use ACCESS_TOKEN secret rather than provided GITHUB_TOKEN. [Katelyn Gigante]</p></li>
+<li><p>Should fix the coverage badge</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-6-2-2022-09-14">
+<h2>v0.6.2  (2022-09-14)<a class="headerlink" href="#v0-6-2-2022-09-14" title="Link to this heading"></a></h2>
+<section id="id2">
+<h3>New<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add full sphinx apidoc build, include readme/extras. [Stephen L
+Arnold]</p>
+<ul>
+<li><p>add new tox commands for ‘docs’ and ‘docs-lint’</p></li>
+<li><p>cleanup link errors found by docs-lint</p></li>
+<li><p>add sphinx doc build workflow, update ci workflow</p></li>
+<li><p>remove new version var from __init__.py globals</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="changes">
+<h3>Changes<a class="headerlink" href="#changes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Convert readme.md to readme.rst, move extra docs. [Stephen L Arnold]</p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>Fixes<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fix included filename and link cleanup. [Stephen L Arnold]</p></li>
+<li><p>Remove more py2 cruft from doctesting (py3.10 warnings) [Stephen L Arnold]</p></li>
+<li><p>Update maintainer info and spec test cmd. [Stephen L Arnold]</p>
+<ul>
+<li><p>update coverage value for delta/base, allow digits only</p></li>
+</ul>
+</li>
+<li><p>Use updated bandit action and workflow excludes (exclude test)
+[Stephen L Arnold]</p>
+<ul>
+<li><p>also fix missing PR event check in coverage workflow</p></li>
+</ul>
+</li>
+<li><p>Use current org-level coverage workflow. [Stephen L Arnold]</p>
+<ul>
+<li><p>increase fetch depth and update regex</p></li>
+<li><p>updated action deps, relaxed run criteria</p></li>
+<li><p>go back to “normal” tokens, remove permission hacks</p></li>
+<li><p>still needs more job isolation =&gt; refactor for another day</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id4">
+<h3>Other<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<ul>
+<li><p>Use buildbot account. [Katelyn Gigante]</p></li>
+<li><p>Use ACCESS_TOKEN secret rather than provided GITHUB_TOKEN. [Katelyn
+Gigante]</p>
+<p>Should fix the coverage badge</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="v0-6-1-2021-11-24">
+<h2>v0.6.1 (2021-11-24)<a class="headerlink" href="#v0-6-1-2021-11-24" title="Link to this heading"></a></h2>
+<section id="id5">
+<h3>Changes<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add shallow checkout for testing. [Stephen L Arnold]</p></li>
+<li><p>Bump comment action to latest release, verify checkout depth. [Stephen
+L Arnold]</p>
+<ul>
+<li><p>see: <a class="reference external" href="https://github.com/marocchino/sticky-pull-request-comment/issues/298">https://github.com/marocchino/sticky-pull-request-comment/issues/298</a>
+in upstream action repo</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id6">
+<h3>Fixes<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Use workflow PR target and checkout params. [Stephen L Arnold]</p></li>
+<li><p>Split coverage (checkout) job from PR comment job. [Stephen L Arnold]</p></li>
+<li><p>Use correct tox env cmd for single platform/version. [Stephen L
+Arnold]</p></li>
+</ul>
+<p>For older changes through v0.6.0 see the HISTORY.md file in the repository.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to the pystache documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dev/generate-changelog.html" class="btn btn-neutral float-right" title="Changelog Generation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

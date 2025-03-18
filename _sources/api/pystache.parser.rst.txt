@@ -1,0 +1,7 @@
+pystache.parser module
+======================
+
+.. automodule:: pystache.parser
+   :members:
+   :undoc-members:
+   :show-inheritance:

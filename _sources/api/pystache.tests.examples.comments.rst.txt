@@ -1,0 +1,7 @@
+pystache.tests.examples.comments module
+=======================================
+
+.. automodule:: pystache.tests.examples.comments
+   :members:
+   :undoc-members:
+   :show-inheritance:

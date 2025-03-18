@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.context &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.context</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.context</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Exposes a ContextStack class.</span>
+
+<span class="sd">The Mustache spec makes a special distinction between two types of context</span>
+<span class="sd">stack elements: hashes and objects.  For the purposes of interpreting the</span>
+<span class="sd">spec, we define these categories mutually exclusively as follows:</span>
+
+<span class="sd"> (1) Hash: an item whose type is a subclass of dict.</span>
+
+<span class="sd"> (2) Object: an item that is neither a hash nor an instance of a</span>
+<span class="sd">     built-in type.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">PystacheError</span>
+
+<span class="c1"># This equals &#39;__builtin__&#39; in Python 2 and &#39;builtins&#39; in Python 3.</span>
+<span class="n">_BUILTIN_MODULE</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="vm">__module__</span>
+
+
+<span class="c1"># We use this private global variable as a return value to represent a key</span>
+<span class="c1"># not being found on lookup.  This lets us distinguish between the case</span>
+<span class="c1"># of a key&#39;s value being None with the case of a key not being found --</span>
+<span class="c1"># without having to rely on exceptions (e.g. KeyError) for flow control.</span>
+<span class="c1">#</span>
+<span class="c1"># TODO: eliminate the need for a private global variable, e.g. by using the</span>
+<span class="c1">#   preferred Python approach of &quot;easier to ask for forgiveness than permission&quot;:</span>
+<span class="c1">#     http://docs.python.org/glossary.html#term-eafp</span>
+<div class="viewcode-block" id="NotFound">
+<a class="viewcode-back" href="../../api/pystache.context.html#pystache.context.NotFound">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NotFound</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+
+<span class="n">_NOT_FOUND</span> <span class="o">=</span> <span class="n">NotFound</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_value</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieve a key&#39;s value from a context item.</span>
+
+<span class="sd">    Returns _NOT_FOUND if the key does not exist.</span>
+
+<span class="sd">    The ContextStack.get() docstring documents this function&#39;s intended behavior.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="c1"># Then we consider the argument a &quot;hash&quot; for the purposes of the spec.</span>
+        <span class="c1">#</span>
+        <span class="c1"># We do a membership test to avoid using exceptions for flow control</span>
+        <span class="c1"># (e.g. catching KeyError).</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">context</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">context</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">context</span><span class="p">)</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">!=</span> <span class="n">_BUILTIN_MODULE</span><span class="p">:</span>
+        <span class="c1"># Then we consider the argument an &quot;object&quot; for the purposes of</span>
+        <span class="c1"># the spec.</span>
+        <span class="c1">#</span>
+        <span class="c1"># The elif test above lets us avoid treating instances of built-in</span>
+        <span class="c1"># types like integers and strings as objects (cf. issue #81).</span>
+        <span class="c1"># Instances of user-defined classes on the other hand, for example,</span>
+        <span class="c1"># are considered objects by the test above.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="c1"># TODO: distinguish the case of the attribute not existing from</span>
+            <span class="c1">#   an AttributeError being raised by the call to the attribute.</span>
+            <span class="c1">#   See the following issue for implementation ideas:</span>
+            <span class="c1">#     http://bugs.python.org/issue7559</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># TODO: consider using EAFP here instead.</span>
+            <span class="c1">#   http://docs.python.org/glossary.html#term-eafp</span>
+            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">attr</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">attr</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">attr</span>
+
+    <span class="k">return</span> <span class="n">_NOT_FOUND</span>
+
+
+<div class="viewcode-block" id="KeyNotFoundError">
+<a class="viewcode-back" href="../../api/pystache.context.html#pystache.context.KeyNotFoundError">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KeyNotFoundError</span><span class="p">(</span><span class="n">PystacheError</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An exception raised when a key is not found in a context stack.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">details</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">details</span> <span class="o">=</span> <span class="n">details</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Key </span><span class="si">%s</span><span class="s1"> not found: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">details</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ContextStack">
+<a class="viewcode-back" href="../../api/pystache.context.html#pystache.context.ContextStack">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ContextStack</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides dictionary-like access to a stack of zero or more items.</span>
+
+<span class="sd">    Instances of this class are meant to act as the rendering context</span>
+<span class="sd">    when rendering Mustache templates in accordance with mustache(5)</span>
+<span class="sd">    and the Mustache spec.</span>
+
+<span class="sd">    Instances encapsulate a private stack of hashes, objects, and built-in</span>
+<span class="sd">    type instances.  Querying the stack for the value of a key queries</span>
+<span class="sd">    the items in the stack in order from last-added objects to first</span>
+<span class="sd">    (last in, first out).</span>
+
+<span class="sd">    Caution: this class does not currently support recursive nesting in</span>
+<span class="sd">    that items in the stack cannot themselves be ContextStack instances.</span>
+
+<span class="sd">    See the docstrings of the methods of this class for more details.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># We reserve keyword arguments for future options (e.g. a &quot;strict=True&quot;</span>
+    <span class="c1"># option for enabling a strict mode).</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">items</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct an instance, and initialize the private stack.</span>
+
+<span class="sd">        The *items arguments are the items with which to populate the</span>
+<span class="sd">        initial stack.  Items in the argument list are added to the</span>
+<span class="sd">        stack in order so that, in particular, items at the end of</span>
+<span class="sd">        the argument list are queried first when querying the stack.</span>
+
+<span class="sd">        Caution: items should not themselves be ContextStack instances, as</span>
+<span class="sd">        recursive nesting does not behave as one might expect.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stack</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a string representation of the instance.</span>
+
+<span class="sd">        For example--</span>
+
+<span class="sd">        &gt;&gt;&gt; context = ContextStack({&#39;alpha&#39;: &#39;abc&#39;}, {&#39;numeric&#39;: 123})</span>
+<span class="sd">        &gt;&gt;&gt; repr(context)</span>
+<span class="sd">        &quot;ContextStack({&#39;alpha&#39;: &#39;abc&#39;}, {&#39;numeric&#39;: 123})&quot;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_stack</span><span class="p">))</span>
+
+<div class="viewcode-block" id="ContextStack.create">
+<a class="viewcode-back" href="../../api/pystache.context.html#pystache.context.ContextStack.create">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build a ContextStack instance from a sequence of context-like items.</span>
+
+<span class="sd">        This factory-style method is more general than the ContextStack class&#39;s</span>
+<span class="sd">        constructor in that, unlike the constructor, the argument list</span>
+<span class="sd">        can itself contain ContextStack instances.</span>
+
+<span class="sd">        Here is an example illustrating various aspects of this method:</span>
+
+<span class="sd">        &gt;&gt;&gt; obj1 = {&#39;animal&#39;: &#39;cat&#39;, &#39;vegetable&#39;: &#39;carrot&#39;, &#39;mineral&#39;: &#39;copper&#39;}</span>
+<span class="sd">        &gt;&gt;&gt; obj2 = ContextStack({&#39;vegetable&#39;: &#39;spinach&#39;, &#39;mineral&#39;: &#39;silver&#39;})</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; context = ContextStack.create(obj1, None, obj2, mineral=&#39;gold&#39;)</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; context.get(&#39;animal&#39;)</span>
+<span class="sd">        &#39;cat&#39;</span>
+<span class="sd">        &gt;&gt;&gt; context.get(&#39;vegetable&#39;)</span>
+<span class="sd">        &#39;spinach&#39;</span>
+<span class="sd">        &gt;&gt;&gt; context.get(&#39;mineral&#39;)</span>
+<span class="sd">        &#39;gold&#39;</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          :context: zero or more dictionaries, ContextStack instances, or objects</span>
+<span class="sd">            with which to populate the initial context stack.  None</span>
+<span class="sd">            arguments will be skipped.  Items in the context list are</span>
+<span class="sd">            added to the stack in order so that later items in the argument</span>
+<span class="sd">            list take precedence over earlier items.  This behavior is the</span>
+<span class="sd">            same as the constructor.</span>
+
+<span class="sd">          :kwargs: additional key-value data to add to the context stack.</span>
+<span class="sd">            As these arguments appear after all items in the context list,</span>
+<span class="sd">            in the case of key conflicts these values take precedence over</span>
+<span class="sd">            all items in the context list.  This behavior is the same as</span>
+<span class="sd">            the constructor&#39;s.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">context</span>
+
+        <span class="n">context</span> <span class="o">=</span> <span class="n">ContextStack</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ContextStack</span><span class="p">):</span>
+                <span class="n">context</span><span class="o">.</span><span class="n">_stack</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">_stack</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">context</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">context</span></div>
+
+
+    <span class="c1"># TODO: add more unit tests for this.</span>
+    <span class="c1"># TODO: update the docstring for dotted names.</span>
+<div class="viewcode-block" id="ContextStack.get">
+<a class="viewcode-back" href="../../api/pystache.context.html#pystache.context.ContextStack.get">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resolve a dotted name against the current context stack.</span>
+
+<span class="sd">        This function follows the rules outlined in the section of the</span>
+<span class="sd">        spec regarding tag interpolation.  This function returns the value</span>
+<span class="sd">        as is and does not coerce the return value to a string.</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          :name: a dotted or non-dotted name.</span>
+
+<span class="sd">          :default: the value to return if name resolution fails at any point.</span>
+<span class="sd">            Defaults to the empty string per the Mustache spec.</span>
+
+<span class="sd">        This method queries items in the stack in order from last-added</span>
+<span class="sd">        objects to first (last in, first out).  The value returned is</span>
+<span class="sd">        the value of the key in the first item that contains the key.</span>
+<span class="sd">        If the key is not found in any item in the stack, then the default</span>
+<span class="sd">        value is returned.  The default value defaults to None.</span>
+
+<span class="sd">        In accordance with the spec, this method queries items in the</span>
+<span class="sd">        stack for a key differently depending on whether the item is a</span>
+<span class="sd">        hash, object, or neither (as defined in the module docstring):</span>
+
+<span class="sd">        (1) Hash: if the item is a hash, then the key&#39;s value is the</span>
+<span class="sd">            dictionary value of the key.  If the dictionary doesn&#39;t contain</span>
+<span class="sd">            the key, then the key is considered not found.</span>
+
+<span class="sd">        (2) Object: if the item is an an object, then the method looks for</span>
+<span class="sd">            an attribute with the same name as the key.  If an attribute</span>
+<span class="sd">            with that name exists, the value of the attribute is returned.</span>
+<span class="sd">            If the attribute is callable, however (i.e. if the attribute</span>
+<span class="sd">            is a method), then the attribute is called with no arguments</span>
+<span class="sd">            and that value is returned.  If there is no attribute with</span>
+<span class="sd">            the same name as the key, then the key is considered not found.</span>
+
+<span class="sd">        (3) Neither: if the item is neither a hash nor an object, then</span>
+<span class="sd">            the key is considered not found.</span>
+
+<span class="sd">        *Caution*:</span>
+
+<span class="sd">          Callables are handled differently depending on whether they are</span>
+<span class="sd">          dictionary values, as in (1) above, or attributes, as in (2).</span>
+<span class="sd">          The former are returned as-is, while the latter are first</span>
+<span class="sd">          called and that value returned.</span>
+
+<span class="sd">          Here is an example to illustrate:</span>
+
+<span class="sd">          &gt;&gt;&gt; def greet():</span>
+<span class="sd">          ...     return &quot;Hi Bob!&quot;</span>
+<span class="sd">          &gt;&gt;&gt;</span>
+<span class="sd">          &gt;&gt;&gt; class Greeter(object):</span>
+<span class="sd">          ...     greet = None</span>
+<span class="sd">          &gt;&gt;&gt;</span>
+<span class="sd">          &gt;&gt;&gt; dct = {&#39;greet&#39;: greet}</span>
+<span class="sd">          &gt;&gt;&gt; obj = Greeter()</span>
+<span class="sd">          &gt;&gt;&gt; obj.greet = greet</span>
+<span class="sd">          &gt;&gt;&gt;</span>
+<span class="sd">          &gt;&gt;&gt; dct[&#39;greet&#39;] is obj.greet</span>
+<span class="sd">          True</span>
+<span class="sd">          &gt;&gt;&gt; ContextStack(dct).get(&#39;greet&#39;)  #doctest: +ELLIPSIS</span>
+<span class="sd">          &lt;function greet at 0x...&gt;</span>
+<span class="sd">          &gt;&gt;&gt; ContextStack(obj).get(&#39;greet&#39;)</span>
+<span class="sd">          &#39;Hi Bob!&#39;</span>
+
+<span class="sd">          TODO: explain the rationale for this difference in treatment.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;.&#39;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">KeyNotFoundError</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;empty context stack&#39;</span><span class="p">)</span>
+
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_simple</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span> <span class="n">KeyNotFoundError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">KeyNotFoundError</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;first part&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="c1"># The full context stack is not used to resolve the remaining parts.</span>
+            <span class="c1"># From the spec--</span>
+            <span class="c1">#</span>
+            <span class="c1">#   5) If any name parts were retained in step 1, each should be</span>
+            <span class="c1">#   resolved against a context stack containing only the result</span>
+            <span class="c1">#   from the former resolution.  If any part fails resolution, the</span>
+            <span class="c1">#   result should be considered falsey, and should interpolate as</span>
+            <span class="c1">#   the empty string.</span>
+            <span class="c1">#</span>
+            <span class="c1"># TODO: make sure we have a test case for the above point.</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">_get_value</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">part</span><span class="p">)</span>
+            <span class="c1"># TODO: consider using EAFP here instead.</span>
+            <span class="c1">#   http://docs.python.org/glossary.html#term-eafp</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="n">_NOT_FOUND</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">KeyNotFoundError</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;missing </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">part</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Query the stack for a non-dotted name.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_stack</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">_get_value</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_NOT_FOUND</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">raise</span> <span class="n">KeyNotFoundError</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;part missing&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ContextStack.push">
+<a class="viewcode-back" href="../../api/pystache.context.html#pystache.context.ContextStack.push">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Push an item onto the stack.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ContextStack.pop">
+<a class="viewcode-back" href="../../api/pystache.context.html#pystache.context.ContextStack.pop">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pop an item off of the stack, and return it.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ContextStack.top">
+<a class="viewcode-back" href="../../api/pystache.context.html#pystache.context.ContextStack.top">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the item last added to the stack.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ContextStack.copy">
+<a class="viewcode-back" href="../../api/pystache.context.html#pystache.context.ContextStack.copy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a copy of this instance.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ContextStack</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_stack</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

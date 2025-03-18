@@ -1,0 +1,7 @@
+pystache.tests.spectesting module
+=================================
+
+.. automodule:: pystache.tests.spectesting
+   :members:
+   :undoc-members:
+   :show-inheritance:

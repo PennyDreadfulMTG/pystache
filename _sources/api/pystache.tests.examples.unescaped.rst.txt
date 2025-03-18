@@ -1,0 +1,7 @@
+pystache.tests.examples.unescaped module
+========================================
+
+.. automodule:: pystache.tests.examples.unescaped
+   :members:
+   :undoc-members:
+   :show-inheritance:

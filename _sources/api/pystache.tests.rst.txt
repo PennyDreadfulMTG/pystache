@@ -1,0 +1,44 @@
+pystache.tests package
+======================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pystache.tests.data
+   pystache.tests.examples
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pystache.tests.benchmark
+   pystache.tests.common
+   pystache.tests.doctesting
+   pystache.tests.main
+   pystache.tests.spectesting
+   pystache.tests.test___init__
+   pystache.tests.test_commands
+   pystache.tests.test_context
+   pystache.tests.test_defaults
+   pystache.tests.test_examples
+   pystache.tests.test_loader
+   pystache.tests.test_locator
+   pystache.tests.test_parser
+   pystache.tests.test_pystache
+   pystache.tests.test_renderengine
+   pystache.tests.test_renderer
+   pystache.tests.test_simple
+   pystache.tests.test_specloader
+
+Module contents
+---------------
+
+.. automodule:: pystache.tests
+   :members:
+   :undoc-members:
+   :show-inheritance:

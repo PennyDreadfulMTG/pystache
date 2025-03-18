@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.loader &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.loader</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.loader</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides a Loader class for locating and reading templates.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache</span><span class="w"> </span><span class="kn">import</span> <span class="n">common</span><span class="p">,</span> <span class="n">defaults</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.locator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Locator</span>
+
+<span class="c1"># We make a function so that the current defaults take effect.</span>
+<span class="c1"># TODO: revisit whether this is necessary.</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_make_to_unicode</span><span class="p">():</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_unicode</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raises a TypeError exception if the given string is already unicode.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">encoding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">encoding</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">STRING_ENCODING</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">encoding</span><span class="p">,</span> <span class="n">defaults</span><span class="o">.</span><span class="n">DECODE_ERRORS</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">to_unicode</span>
+
+
+<div class="viewcode-block" id="Loader">
+<a class="viewcode-back" href="../../api/pystache.loader.html#pystache.loader.Loader">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Loader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads the template associated to a name or user-defined object.</span>
+
+<span class="sd">    All load_*() methods return the template as a unicode string.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">file_encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">extension</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">to_unicode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">search_dirs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct a template loader instance.</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          extension: the template file extension, without the leading dot.</span>
+<span class="sd">            Pass False for no extension (e.g. to use extensionless template</span>
+<span class="sd">            files).  Defaults to the package default.</span>
+
+<span class="sd">          file_encoding: the name of the encoding to use when converting file</span>
+<span class="sd">            contents to unicode.  Defaults to the package default.</span>
+
+<span class="sd">          search_dirs: the list of directories in which to search when loading</span>
+<span class="sd">            a template by name or file name.  Defaults to the package default.</span>
+
+<span class="sd">          to_unicode: the function to use when converting strings of type</span>
+<span class="sd">            str to unicode.  The function should have the signature:</span>
+
+<span class="sd">              to_unicode(s, encoding=None)</span>
+
+<span class="sd">            It should accept a string of type str and an optional encoding</span>
+<span class="sd">            name and return a string of type unicode.  Defaults to calling</span>
+<span class="sd">            Python&#39;s built-in function unicode() using the package string</span>
+<span class="sd">            encoding and decode errors defaults.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">extension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">extension</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">TEMPLATE_EXTENSION</span>
+
+        <span class="k">if</span> <span class="n">file_encoding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">file_encoding</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">FILE_ENCODING</span>
+
+        <span class="k">if</span> <span class="n">search_dirs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">search_dirs</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">SEARCH_DIRS</span>
+
+        <span class="k">if</span> <span class="n">to_unicode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">to_unicode</span> <span class="o">=</span> <span class="n">_make_to_unicode</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">extension</span> <span class="o">=</span> <span class="n">extension</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_encoding</span> <span class="o">=</span> <span class="n">file_encoding</span>
+        <span class="c1"># TODO: unit test setting this attribute.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_dirs</span> <span class="o">=</span> <span class="n">search_dirs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_unicode</span> <span class="o">=</span> <span class="n">to_unicode</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_locator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Locator</span><span class="p">(</span><span class="n">extension</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">extension</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Loader.str">
+<a class="viewcode-back" href="../../api/pystache.loader.html#pystache.loader.Loader.str">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a string to unicode using the given encoding, and return it.</span>
+
+<span class="sd">        This function uses the underlying to_unicode attribute.</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          s: a basestring instance to convert to unicode.  Unlike Python&#39;s</span>
+<span class="sd">            built-in unicode() function, it is okay to pass unicode strings</span>
+<span class="sd">            to this function.  (Passing a unicode string to Python&#39;s unicode()</span>
+<span class="sd">            with the encoding argument throws the error, &quot;TypeError: decoding</span>
+<span class="sd">            Unicode is not supported.&quot;)</span>
+
+<span class="sd">          encoding: the encoding to pass to the to_unicode attribute.</span>
+<span class="sd">            Defaults to None.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_unicode</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Loader.read">
+<a class="viewcode-back" href="../../api/pystache.loader.html#pystache.loader.Loader.read">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read the template at the given path, and return it as a unicode string.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">encoding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">encoding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_encoding</span>
+        <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Windows&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">str</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">str</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Loader.load_file">
+<a class="viewcode-back" href="../../api/pystache.loader.html#pystache.loader.Loader.load_file">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find and return the template with the given file name.</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          file_name: the file name of the template.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">locator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_locator</span><span class="p">()</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">locator</span><span class="o">.</span><span class="n">find_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_dirs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Loader.load_name">
+<a class="viewcode-back" href="../../api/pystache.loader.html#pystache.loader.Loader.load_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find and return the template with the given template name.</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          name: the name of the template.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">locator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_locator</span><span class="p">()</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">locator</span><span class="o">.</span><span class="n">find_name</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_dirs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
+
+
+    <span class="c1"># TODO: unit-test this method.</span>
+<div class="viewcode-block" id="Loader.load_object">
+<a class="viewcode-back" href="../../api/pystache.loader.html#pystache.loader.Loader.load_object">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find and return the template associated to the given object.</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          obj: an instance of a user-defined class.</span>
+
+<span class="sd">          search_dirs: the list of directories in which to search.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">locator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_locator</span><span class="p">()</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">locator</span><span class="o">.</span><span class="n">find_object</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_dirs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

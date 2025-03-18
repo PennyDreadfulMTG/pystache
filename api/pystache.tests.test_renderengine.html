@@ -1,0 +1,530 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.tests.test_renderengine module &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pystache.tests.test_renderer module" href="pystache.tests.test_renderer.html" />
+    <link rel="prev" title="pystache.tests.test_pystache module" href="pystache.tests.test_pystache.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pystache</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pystache.html">pystache package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pystache.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pystache.commands.html">pystache.commands package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="pystache.tests.html">pystache.tests package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.html#module-pystache">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pystache</a></li>
+          <li class="breadcrumb-item"><a href="pystache.html">pystache package</a></li>
+          <li class="breadcrumb-item"><a href="pystache.tests.html">pystache.tests package</a></li>
+      <li class="breadcrumb-item active">pystache.tests.test_renderengine module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/pystache.tests.test_renderengine.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pystache.tests.test_renderengine">
+<span id="pystache-tests-test-renderengine-module"></span><h1>pystache.tests.test_renderengine module<a class="headerlink" href="#module-pystache.tests.test_renderengine" title="Link to this heading"></a></h1>
+<p>Unit tests of renderengine.py.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderEngineTestCase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.tests.test_renderengine.</span></span><span class="sig-name descname"><span class="pre">RenderEngineTestCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderEngineTestCase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderEngineTestCase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<p>Test the RenderEngine class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderEngineTestCase.test_init">
+<span class="sig-name descname"><span class="pre">test_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderEngineTestCase.test_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderEngineTestCase.test_init" title="Link to this definition"></a></dt>
+<dd><p>Test that __init__() stores all of the arguments correctly.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.tests.test_renderengine.</span></span><span class="sig-name descname"><span class="pre">RenderTests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code>, <a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.AssertStringMixin" title="pystache.tests.common.AssertStringMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssertStringMixin</span></code></a>, <a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.AssertExceptionMixin" title="pystache.tests.common.AssertExceptionMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssertExceptionMixin</span></code></a></p>
+<p>Tests RenderEngine.render().</p>
+<p>Explicit spec-test-like tests best go in this class since the
+RenderEngine class contains all parsing logic.  This way, the unit tests
+will be more focused and fail “closer to the code”.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test__escape">
+<span class="sig-name descname"><span class="pre">test__escape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test__escape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test__escape" title="Link to this definition"></a></dt>
+<dd><p>Test that render() uses the escape attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test__escape_does_not_call_literal">
+<span class="sig-name descname"><span class="pre">test__escape_does_not_call_literal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test__escape_does_not_call_literal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test__escape_does_not_call_literal" title="Link to this definition"></a></dt>
+<dd><p>Test that render() does not call literal before or after calling escape.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test__escape_preserves_unicode_subclasses">
+<span class="sig-name descname"><span class="pre">test__escape_preserves_unicode_subclasses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test__escape_preserves_unicode_subclasses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test__escape_preserves_unicode_subclasses" title="Link to this definition"></a></dt>
+<dd><p>Test that render() preserves unicode subclasses when passing to escape.</p>
+<p>This is useful, for example, if one wants to respect whether a
+variable value is markupsafe.Markup when escaping.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test__literal">
+<span class="sig-name descname"><span class="pre">test__literal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test__literal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test__literal" title="Link to this definition"></a></dt>
+<dd><p>Test that render() uses the literal attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test__non_basestring__literal_and_escaped">
+<span class="sig-name descname"><span class="pre">test__non_basestring__literal_and_escaped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test__non_basestring__literal_and_escaped"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test__non_basestring__literal_and_escaped" title="Link to this definition"></a></dt>
+<dd><p>Test a context value that is not a basestring instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test__resolve_partial">
+<span class="sig-name descname"><span class="pre">test__resolve_partial</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test__resolve_partial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test__resolve_partial" title="Link to this definition"></a></dt>
+<dd><p>Test that render() uses the load_template attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_comment__multiline">
+<span class="sig-name descname"><span class="pre">test_comment__multiline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_comment__multiline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_comment__multiline" title="Link to this definition"></a></dt>
+<dd><p>Check that multiline comments are permitted.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_custom_delimiters__not_retroactive">
+<span class="sig-name descname"><span class="pre">test_custom_delimiters__not_retroactive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_custom_delimiters__not_retroactive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_custom_delimiters__not_retroactive" title="Link to this definition"></a></dt>
+<dd><p>Check that changing custom delimiters back is not “retroactive.”</p>
+<p>Test case for issue #35: <a class="reference external" href="https://github.com/defunkt/pystache/issues/35">https://github.com/defunkt/pystache/issues/35</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_custom_delimiters__sections">
+<span class="sig-name descname"><span class="pre">test_custom_delimiters__sections</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_custom_delimiters__sections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_custom_delimiters__sections" title="Link to this definition"></a></dt>
+<dd><p>Check that custom delimiters can be used to start a section.</p>
+<p>Test case for issue #20: <a class="reference external" href="https://github.com/defunkt/pystache/issues/20">https://github.com/defunkt/pystache/issues/20</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_dot_notation">
+<span class="sig-name descname"><span class="pre">test_dot_notation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_dot_notation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_dot_notation" title="Link to this definition"></a></dt>
+<dd><p>Test simple dot notation cases.</p>
+<p>Check that we can use dot notation when the variable is a dict,
+user-defined object, or combination of both.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_dot_notation__missing_part_terminates_search">
+<span class="sig-name descname"><span class="pre">test_dot_notation__missing_part_terminates_search</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_dot_notation__missing_part_terminates_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_dot_notation__missing_part_terminates_search" title="Link to this definition"></a></dt>
+<dd><p>Test that dotted name resolution terminates on a later part not found.</p>
+<p>Check that if a later dotted name part is not found in the result from
+the former resolution, then name resolution terminates rather than
+starting the search over with the next element of the context stack.
+From the spec (interpolation section)–</p>
+<blockquote>
+<div><p>5) If any name parts were retained in step 1, each should be resolved
+against a context stack containing only the result from the former
+resolution.  If any part fails resolution, the result should be considered
+falsey, and should interpolate as the empty string.</p>
+</div></blockquote>
+<p>This test case is equivalent to the test case in the following pull
+request:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://github.com/mustache/spec/pull/48">https://github.com/mustache/spec/pull/48</a></p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_dot_notation__multiple_levels">
+<span class="sig-name descname"><span class="pre">test_dot_notation__multiple_levels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_dot_notation__multiple_levels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_dot_notation__multiple_levels" title="Link to this definition"></a></dt>
+<dd><p>Test dot notation with multiple levels.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_implicit_iterator__escaped">
+<span class="sig-name descname"><span class="pre">test_implicit_iterator__escaped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_implicit_iterator__escaped"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_implicit_iterator__escaped" title="Link to this definition"></a></dt>
+<dd><p>Test an implicit iterator in a normal tag.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_implicit_iterator__literal">
+<span class="sig-name descname"><span class="pre">test_implicit_iterator__literal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_implicit_iterator__literal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_implicit_iterator__literal" title="Link to this definition"></a></dt>
+<dd><p>Test an implicit iterator in a literal tag.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_interpolation__built_in_type__integer">
+<span class="sig-name descname"><span class="pre">test_interpolation__built_in_type__integer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_interpolation__built_in_type__integer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_interpolation__built_in_type__integer" title="Link to this definition"></a></dt>
+<dd><p>Check tag interpolation with a built-in type: integer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_interpolation__built_in_type__list">
+<span class="sig-name descname"><span class="pre">test_interpolation__built_in_type__list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_interpolation__built_in_type__list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_interpolation__built_in_type__list" title="Link to this definition"></a></dt>
+<dd><p>Check tag interpolation with a built-in type: list.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_interpolation__built_in_type__string">
+<span class="sig-name descname"><span class="pre">test_interpolation__built_in_type__string</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_interpolation__built_in_type__string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_interpolation__built_in_type__string" title="Link to this definition"></a></dt>
+<dd><p>Check tag interpolation with a built-in type: string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_interpolation__falsey__none">
+<span class="sig-name descname"><span class="pre">test_interpolation__falsey__none</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_interpolation__falsey__none"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_interpolation__falsey__none" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_interpolation__falsey__zero">
+<span class="sig-name descname"><span class="pre">test_interpolation__falsey__zero</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_interpolation__falsey__zero"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_interpolation__falsey__zero" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_interpolation__nonascii_nonunicode">
+<span class="sig-name descname"><span class="pre">test_interpolation__nonascii_nonunicode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_interpolation__nonascii_nonunicode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_interpolation__nonascii_nonunicode" title="Link to this definition"></a></dt>
+<dd><p>Test a tag whose value is a non-ascii, non-unicode string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_lambda__returning_nonascii_nonunicode">
+<span class="sig-name descname"><span class="pre">test_lambda__returning_nonascii_nonunicode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_lambda__returning_nonascii_nonunicode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_lambda__returning_nonascii_nonunicode" title="Link to this definition"></a></dt>
+<dd><p>Test a lambda tag value returning a non-ascii, non-unicode string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_literal__in_partial">
+<span class="sig-name descname"><span class="pre">test_literal__in_partial</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_literal__in_partial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_literal__in_partial" title="Link to this definition"></a></dt>
+<dd><p>Check that literals work in partials.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_literal__in_section">
+<span class="sig-name descname"><span class="pre">test_literal__in_section</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_literal__in_section"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_literal__in_section" title="Link to this definition"></a></dt>
+<dd><p>Check that literals work in sections.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_literal__sigil">
+<span class="sig-name descname"><span class="pre">test_literal__sigil</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_literal__sigil"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_literal__sigil" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_partial">
+<span class="sig-name descname"><span class="pre">test_partial</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_partial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_partial" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_partial__context_values">
+<span class="sig-name descname"><span class="pre">test_partial__context_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_partial__context_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_partial__context_values" title="Link to this definition"></a></dt>
+<dd><p>Test that escape and literal work on context values in partials.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_render">
+<span class="sig-name descname"><span class="pre">test_render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_render" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__context_precedence">
+<span class="sig-name descname"><span class="pre">test_section__context_precedence</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__context_precedence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__context_precedence" title="Link to this definition"></a></dt>
+<dd><p>Check that items higher in the context stack take precedence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__context_values">
+<span class="sig-name descname"><span class="pre">test_section__context_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__context_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__context_values" title="Link to this definition"></a></dt>
+<dd><p>Test that escape and literal work on context values in sections.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__end_tag_mismatch">
+<span class="sig-name descname"><span class="pre">test_section__end_tag_mismatch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__end_tag_mismatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__end_tag_mismatch" title="Link to this definition"></a></dt>
+<dd><p>Check what happens if the end tag doesn’t match.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__end_tag_with_no_start_tag">
+<span class="sig-name descname"><span class="pre">test_section__end_tag_with_no_start_tag</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__end_tag_with_no_start_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__end_tag_with_no_start_tag" title="Link to this definition"></a></dt>
+<dd><p>Check what happens if there is an end tag with no start tag.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__iterable">
+<span class="sig-name descname"><span class="pre">test_section__iterable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__iterable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__iterable" title="Link to this definition"></a></dt>
+<dd><p>Check that objects supporting iteration (aside from dicts) behave like lists.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__lambda">
+<span class="sig-name descname"><span class="pre">test_section__lambda</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__lambda"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__lambda" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__lambda__list">
+<span class="sig-name descname"><span class="pre">test_section__lambda__list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__lambda__list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__lambda__list" title="Link to this definition"></a></dt>
+<dd><p>Check that lists of lambdas are processed correctly for sections.</p>
+<p>This test case is equivalent to a test submitted to the Mustache spec here:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://github.com/mustache/spec/pull/47">https://github.com/mustache/spec/pull/47</a> .</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__lambda__mixed_list">
+<span class="sig-name descname"><span class="pre">test_section__lambda__mixed_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__lambda__mixed_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__lambda__mixed_list" title="Link to this definition"></a></dt>
+<dd><p>Test a mixed list of lambdas and non-lambdas as a section value.</p>
+<p>This test case is equivalent to a test submitted to the Mustache spec here:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://github.com/mustache/spec/pull/47">https://github.com/mustache/spec/pull/47</a> .</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__lambda__no_reinterpolation">
+<span class="sig-name descname"><span class="pre">test_section__lambda__no_reinterpolation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__lambda__no_reinterpolation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__lambda__no_reinterpolation" title="Link to this definition"></a></dt>
+<dd><p>Check that section lambda return values are not re-interpolated.</p>
+<p>This test is a sanity check that the rendered lambda return value
+is not re-interpolated as could be construed by reading the
+section part of the Mustache spec.</p>
+<p>This test case is equivalent to a test submitted to the Mustache spec here:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://github.com/mustache/spec/pull/47">https://github.com/mustache/spec/pull/47</a> .</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__lambda__not_on_context_stack">
+<span class="sig-name descname"><span class="pre">test_section__lambda__not_on_context_stack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__lambda__not_on_context_stack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__lambda__not_on_context_stack" title="Link to this definition"></a></dt>
+<dd><p>Check that section lambdas are not pushed onto the context stack.</p>
+<p>Even though the sections spec says that section data values should be
+pushed onto the context stack prior to rendering, this does not apply
+to lambdas.  Lambdas obey their own special case.</p>
+<p>This test case is equivalent to a test submitted to the Mustache spec here:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://github.com/mustache/spec/pull/47">https://github.com/mustache/spec/pull/47</a> .</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__lambda__returning_nonascii_nonunicode">
+<span class="sig-name descname"><span class="pre">test_section__lambda__returning_nonascii_nonunicode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__lambda__returning_nonascii_nonunicode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__lambda__returning_nonascii_nonunicode" title="Link to this definition"></a></dt>
+<dd><p>Test a lambda section value returning a non-ascii, non-unicode string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__lambda__returning_nonstring">
+<span class="sig-name descname"><span class="pre">test_section__lambda__returning_nonstring</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__lambda__returning_nonstring"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__lambda__returning_nonstring" title="Link to this definition"></a></dt>
+<dd><p>Test a lambda section value returning a non-string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__lambda__tag_in_output">
+<span class="sig-name descname"><span class="pre">test_section__lambda__tag_in_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__lambda__tag_in_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__lambda__tag_in_output" title="Link to this definition"></a></dt>
+<dd><p>Check that callable output is treated as a template string (issue #46).</p>
+<p>The spec says–</p>
+<blockquote>
+<div><p>When used as the data value for a Section tag, the lambda MUST
+be treatable as an arity 1 function, and invoked as such (passing
+a String containing the unprocessed section contents).  The
+returned value MUST be rendered against the current delimiters,
+then interpolated in place of the section.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__list_referencing_outer_context">
+<span class="sig-name descname"><span class="pre">test_section__list_referencing_outer_context</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__list_referencing_outer_context"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__list_referencing_outer_context" title="Link to this definition"></a></dt>
+<dd><p>Check that list items can access the parent context.</p>
+<p>For sections whose value is a list, check that items in the list
+have access to the values inherited from the parent context
+when rendering.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__nested_truthy">
+<span class="sig-name descname"><span class="pre">test_section__nested_truthy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__nested_truthy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__nested_truthy" title="Link to this definition"></a></dt>
+<dd><p>Check that “nested truthy” sections get rendered.</p>
+<p>Test case for issue #24: <a class="reference external" href="https://github.com/defunkt/pystache/issues/24">https://github.com/defunkt/pystache/issues/24</a></p>
+<p>This test is copied from the spec.  We explicitly include it to
+prevent regressions for those who don’t pull down the spec tests.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__nested_with_same_keys">
+<span class="sig-name descname"><span class="pre">test_section__nested_with_same_keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__nested_with_same_keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__nested_with_same_keys" title="Link to this definition"></a></dt>
+<dd><p>Check a doubly-nested section with the same context key.</p>
+<p>Test case for issue #36: <a class="reference external" href="https://github.com/defunkt/pystache/issues/36">https://github.com/defunkt/pystache/issues/36</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__nonascii_nonunicode">
+<span class="sig-name descname"><span class="pre">test_section__nonascii_nonunicode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__nonascii_nonunicode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__nonascii_nonunicode" title="Link to this definition"></a></dt>
+<dd><p>Test a section whose value is a non-ascii, non-unicode string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__output_not_interpolated">
+<span class="sig-name descname"><span class="pre">test_section__output_not_interpolated</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__output_not_interpolated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__output_not_interpolated" title="Link to this definition"></a></dt>
+<dd><p>Check that rendered section output is not interpolated.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_section__string_values_not_lists">
+<span class="sig-name descname"><span class="pre">test_section__string_values_not_lists</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_section__string_values_not_lists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_section__string_values_not_lists" title="Link to this definition"></a></dt>
+<dd><p>Check that string section values are not interpreted as lists.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_tag__output_not_interpolated">
+<span class="sig-name descname"><span class="pre">test_tag__output_not_interpolated</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_tag__output_not_interpolated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_tag__output_not_interpolated" title="Link to this definition"></a></dt>
+<dd><p>Context values should not be treated as templates (issue #44).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_tag__output_not_interpolated__section">
+<span class="sig-name descname"><span class="pre">test_tag__output_not_interpolated__section</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_tag__output_not_interpolated__section"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_tag__output_not_interpolated__section" title="Link to this definition"></a></dt>
+<dd><p>Context values should not be treated as templates (issue #44).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_to_str">
+<span class="sig-name descname"><span class="pre">test_to_str</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_to_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_to_str" title="Link to this definition"></a></dt>
+<dd><p>Test the to_str attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_to_str__lambda">
+<span class="sig-name descname"><span class="pre">test_to_str__lambda</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_to_str__lambda"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_to_str__lambda" title="Link to this definition"></a></dt>
+<dd><p>Test the to_str attribute for a lambda.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_to_str__section_lambda">
+<span class="sig-name descname"><span class="pre">test_to_str__section_lambda</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_to_str__section_lambda"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_to_str__section_lambda" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.RenderTests.test_to_str__section_list">
+<span class="sig-name descname"><span class="pre">test_to_str__section_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#RenderTests.test_to_str__section_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.RenderTests.test_to_str__section_list" title="Link to this definition"></a></dt>
+<dd><p>Test the to_str attribute for a section list.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pystache.tests.test_renderengine.mock_literal">
+<span class="sig-prename descclassname"><span class="pre">pystache.tests.test_renderengine.</span></span><span class="sig-name descname"><span class="pre">mock_literal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/test_renderengine.html#mock_literal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.test_renderengine.mock_literal" title="Link to this definition"></a></dt>
+<dd><p>For use as the literal keyword argument to the RenderEngine constructor.</p>
+<p>Arguments:</p>
+<blockquote>
+<div><p>s: a byte string or unicode string.</p>
+</div></blockquote>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pystache.tests.test_pystache.html" class="btn btn-neutral float-left" title="pystache.tests.test_pystache module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pystache.tests.test_renderer.html" class="btn btn-neutral float-right" title="pystache.tests.test_renderer module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

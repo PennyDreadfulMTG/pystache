@@ -1,0 +1,7 @@
+pystache.common module
+======================
+
+.. automodule:: pystache.common
+   :members:
+   :undoc-members:
+   :show-inheritance:

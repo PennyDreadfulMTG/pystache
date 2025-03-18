@@ -1,0 +1,7 @@
+pystache.tests.data.views module
+================================
+
+.. automodule:: pystache.tests.data.views
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.renderengine &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.renderengine</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.renderengine</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines a class responsible for rendering logic.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_string</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.parser</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse</span>
+
+
+<div class="viewcode-block" id="context_get">
+<a class="viewcode-back" href="../../api/pystache.renderengine.html#pystache.renderengine.context_get">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">context_get</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find and return a name from a ContextStack instance.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">stack</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="RenderEngine">
+<a class="viewcode-back" href="../../api/pystache.renderengine.html#pystache.renderengine.RenderEngine">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RenderEngine</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides a render() method.</span>
+
+<span class="sd">    This class is meant only for internal use.</span>
+
+<span class="sd">    As a rule, the code in this class operates on unicode strings where</span>
+<span class="sd">    possible rather than, say, strings of type str or markupsafe.Markup.</span>
+<span class="sd">    This means that strings obtained from &quot;external&quot; sources like partials</span>
+<span class="sd">    and variable tag values are immediately converted to unicode (or</span>
+<span class="sd">    escaped and converted to unicode) before being operated on further.</span>
+<span class="sd">    This makes maintaining, reasoning about, and testing the correctness</span>
+<span class="sd">    of the code much simpler.  In particular, it keeps the implementation</span>
+<span class="sd">    of this class independent of the API details of one (or possibly more)</span>
+<span class="sd">    unicode subclasses (e.g. markupsafe.Markup).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># TODO: it would probably be better for the constructor to accept</span>
+    <span class="c1">#   and set as an attribute a single RenderResolver instance</span>
+    <span class="c1">#   that encapsulates the customizable aspects of converting</span>
+    <span class="c1">#   strings and resolving partials and names from context.</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">literal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">escape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">resolve_context</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">resolve_partial</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">to_str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          literal: the function used to convert unescaped variable tag</span>
+<span class="sd">            values to unicode, e.g. the value corresponding to a tag</span>
+<span class="sd">            &quot;{{{name}}}&quot;.  The function should accept a string of type</span>
+<span class="sd">            str or unicode (or a subclass) and return a string of type</span>
+<span class="sd">            unicode (but not a proper subclass of unicode).</span>
+<span class="sd">                This class will only pass basestring instances to this</span>
+<span class="sd">            function.  For example, it will call str() on integer variable</span>
+<span class="sd">            values prior to passing them to this function.</span>
+
+<span class="sd">          escape: the function used to escape and convert variable tag</span>
+<span class="sd">            values to unicode, e.g. the value corresponding to a tag</span>
+<span class="sd">            &quot;{{name}}&quot;.  The function should obey the same properties</span>
+<span class="sd">            described above for the &quot;literal&quot; function argument.</span>
+<span class="sd">                This function should take care to convert any str</span>
+<span class="sd">            arguments to unicode just as the literal function should, as</span>
+<span class="sd">            this class will not pass tag values to literal prior to passing</span>
+<span class="sd">            them to this function.  This allows for more flexibility,</span>
+<span class="sd">            for example using a custom escape function that handles</span>
+<span class="sd">            incoming strings of type markupsafe.Markup differently</span>
+<span class="sd">            from plain unicode strings.</span>
+
+<span class="sd">          resolve_context: the function to call to resolve a name against</span>
+<span class="sd">            a context stack.  The function should accept two positional</span>
+<span class="sd">            arguments: a ContextStack instance and a name to resolve.</span>
+
+<span class="sd">          resolve_partial: the function to call when loading a partial.</span>
+<span class="sd">            The function should accept a template name string and return a</span>
+<span class="sd">            template string of type unicode (not a subclass).</span>
+
+<span class="sd">          to_str: a function that accepts an object and returns a string (e.g.</span>
+<span class="sd">            the built-in function str).  This function is used for string</span>
+<span class="sd">            coercion whenever a string is required (e.g. for converting None</span>
+<span class="sd">            or 0 to a string).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">escape</span> <span class="o">=</span> <span class="n">escape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">literal</span> <span class="o">=</span> <span class="n">literal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resolve_context</span> <span class="o">=</span> <span class="n">resolve_context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resolve_partial</span> <span class="o">=</span> <span class="n">resolve_partial</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_str</span> <span class="o">=</span> <span class="n">to_str</span>
+
+    <span class="c1"># TODO: Rename context to stack throughout this module.</span>
+
+    <span class="c1"># From the spec:</span>
+    <span class="c1">#</span>
+    <span class="c1">#   When used as the data value for an Interpolation tag, the lambda</span>
+    <span class="c1">#   MUST be treatable as an arity 0 function, and invoked as such.</span>
+    <span class="c1">#   The returned value MUST be rendered against the default delimiters,</span>
+    <span class="c1">#   then interpolated in place of the lambda.</span>
+    <span class="c1">#</span>
+<div class="viewcode-block" id="RenderEngine.fetch_string">
+<a class="viewcode-back" href="../../api/pystache.renderengine.html#pystache.renderengine.RenderEngine.fetch_string">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fetch_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a value from the given context as a basestring instance.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolve_context</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="c1"># Return because _render_value() is already a string.</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render_value</span><span class="p">(</span><span class="n">val</span><span class="p">(),</span> <span class="n">context</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_string</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">val</span></div>
+
+
+<div class="viewcode-block" id="RenderEngine.fetch_section_data">
+<a class="viewcode-back" href="../../api/pystache.renderengine.html#pystache.renderengine.RenderEngine.fetch_section_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fetch_section_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fetch the value of a section as a list.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolve_context</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># From the spec:</span>
+        <span class="c1">#</span>
+        <span class="c1">#   If the data is not of a list type, it is coerced into a list</span>
+        <span class="c1">#   as follows: if the data is truthy (e.g. `!!data == true`),</span>
+        <span class="c1">#   use a single-element list containing the data, otherwise use</span>
+        <span class="c1">#   an empty list.</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># The least brittle way to determine whether something</span>
+            <span class="c1"># supports iteration is by trying to call iter() on it:</span>
+            <span class="c1">#</span>
+            <span class="c1">#   http://docs.python.org/library/functions.html#iter</span>
+            <span class="c1">#</span>
+            <span class="c1"># It is not sufficient, for example, to check whether the item</span>
+            <span class="c1"># implements __iter__ () (the iteration protocol).  There is</span>
+            <span class="c1"># also __getitem__() (the sequence protocol).  In Python 2,</span>
+            <span class="c1"># strings do not implement __iter__(), but in Python 3 they do.</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nb">iter</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="c1"># Then the value does not support iteration.</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">is_string</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="c1"># Do not treat strings and dicts (which are iterable) as lists.</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>
+                <span class="c1"># Otherwise, treat the value as a list.</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_render_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">delimiters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render an arbitrary value.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_string</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="c1"># In case the template is an integer, for example.</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">literal</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">delimiters</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RenderEngine.render">
+<a class="viewcode-back" href="../../api/pystache.renderengine.html#pystache.renderengine.RenderEngine.render">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context_stack</span><span class="p">,</span> <span class="n">delimiters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render a unicode template string, and return as unicode.</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          template: a template string of type unicode (but not a proper</span>
+<span class="sd">            subclass of unicode).</span>
+
+<span class="sd">          context_stack: a ContextStack instance.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parsed_template</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">delimiters</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">parsed_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context_stack</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.template_spec module &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="pystache.specloader module" href="pystache.specloader.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pystache</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pystache.html">pystache package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pystache.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="pystache.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pystache.common.html">pystache.common module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.context.html">pystache.context module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.defaults.html">pystache.defaults module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.init.html">pystache.init module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.loader.html">pystache.loader module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.locator.html">pystache.locator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.parsed.html">pystache.parsed module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.parser.html">pystache.parser module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.renderengine.html">pystache.renderengine module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.renderer.html">pystache.renderer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.specloader.html">pystache.specloader module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pystache.template_spec module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.html#module-pystache">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pystache</a></li>
+          <li class="breadcrumb-item"><a href="pystache.html">pystache package</a></li>
+      <li class="breadcrumb-item active">pystache.template_spec module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/pystache.template_spec.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pystache.template_spec">
+<span id="pystache-template-spec-module"></span><h1>pystache.template_spec module<a class="headerlink" href="#module-pystache.template_spec" title="Link to this heading"></a></h1>
+<p>Provides a class to customize template information on a per-view basis.</p>
+<p>To customize template properties for a particular view, create that view
+from a class that subclasses TemplateSpec.  The “spec” in TemplateSpec
+stands for “special” or “specified” template information.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.template_spec.TemplateSpec">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.template_spec.</span></span><span class="sig-name descname"><span class="pre">TemplateSpec</span></span><a class="reference internal" href="../_modules/pystache/template_spec.html#TemplateSpec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.template_spec.TemplateSpec" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A mixin or interface for specifying custom template information.</p>
+<p>The “spec” in TemplateSpec can be taken to mean that the template
+information is either “specified” or “special.”</p>
+<p>A view should subclass this class only if customized template loading
+is needed.  The following attributes allow one to customize/override
+template information on a per view basis.  A None value means to use
+default behavior for that value and perform no customization.  All
+attributes are initialized to None.</p>
+<p>Attributes:</p>
+<blockquote>
+<div><p>template: the template as a string.</p>
+<p>template_encoding: the encoding used by the template.</p>
+<dl class="simple">
+<dt>template_extension: the template file extension.  Defaults to “mustache”.</dt><dd><p>Pass False for no extension (i.e. extensionless template files).</p>
+</dd>
+</dl>
+<p>template_name: the name of the template.</p>
+<p>template_path: absolute path to the template.</p>
+<dl class="simple">
+<dt>template_rel_directory: the directory containing the template file,</dt><dd><p>relative to the directory containing the module defining the class.</p>
+</dd>
+<dt>template_rel_path: the path to the template file, relative to the</dt><dd><p>directory containing the module defining the class.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pystache.template_spec.TemplateSpec.template">
+<span class="sig-name descname"><span class="pre">template</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pystache.template_spec.TemplateSpec.template" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pystache.template_spec.TemplateSpec.template_encoding">
+<span class="sig-name descname"><span class="pre">template_encoding</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pystache.template_spec.TemplateSpec.template_encoding" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pystache.template_spec.TemplateSpec.template_extension">
+<span class="sig-name descname"><span class="pre">template_extension</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pystache.template_spec.TemplateSpec.template_extension" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pystache.template_spec.TemplateSpec.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pystache.template_spec.TemplateSpec.template_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pystache.template_spec.TemplateSpec.template_path">
+<span class="sig-name descname"><span class="pre">template_path</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pystache.template_spec.TemplateSpec.template_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pystache.template_spec.TemplateSpec.template_rel_directory">
+<span class="sig-name descname"><span class="pre">template_rel_directory</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pystache.template_spec.TemplateSpec.template_rel_directory" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pystache.template_spec.TemplateSpec.template_rel_path">
+<span class="sig-name descname"><span class="pre">template_rel_path</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pystache.template_spec.TemplateSpec.template_rel_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pystache.specloader.html" class="btn btn-neutral float-left" title="pystache.specloader module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+pystache.tests.data.locator package
+===================================
+
+Module contents
+---------------
+
+.. automodule:: pystache.tests.data.locator
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+pystache.tests.examples.partials\_with\_lambdas module
+======================================================
+
+.. automodule:: pystache.tests.examples.partials_with_lambdas
+   :members:
+   :undoc-members:
+   :show-inheritance:

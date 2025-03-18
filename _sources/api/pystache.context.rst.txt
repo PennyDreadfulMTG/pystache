@@ -1,0 +1,7 @@
+pystache.context module
+=======================
+
+.. automodule:: pystache.context
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,566 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.parser &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.parser</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.parser</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Exposes a parse() function to parse template strings.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaults</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.parsed</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParsedTemplate</span>
+
+<span class="n">END_OF_LINE_CHARACTERS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">]</span>
+<span class="n">NON_BLANK_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(.)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+
+
+<span class="c1"># TODO: add some unit tests for this.</span>
+<span class="c1"># TODO: add a test case that checks for spurious spaces.</span>
+<span class="c1"># TODO: add test cases for delimiters.</span>
+<div class="viewcode-block" id="parse">
+<a class="viewcode-back" href="../../api/pystache.parser.html#pystache.parse">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">delimiters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_on_mismatch</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse a unicode template string and return a ParsedTemplate instance.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">      template: a unicode template string.</span>
+<span class="sd">      delimiters: a 2-tuple of delimiters.  Defaults to the package default.</span>
+<span class="sd">      raise_on_mismatch: a boolean indicating whether to raise an exception when parsing fails.</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">    &gt;&gt;&gt; parsed = parse(&quot;Hey {{#who}}{{name}}!{{/who}}&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; print(str(parsed).replace(&#39;u&#39;, &#39;&#39;))  # This is an old hack.</span>
+<span class="sd">    [&#39;Hey &#39;, _SectionNode(key=&#39;who&#39;, index_begin=12, index_end=21, parsed=[_EscapeNode(key=&#39;name&#39;), &#39;!&#39;])]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">template</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Template is not unicode: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">template</span><span class="p">))</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">_Parser</span><span class="p">(</span><span class="n">delimiters</span><span class="p">,</span> <span class="n">raise_on_mismatch</span><span class="o">=</span><span class="n">raise_on_mismatch</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">template</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_compile_template_re</span><span class="p">(</span><span class="n">delimiters</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a regular expression object (re.RegexObject) instance.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># The possible tag type characters following the opening tag,</span>
+    <span class="c1"># excluding &quot;=&quot; and &quot;{&quot;.</span>
+    <span class="n">tag_types</span> <span class="o">=</span> <span class="s1">&#39;!&gt;&amp;/#^&#39;</span>
+
+    <span class="c1"># TODO: are we following this in the spec?</span>
+    <span class="c1">#</span>
+    <span class="c1">#   The tag&#39;s content MUST be a non-whitespace character sequence</span>
+    <span class="c1">#   NOT containing the current closing delimiter.</span>
+    <span class="c1">#</span>
+    <span class="n">tag</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        (?P&lt;whitespace&gt;[\ \t]*)</span>
+<span class="s2">        </span><span class="si">%(otag)s</span><span class="s2"> \s*</span>
+<span class="s2">        (?:</span>
+<span class="s2">          (?P&lt;change&gt;=) \s* (?P&lt;delims&gt;.+?)   \s* = |</span>
+<span class="s2">          (?P&lt;raw&gt;{)    \s* (?P&lt;raw_name&gt;.+?) \s* } |</span>
+<span class="s2">          (?P&lt;tag&gt;[</span><span class="si">%(tag_types)s</span><span class="s2">]?)  \s* (?P&lt;tag_key&gt;[\s\S]+?)</span>
+<span class="s2">        )</span>
+<span class="s2">        \s* </span><span class="si">%(ctag)s</span>
+<span class="s2">    &quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">{</span>
+        <span class="s1">&#39;tag_types&#39;</span><span class="p">:</span> <span class="n">tag_types</span><span class="p">,</span>
+        <span class="s1">&#39;otag&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">delimiters</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+        <span class="s1">&#39;ctag&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">delimiters</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ParsingErrorDetails">
+<a class="viewcode-back" href="../../api/pystache.parser.html#pystache.ParsingErrorDetails">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ParsingErrorDetails</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag_type</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">tag_key</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param tag_type: the type of the tag being parsed, for example &quot;/&quot;</span>
+<span class="sd">        :type tag_type: str</span>
+<span class="sd">        :param position: the position of the tag being parsed</span>
+<span class="sd">        :type position: int</span>
+<span class="sd">        :param tag_key: the key of the tag being parsed, for example &quot;em&quot;</span>
+<span class="sd">        :type tag_key: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tag_type</span> <span class="o">=</span> <span class="n">tag_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tag_key</span> <span class="o">=</span> <span class="n">tag_key</span></div>
+
+
+
+<div class="viewcode-block" id="ParsingError">
+<a class="viewcode-back" href="../../api/pystache.parser.html#pystache.ParsingError">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ParsingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_info</span> <span class="o">=</span> <span class="n">info</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :returns: Additional information about the error.</span>
+<span class="sd">        :rtype: ParsingErrorDetails | None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span></div>
+
+
+
+<span class="c1">## Node types</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_format</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">exclude</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">exclude</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">exclude</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)</span>
+    <span class="n">attrs</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">attrs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">exclude</span><span class="p">))</span>
+    <span class="n">names</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="n">names</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;key&#39;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">attrs</span><span class="p">[</span><span class="n">name</span><span class="p">]))</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">(</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_CommentNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_format</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_ChangeNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delimiters</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delimiters</span> <span class="o">=</span> <span class="n">delimiters</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_format</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_EscapeNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_format</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">fetch_string</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">engine</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_LiteralNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_format</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">fetch_string</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">engine</span><span class="o">.</span><span class="n">literal</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_PartialNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">indent</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">=</span> <span class="n">indent</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_format</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">resolve_partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+        <span class="c1"># Indent before rendering.</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">NON_BLANK_RE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39;\1&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">engine</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_InvertedNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">parsed_section</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parsed_section</span> <span class="o">=</span> <span class="n">parsed_section</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_format</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="c1"># TODO: is there a bug because we are not using the same</span>
+        <span class="c1">#   logic as in fetch_string()?</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">resolve_context</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+        <span class="c1"># Note that lambdas are considered truthy for inverted sections</span>
+        <span class="c1"># per the spec.</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parsed_section</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_SectionNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c1"># TODO: the template_ and parsed_template_ arguments don&#39;t both seem</span>
+    <span class="c1"># to be necessary.  Can we remove one of them?  For example, if</span>
+    <span class="c1"># callable(data) is True, then the initial parsed_template isn&#39;t used.</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">parsed</span><span class="p">,</span> <span class="n">delimiters</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">index_begin</span><span class="p">,</span> <span class="n">index_end</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delimiters</span> <span class="o">=</span> <span class="n">delimiters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parsed</span> <span class="o">=</span> <span class="n">parsed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="n">template</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_begin</span> <span class="o">=</span> <span class="n">index_begin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_end</span> <span class="o">=</span> <span class="n">index_end</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;delimiters&#39;</span><span class="p">,</span> <span class="s1">&#39;template&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">fetch_section_data</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+                <span class="c1"># Lambdas special case section rendering and bypass pushing</span>
+                <span class="c1"># the data value onto the context stack.  From the spec--</span>
+                <span class="c1">#</span>
+                <span class="c1">#   When used as the data value for a Section tag, the</span>
+                <span class="c1">#   lambda MUST be treatable as an arity 1 function, and</span>
+                <span class="c1">#   invoked as such (passing a String containing the</span>
+                <span class="c1">#   unprocessed section contents).  The returned value</span>
+                <span class="c1">#   MUST be rendered against the current delimiters, then</span>
+                <span class="c1">#   interpolated in place of the section.</span>
+                <span class="c1">#</span>
+                <span class="c1">#  Also see--</span>
+                <span class="c1">#</span>
+                <span class="c1">#   https://github.com/defunkt/pystache/issues/113</span>
+                <span class="c1">#</span>
+                <span class="c1"># TODO: should we check the arity?</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index_begin</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_end</span><span class="p">])</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">_render_value</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">delimiters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">delimiters</span><span class="p">)</span>
+                <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">context</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parsed</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">context</span><span class="p">))</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">))</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_Parser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">_delimiters</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_template_re</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_raise_on_mismatch</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delimiters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_on_mismatch</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">delimiters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">delimiters</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">DELIMITERS</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delimiters</span> <span class="o">=</span> <span class="n">delimiters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_raise_on_mismatch</span> <span class="o">=</span> <span class="n">raise_on_mismatch</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compile_delimiters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_template_re</span> <span class="o">=</span> <span class="n">_compile_template_re</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_delimiters</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_change_delimiters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delimiters</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delimiters</span> <span class="o">=</span> <span class="n">delimiters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_compile_delimiters</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse a template string starting at some index.</span>
+<span class="sd">        This method uses the current tag delimiter.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">          template: a unicode string that is the template to parse.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">          a ParsedTemplate instance.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_compile_delimiters</span><span class="p">()</span>
+
+        <span class="n">start_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">parsed_section</span><span class="p">,</span> <span class="n">section_key</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="n">parsed_template</span> <span class="o">=</span> <span class="n">ParsedTemplate</span><span class="p">()</span>
+
+        <span class="n">states</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">tag_key</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_template_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">start_index</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">break</span>
+
+            <span class="n">match_index</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="n">end_index</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+
+            <span class="n">matches</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groupdict</span><span class="p">()</span>
+
+            <span class="c1"># Normalize the matches dictionary.</span>
+            <span class="k">if</span> <span class="n">matches</span><span class="p">[</span><span class="s1">&#39;change&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">matches</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">tag</span><span class="o">=</span><span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">tag_key</span><span class="o">=</span><span class="n">matches</span><span class="p">[</span><span class="s1">&#39;delims&#39;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">matches</span><span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">matches</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">tag</span><span class="o">=</span><span class="s1">&#39;&amp;&#39;</span><span class="p">,</span> <span class="n">tag_key</span><span class="o">=</span><span class="n">matches</span><span class="p">[</span><span class="s1">&#39;raw_name&#39;</span><span class="p">])</span>
+
+            <span class="n">tag_type</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="s1">&#39;tag&#39;</span><span class="p">]</span>
+            <span class="n">tag_key</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="s1">&#39;tag_key&#39;</span><span class="p">]</span>
+            <span class="n">leading_whitespace</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="s1">&#39;whitespace&#39;</span><span class="p">]</span>
+
+            <span class="c1"># Standalone (non-interpolation) tags consume the entire line,</span>
+            <span class="c1"># both leading whitespace and trailing newline.</span>
+            <span class="n">did_tag_begin_line</span> <span class="o">=</span> <span class="n">match_index</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">template</span><span class="p">[</span><span class="n">match_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">END_OF_LINE_CHARACTERS</span>
+            <span class="n">did_tag_end_line</span> <span class="o">=</span> <span class="n">end_index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">template</span><span class="p">)</span> <span class="ow">or</span> <span class="n">template</span><span class="p">[</span><span class="n">end_index</span><span class="p">]</span> <span class="ow">in</span> <span class="n">END_OF_LINE_CHARACTERS</span>
+            <span class="n">is_tag_interpolating</span> <span class="o">=</span> <span class="n">tag_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">did_tag_begin_line</span> <span class="ow">and</span> <span class="n">did_tag_end_line</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_tag_interpolating</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">end_index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">template</span><span class="p">):</span>
+                    <span class="n">end_index</span> <span class="o">+=</span> <span class="n">template</span><span class="p">[</span><span class="n">end_index</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span> <span class="ow">and</span> <span class="mi">1</span> <span class="ow">or</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="n">end_index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">template</span><span class="p">):</span>
+                    <span class="n">end_index</span> <span class="o">+=</span> <span class="n">template</span><span class="p">[</span><span class="n">end_index</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="ow">and</span> <span class="mi">1</span> <span class="ow">or</span> <span class="mi">0</span>
+            <span class="k">elif</span> <span class="n">leading_whitespace</span><span class="p">:</span>
+                <span class="n">match_index</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">leading_whitespace</span><span class="p">)</span>
+                <span class="n">leading_whitespace</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+            <span class="c1"># Avoid adding spurious empty strings to the parse tree.</span>
+            <span class="k">if</span> <span class="n">start_index</span> <span class="o">!=</span> <span class="n">match_index</span><span class="p">:</span>
+                <span class="n">parsed_template</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">template</span><span class="p">[</span><span class="n">start_index</span><span class="p">:</span><span class="n">match_index</span><span class="p">])</span>
+
+            <span class="n">start_index</span> <span class="o">=</span> <span class="n">end_index</span>
+
+            <span class="k">if</span> <span class="n">tag_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">,</span> <span class="s1">&#39;^&#39;</span><span class="p">):</span>
+                <span class="c1"># Cache current state.</span>
+                <span class="n">state</span> <span class="o">=</span> <span class="p">(</span><span class="n">tag_type</span><span class="p">,</span> <span class="n">end_index</span><span class="p">,</span> <span class="n">section_key</span><span class="p">,</span> <span class="n">parsed_template</span><span class="p">)</span>
+                <span class="n">states</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+                <span class="c1"># Initialize new state</span>
+                <span class="n">section_key</span><span class="p">,</span> <span class="n">parsed_template</span> <span class="o">=</span> <span class="n">tag_key</span><span class="p">,</span> <span class="n">ParsedTemplate</span><span class="p">()</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">tag_type</span> <span class="o">==</span> <span class="s1">&#39;/&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">tag_key</span> <span class="o">!=</span> <span class="n">section_key</span><span class="p">:</span>
+                    <span class="n">error_details</span> <span class="o">=</span> <span class="n">ParsingErrorDetails</span><span class="p">(</span>
+                        <span class="n">tag_type</span><span class="p">,</span>
+                        <span class="n">start_index</span><span class="p">,</span>
+                        <span class="n">tag_key</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">ParsingError</span><span class="p">(</span>
+                        <span class="s1">&#39;Section end tag mismatch at position </span><span class="si">%d</span><span class="s1">. Found {{</span><span class="si">%s%s</span><span class="s1">}}, expected {{</span><span class="si">%s%s</span><span class="s1">}}&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                            <span class="n">start_index</span><span class="p">,</span>
+                            <span class="n">tag_type</span><span class="p">,</span>
+                            <span class="n">tag_key</span><span class="p">,</span>
+                            <span class="n">tag_type</span> <span class="k">if</span> <span class="n">section_key</span> <span class="k">else</span> <span class="s1">&#39;#&#39;</span><span class="p">,</span>
+                            <span class="n">section_key</span> <span class="ow">or</span> <span class="n">tag_key</span><span class="p">,</span>
+                        <span class="p">),</span>
+                        <span class="n">error_details</span>
+                    <span class="p">)</span>
+
+                <span class="c1"># Restore previous state with newly found section data.</span>
+                <span class="n">parsed_section</span> <span class="o">=</span> <span class="n">parsed_template</span>
+
+                <span class="p">(</span>
+                    <span class="n">tag_type</span><span class="p">,</span>
+                    <span class="n">section_start_index</span><span class="p">,</span>
+                    <span class="n">section_key</span><span class="p">,</span>
+                    <span class="n">parsed_template</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">=</span> <span class="n">states</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_section_node</span><span class="p">(</span>
+                    <span class="n">template</span><span class="p">,</span>
+                    <span class="n">tag_type</span><span class="p">,</span>
+                    <span class="n">tag_key</span><span class="p">,</span>
+                    <span class="n">parsed_section</span><span class="p">,</span>
+                    <span class="n">section_start_index</span><span class="p">,</span>
+                    <span class="n">match_index</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_interpolation_node</span><span class="p">(</span><span class="n">tag_type</span><span class="p">,</span> <span class="n">tag_key</span><span class="p">,</span> <span class="n">leading_whitespace</span><span class="p">)</span>
+
+            <span class="n">parsed_template</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+        <span class="c1"># Some open/close tags were mismatched.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raise_on_mismatch</span> <span class="ow">and</span> <span class="n">states</span><span class="p">:</span>
+            <span class="n">error_details</span> <span class="o">=</span> <span class="n">ParsingErrorDetails</span><span class="p">(</span>
+                <span class="n">states</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">states</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">states</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> <span class="n">tag_key</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ParsingError</span><span class="p">(</span>
+                <span class="s2">&quot;Did not find a matching tag for {{</span><span class="si">%s%s</span><span class="s2">}}. Its section starts at position </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">error_details</span><span class="o">.</span><span class="n">tag_type</span><span class="p">,</span> <span class="n">error_details</span><span class="o">.</span><span class="n">tag_key</span><span class="p">,</span> <span class="n">error_details</span><span class="o">.</span><span class="n">position</span>
+                <span class="p">),</span>
+                <span class="n">error_details</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Avoid adding spurious empty strings to the parse tree.</span>
+        <span class="k">if</span> <span class="n">start_index</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">template</span><span class="p">):</span>
+            <span class="n">parsed_template</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">template</span><span class="p">[</span><span class="n">start_index</span><span class="p">:])</span>
+
+        <span class="k">return</span> <span class="n">parsed_template</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_interpolation_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag_type</span><span class="p">,</span> <span class="n">tag_key</span><span class="p">,</span> <span class="n">leading_whitespace</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create and return a non-section node for the parse tree.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: switch to using a dictionary instead of a bunch of ifs and elifs.</span>
+        <span class="k">if</span> <span class="n">tag_type</span> <span class="o">==</span> <span class="s1">&#39;!&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_CommentNode</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">tag_type</span> <span class="o">==</span> <span class="s1">&#39;=&#39;</span><span class="p">:</span>
+            <span class="n">delimiters</span> <span class="o">=</span> <span class="n">tag_key</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_delimiters</span><span class="p">(</span><span class="n">delimiters</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">_ChangeNode</span><span class="p">(</span><span class="n">delimiters</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">tag_type</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_EscapeNode</span><span class="p">(</span><span class="n">tag_key</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">tag_type</span> <span class="o">==</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_LiteralNode</span><span class="p">(</span><span class="n">tag_key</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">tag_type</span> <span class="o">==</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_PartialNode</span><span class="p">(</span><span class="n">tag_key</span><span class="p">,</span> <span class="n">leading_whitespace</span><span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid symbol for interpolation tag: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">tag_type</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_section_node</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">template</span><span class="p">,</span>
+        <span class="n">tag_type</span><span class="p">,</span>
+        <span class="n">tag_key</span><span class="p">,</span>
+        <span class="n">parsed_section</span><span class="p">,</span>
+        <span class="n">section_start_index</span><span class="p">,</span>
+        <span class="n">section_end_index</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create and return a section node for the parse tree.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">tag_type</span> <span class="o">==</span> <span class="s1">&#39;#&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_SectionNode</span><span class="p">(</span>
+                <span class="n">tag_key</span><span class="p">,</span>
+                <span class="n">parsed_section</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_delimiters</span><span class="p">,</span>
+                <span class="n">template</span><span class="p">,</span>
+                <span class="n">section_start_index</span><span class="p">,</span>
+                <span class="n">section_end_index</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">tag_type</span> <span class="o">==</span> <span class="s1">&#39;^&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_InvertedNode</span><span class="p">(</span><span class="n">tag_key</span><span class="p">,</span> <span class="n">parsed_section</span><span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid symbol for section tag: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">tag_type</span><span class="p">))</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

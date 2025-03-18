@@ -1,0 +1,609 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.renderer &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.renderer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.renderer</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides a Renderer class to render templates.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaults</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.common</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MissingTags</span><span class="p">,</span>
+    <span class="n">TemplateNotFoundError</span><span class="p">,</span>
+    <span class="n">is_string</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContextStack</span><span class="p">,</span> <span class="n">KeyNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">Loader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.parsed</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParsedTemplate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.renderengine</span><span class="w"> </span><span class="kn">import</span> <span class="n">RenderEngine</span><span class="p">,</span> <span class="n">context_get</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.specloader</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpecLoader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.template_spec</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemplateSpec</span>
+
+
+<div class="viewcode-block" id="Renderer">
+<a class="viewcode-back" href="../../api/pystache.renderer.html#pystache.Renderer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Renderer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class for rendering mustache templates.</span>
+
+<span class="sd">    This class supports several rendering options which are described in</span>
+<span class="sd">    the constructor&#39;s docstring.  Other behavior can be customized by</span>
+<span class="sd">    subclassing this class.</span>
+
+<span class="sd">    For example, one can pass a string-string dictionary to the constructor</span>
+<span class="sd">    to bypass loading partials from the file system:</span>
+
+<span class="sd">    &gt;&gt;&gt; partials = {&#39;partial&#39;: &#39;Hello, {{thing}}!&#39;}</span>
+<span class="sd">    &gt;&gt;&gt; renderer = Renderer(partials=partials)</span>
+<span class="sd">    &gt;&gt;&gt; # We apply print to make the test work in Python 3 after 2to3.</span>
+<span class="sd">    &gt;&gt;&gt; print(renderer.render(&#39;{{&gt;partial}}&#39;, {&#39;thing&#39;: &#39;world&#39;}))</span>
+<span class="sd">    Hello, world!</span>
+
+<span class="sd">    To customize string coercion (e.g. to render False values as ``&#39;&#39;``), one can</span>
+<span class="sd">    subclass this class.  For example::</span>
+
+<span class="sd">        class MyRenderer(Renderer):</span>
+<span class="sd">            def str_coerce(self, val):</span>
+<span class="sd">                if not val:</span>
+<span class="sd">                    return &#39;&#39;</span>
+<span class="sd">                else:</span>
+<span class="sd">                    return str(val)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">file_encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">string_encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">decode_errors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">search_dirs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">file_extension</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">escape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">partials</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">missing_tags</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct an instance.</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          file_encoding: the name of the encoding to use by default when</span>
+<span class="sd">            reading template files.  All templates are converted to unicode</span>
+<span class="sd">            prior to parsing.  Defaults to the package default.</span>
+
+<span class="sd">          string_encoding: the name of the encoding to use when converting</span>
+<span class="sd">            to unicode any byte strings (type str in Python 2) encountered</span>
+<span class="sd">            during the rendering process.  This name will be passed as the</span>
+<span class="sd">            encoding argument to the built-in function unicode().</span>
+<span class="sd">            Defaults to the package default.</span>
+
+<span class="sd">          decode_errors: the string to pass as the errors argument to the</span>
+<span class="sd">            built-in function unicode() when converting byte strings to</span>
+<span class="sd">            unicode.  Defaults to the package default.</span>
+
+<span class="sd">          search_dirs: the list of directories in which to search when</span>
+<span class="sd">            loading a template by name or file name.  If given a string,</span>
+<span class="sd">            the method interprets the string as a single directory.</span>
+<span class="sd">            Defaults to the package default.</span>
+
+<span class="sd">          file_extension: the template file extension.  Pass False for no</span>
+<span class="sd">            extension (i.e. to use extensionless template files).</span>
+<span class="sd">            Defaults to the package default.</span>
+
+<span class="sd">          partials: an object (e.g. a dictionary) for custom partial loading</span>
+<span class="sd">            during the rendering process.</span>
+<span class="sd">                The object should have a get() method that accepts a string</span>
+<span class="sd">            and returns the corresponding template as a string, preferably</span>
+<span class="sd">            as a unicode string.  If there is no template with that name,</span>
+<span class="sd">            the get() method should either return None (as dict.get() does)</span>
+<span class="sd">            or raise an exception.</span>
+<span class="sd">                If this argument is None, the rendering process will use</span>
+<span class="sd">            the normal procedure of locating and reading templates from</span>
+<span class="sd">            the file system -- using relevant instance attributes like</span>
+<span class="sd">            search_dirs, file_encoding, etc.</span>
+
+<span class="sd">          escape: the function used to escape variable tag values when</span>
+<span class="sd">            rendering a template.  The function should accept a unicode</span>
+<span class="sd">            string (or subclass of unicode) and return an escaped string</span>
+<span class="sd">            that is again unicode (or a subclass of unicode).</span>
+<span class="sd">                This function need not handle strings of type `str` because</span>
+<span class="sd">            this class will only pass it unicode strings.  The constructor</span>
+<span class="sd">            assigns this function to the constructed instance&#39;s escape()</span>
+<span class="sd">            method.</span>
+<span class="sd">                To disable escaping entirely, one can pass `lambda u: u`</span>
+<span class="sd">            as the escape function, for example.  One may also wish to</span>
+<span class="sd">            consider using markupsafe&#39;s escape function: markupsafe.escape().</span>
+<span class="sd">            This argument defaults to the package default.</span>
+
+<span class="sd">          missing_tags: a string specifying how to handle missing tags.</span>
+<span class="sd">            If &#39;strict&#39;, an error is raised on a missing tag.  If &#39;ignore&#39;,</span>
+<span class="sd">            the value of the tag is the empty string.  Defaults to the</span>
+<span class="sd">            package default.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">decode_errors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">decode_errors</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">DECODE_ERRORS</span>
+
+        <span class="k">if</span> <span class="n">escape</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">escape</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">TAG_ESCAPE</span>
+
+        <span class="k">if</span> <span class="n">file_encoding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">file_encoding</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">FILE_ENCODING</span>
+
+        <span class="k">if</span> <span class="n">file_extension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">file_extension</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">TEMPLATE_EXTENSION</span>
+
+        <span class="k">if</span> <span class="n">missing_tags</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">missing_tags</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">MISSING_TAGS</span>
+
+        <span class="k">if</span> <span class="n">search_dirs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">search_dirs</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">SEARCH_DIRS</span>
+
+        <span class="k">if</span> <span class="n">string_encoding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">string_encoding</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">STRING_ENCODING</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">search_dirs</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">search_dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">search_dirs</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_context</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decode_errors</span> <span class="o">=</span> <span class="n">decode_errors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">escape</span> <span class="o">=</span> <span class="n">escape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_encoding</span> <span class="o">=</span> <span class="n">file_encoding</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_extension</span> <span class="o">=</span> <span class="n">file_extension</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">missing_tags</span> <span class="o">=</span> <span class="n">missing_tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partials</span> <span class="o">=</span> <span class="n">partials</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_dirs</span> <span class="o">=</span> <span class="n">search_dirs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">string_encoding</span> <span class="o">=</span> <span class="n">string_encoding</span>
+
+    <span class="c1"># This is an experimental way of giving views access to the current context.</span>
+    <span class="c1"># TODO: consider another approach of not giving access via a property,</span>
+    <span class="c1">#   but instead letting the caller pass the initial context to the</span>
+    <span class="c1">#   main render() method by reference.  This approach would probably</span>
+    <span class="c1">#   be less likely to be misused.</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the current rendering context [experimental].</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_context</span>
+
+    <span class="c1"># We could not choose str() as the name because 2to3 renames the unicode()</span>
+    <span class="c1"># method of this class to str().</span>
+<div class="viewcode-block" id="Renderer.str_coerce">
+<a class="viewcode-back" href="../../api/pystache.renderer.html#pystache.Renderer.str_coerce">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">str_coerce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Coerce a non-string value to a string.</span>
+
+<span class="sd">        This method is called whenever a non-string is encountered during the</span>
+<span class="sd">        rendering process when a string is needed (e.g. if a context value</span>
+<span class="sd">        for string interpolation is not a string).  To customize string</span>
+<span class="sd">        coercion, you can override this method.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_to_unicode_soft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a basestring to unicode, preserving any unicode subclass.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># We type-check to avoid &quot;TypeError: decoding Unicode is not supported&quot;.</span>
+        <span class="c1"># We avoid the Python ternary operator for Python 2.4 support.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">s</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_to_unicode_hard</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a basestring to a string with type unicode (not subclass).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_unicode_soft</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_escape_to_unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a basestring to unicode (preserving any unicode subclass), and escape it.</span>
+
+<span class="sd">        Returns a unicode string (not subclass).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_unicode_soft</span><span class="p">(</span><span class="n">s</span><span class="p">)))</span>
+
+<div class="viewcode-block" id="Renderer.str">
+<a class="viewcode-back" href="../../api/pystache.renderer.html#pystache.Renderer.str">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a byte string to unicode, using string_encoding and decode_errors.</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          b: a byte string.</span>
+
+<span class="sd">          encoding: the name of an encoding.  Defaults to the string_encoding</span>
+<span class="sd">            attribute for this instance.</span>
+
+<span class="sd">        Raises:</span>
+
+<span class="sd">          TypeError: Because this method calls Python&#39;s built-in unicode()</span>
+<span class="sd">            function, this method raises the following exception if the</span>
+<span class="sd">            given string is already unicode:</span>
+
+<span class="sd">              TypeError: decoding Unicode is not supported</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">encoding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">encoding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">string_encoding</span>
+
+        <span class="c1"># TODO: Wrap UnicodeDecodeErrors with a message about setting</span>
+        <span class="c1"># the string_encoding and decode_errors attributes.</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">encoding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode_errors</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_loader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a Loader instance using current attributes.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Loader</span><span class="p">(</span>
+            <span class="n">file_encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_encoding</span><span class="p">,</span>
+            <span class="n">extension</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_extension</span><span class="p">,</span>
+            <span class="n">to_unicode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">str</span><span class="p">,</span>
+            <span class="n">search_dirs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">search_dirs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_load_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a function that loads a template by name.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_loader</span><span class="p">()</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">load_template</span><span class="p">(</span><span class="n">template_name</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">loader</span><span class="o">.</span><span class="n">load_name</span><span class="p">(</span><span class="n">template_name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">load_template</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_load_partial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a function that loads a partial by name.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">partials</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_load_template</span><span class="p">()</span>
+
+        <span class="c1"># Otherwise, create a function from the custom partial loader.</span>
+        <span class="n">partials</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">partials</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">load_partial</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+            <span class="c1"># TODO: consider using EAFP here instead.</span>
+            <span class="c1">#     http://docs.python.org/glossary.html#term-eafp</span>
+            <span class="c1">#   This would mean requiring that the custom partial loader</span>
+            <span class="c1">#   raise a KeyError on name not found.</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">partials</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">template</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TemplateNotFoundError</span><span class="p">(</span>
+                    <span class="s1">&#39;Name </span><span class="si">%s</span><span class="s1"> not found in partials: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">partials</span><span class="p">))</span>
+                <span class="p">)</span>
+
+            <span class="c1"># RenderEngine requires that the return value be unicode.</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_unicode_hard</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">load_partial</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_is_missing_tags_strict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return whether missing_tags is set to strict.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">missing_tags</span>
+
+        <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="n">MissingTags</span><span class="o">.</span><span class="n">strict</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">val</span> <span class="o">==</span> <span class="n">MissingTags</span><span class="o">.</span><span class="n">ignore</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unsupported &#39;missing_tags&#39; value: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_resolve_partial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the resolve_partial function to pass to RenderEngine.__init__().</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">load_partial</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_load_partial</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_missing_tags_strict</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">load_partial</span>
+        <span class="c1"># Otherwise, ignore missing tags.</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">resolve_partial</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">load_partial</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">TemplateNotFoundError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="n">resolve_partial</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_resolve_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the resolve_context function to pass to RenderEngine.__init__().</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_missing_tags_strict</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">context_get</span>
+        <span class="c1"># Otherwise, ignore missing tags.</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">resolve_context</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">context_get</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">KeyNotFoundError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="n">resolve_context</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_render_engine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a RenderEngine instance for rendering.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">resolve_context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_resolve_context</span><span class="p">()</span>
+        <span class="n">resolve_partial</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_resolve_partial</span><span class="p">()</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">RenderEngine</span><span class="p">(</span>
+            <span class="n">literal</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_unicode_hard</span><span class="p">,</span>
+            <span class="n">escape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_to_unicode</span><span class="p">,</span>
+            <span class="n">resolve_context</span><span class="o">=</span><span class="n">resolve_context</span><span class="p">,</span>
+            <span class="n">resolve_partial</span><span class="o">=</span><span class="n">resolve_partial</span><span class="p">,</span>
+            <span class="n">to_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">str_coerce</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">engine</span>
+
+    <span class="c1"># TODO: add unit tests for this method.</span>
+<div class="viewcode-block" id="Renderer.load_template">
+<a class="viewcode-back" href="../../api/pystache.renderer.html#pystache.Renderer.load_template">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load a template by name from the file system.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">load_template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_load_template</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">load_template</span><span class="p">(</span><span class="n">template_name</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_render_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render the template associated with the given object.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_loader</span><span class="p">()</span>
+
+        <span class="c1"># TODO: consider an approach that does not require using an if</span>
+        <span class="c1">#   block here.  For example, perhaps this class&#39;s loader can be</span>
+        <span class="c1">#   a SpecLoader in all cases, and the SpecLoader instance can</span>
+        <span class="c1">#   check the object&#39;s type.  Or perhaps Loader and SpecLoader</span>
+        <span class="c1">#   can be refactored to implement the same interface.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">TemplateSpec</span><span class="p">):</span>
+            <span class="n">loader</span> <span class="o">=</span> <span class="n">SpecLoader</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+        <span class="n">context</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render_string</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Renderer.render_name">
+<a class="viewcode-back" href="../../api/pystache.renderer.html#pystache.Renderer.render_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">render_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_name</span><span class="p">,</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render the template with the given name using the given context.</span>
+
+<span class="sd">        See the render() docstring for more information.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_loader</span><span class="p">()</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load_name</span><span class="p">(</span><span class="n">template_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render_string</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Renderer.render_path">
+<a class="viewcode-back" href="../../api/pystache.renderer.html#pystache.Renderer.render_path">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">render_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_path</span><span class="p">,</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render the template at the given path using the given context.</span>
+
+<span class="sd">        Read the render() docstring for more information.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_loader</span><span class="p">()</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">template_path</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render_string</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_render_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render the given template string using the given context.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># RenderEngine.render() requires that the template string be unicode.</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_unicode_hard</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+
+        <span class="n">render_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">engine</span><span class="p">,</span> <span class="n">stack</span><span class="p">:</span> <span class="n">engine</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">stack</span><span class="p">)</span>  <span class="c1"># noqa</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render_final</span><span class="p">(</span><span class="n">render_func</span><span class="p">,</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># All calls to render() should end here because it prepares the</span>
+    <span class="c1"># context stack correctly.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_render_final</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_func</span><span class="p">,</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          :render_func: a function that accepts a RenderEngine and ContextStack</span>
+<span class="sd">            instance and returns a template rendering as a unicode string.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="n">ContextStack</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_context</span> <span class="o">=</span> <span class="n">stack</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">render_func</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">stack</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Renderer.render">
+<a class="viewcode-back" href="../../api/pystache.renderer.html#pystache.Renderer.render">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render the given template string, view template, or parsed template.</span>
+
+<span class="sd">        Returns a unicode string.</span>
+
+<span class="sd">        Prior to rendering, this method will convert a template that is a</span>
+<span class="sd">        byte string (type str in Python 2) to unicode using the string_encoding</span>
+<span class="sd">        and decode_errors attributes.  See the constructor docstring for</span>
+<span class="sd">        more information.</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          :template: a template string that is unicode or a byte string,</span>
+<span class="sd">            a ParsedTemplate instance, or another object instance.  In the</span>
+<span class="sd">            final case, the function first looks for the template associated</span>
+<span class="sd">            to the object by calling this class&#39;s get_associated_template()</span>
+<span class="sd">            method.  The rendering process also uses the passed object as</span>
+<span class="sd">            the first element of the context stack when rendering.</span>
+
+<span class="sd">          :context: zero or more dictionaries, ContextStack instances, or objects</span>
+<span class="sd">            with which to populate the initial context stack.  None</span>
+<span class="sd">            arguments are skipped.  Items in the context list are added to</span>
+<span class="sd">            the context stack in order so that later items in the argument</span>
+<span class="sd">            list take precedence over earlier items.</span>
+
+<span class="sd">          :kwargs: additional key-value data to add to the context stack.</span>
+<span class="sd">            As these arguments appear after all items in the context list,</span>
+<span class="sd">            in the case of key conflicts these values take precedence over</span>
+<span class="sd">            all items in the context list.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">is_string</span><span class="p">(</span><span class="n">template</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render_string</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">ParsedTemplate</span><span class="p">):</span>
+            <span class="n">render_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">engine</span><span class="p">,</span> <span class="n">stack</span><span class="p">:</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">stack</span><span class="p">)</span>  <span class="c1"># noqa</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render_final</span><span class="p">(</span><span class="n">render_func</span><span class="p">,</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># Otherwise, we assume the template is an object.</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render_object</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

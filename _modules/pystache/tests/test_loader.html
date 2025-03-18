@@ -1,0 +1,381 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.tests.test_loader &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.tests.test_loader</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.tests.test_loader</h1><div class="highlight"><pre>
+<span></span><span class="c1"># encoding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Unit tests of loader.py.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">unittest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaults</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">Loader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.tests.common</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DATA_DIR</span><span class="p">,</span>
+    <span class="n">AssertStringMixin</span><span class="p">,</span>
+    <span class="n">SetupDefaults</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># We use the same directory as the locator tests for now.</span>
+<span class="n">LOADER_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;locator&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="LoaderTests">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LoaderTests</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">,</span> <span class="n">AssertStringMixin</span><span class="p">,</span> <span class="n">SetupDefaults</span><span class="p">):</span>
+
+<div class="viewcode-block" id="LoaderTests.setUp">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.setUp">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_defaults</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="LoaderTests.tearDown">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.tearDown">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">teardown_defaults</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="LoaderTests.test_init__extension">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_init__extension">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_init__extension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">extension</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">extension</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LoaderTests.test_init__extension__default">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_init__extension__default">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_init__extension__default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Test the default value.</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">extension</span><span class="p">,</span> <span class="s1">&#39;mustache&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LoaderTests.test_init__file_encoding">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_init__file_encoding">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_init__file_encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">file_encoding</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">file_encoding</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LoaderTests.test_init__file_encoding__default">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_init__file_encoding__default">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_init__file_encoding__default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">file_encoding</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">FILE_ENCODING</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">defaults</span><span class="o">.</span><span class="n">FILE_ENCODING</span> <span class="o">=</span> <span class="s1">&#39;foo&#39;</span>
+            <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">file_encoding</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">defaults</span><span class="o">.</span><span class="n">FILE_ENCODING</span> <span class="o">=</span> <span class="n">file_encoding</span></div>
+
+
+<div class="viewcode-block" id="LoaderTests.test_init__to_unicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_init__to_unicode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_init__to_unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">to_unicode</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">to_unicode</span><span class="o">=</span><span class="n">to_unicode</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">to_unicode</span><span class="p">,</span> <span class="n">to_unicode</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LoaderTests.test_init__to_unicode__default">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_init__to_unicode__default">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_init__to_unicode__default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="n">loader</span><span class="o">.</span><span class="n">to_unicode</span><span class="p">,</span> <span class="s2">&quot;abc&quot;</span><span class="p">)</span>
+
+        <span class="n">decode_errors</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">DECODE_ERRORS</span>
+        <span class="n">string_encoding</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">STRING_ENCODING</span>
+
+        <span class="n">nonascii</span> <span class="o">=</span> <span class="s1">&#39;abcdé&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">UnicodeDecodeError</span><span class="p">,</span> <span class="n">loader</span><span class="o">.</span><span class="n">to_unicode</span><span class="p">,</span> <span class="n">nonascii</span><span class="p">)</span>
+
+        <span class="n">defaults</span><span class="o">.</span><span class="n">DECODE_ERRORS</span> <span class="o">=</span> <span class="s1">&#39;ignore&#39;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">to_unicode</span><span class="p">(</span><span class="n">nonascii</span><span class="p">),</span> <span class="s1">&#39;abcd&#39;</span><span class="p">)</span>
+
+        <span class="n">defaults</span><span class="o">.</span><span class="n">STRING_ENCODING</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">to_unicode</span><span class="p">(</span><span class="n">nonascii</span><span class="p">),</span> <span class="s1">&#39;abcdé&#39;</span><span class="p">)</span></div>
+
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LoaderTests.test_unicode__basic__input_str">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_unicode__basic__input_str">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_unicode__basic__input_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test unicode(): default arguments with str input.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">str</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LoaderTests.test_unicode__basic__input_unicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_unicode__basic__input_unicode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_unicode__basic__input_unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test unicode(): default arguments with unicode input.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">str</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LoaderTests.test_unicode__basic__input_unicode_subclass">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_unicode__basic__input_unicode_subclass">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_unicode__basic__input_unicode_subclass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test unicode(): default arguments with unicode-subclass input.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">UnicodeSubclass</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="n">UnicodeSubclass</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LoaderTests.test_unicode__to_unicode__attribute">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_unicode__to_unicode__attribute">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_unicode__to_unicode__attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test unicode(): encoding attribute.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+
+        <span class="n">non_ascii</span> <span class="o">=</span> <span class="s1">&#39;abcdé&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">UnicodeDecodeError</span><span class="p">,</span> <span class="n">loader</span><span class="o">.</span><span class="n">str</span><span class="p">,</span> <span class="n">non_ascii</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">to_unicode</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">encoding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span>
+
+        <span class="n">loader</span><span class="o">.</span><span class="n">to_unicode</span> <span class="o">=</span> <span class="n">to_unicode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">str</span><span class="p">(</span><span class="n">non_ascii</span><span class="p">),</span> <span class="s2">&quot;abcdé&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LoaderTests.test_unicode__encoding_argument">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_unicode__encoding_argument">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_unicode__encoding_argument</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test unicode(): encoding argument.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+
+        <span class="n">non_ascii</span> <span class="o">=</span> <span class="s1">&#39;abcdé&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">UnicodeDecodeError</span><span class="p">,</span> <span class="n">loader</span><span class="o">.</span><span class="n">str</span><span class="p">,</span> <span class="n">non_ascii</span><span class="p">)</span>
+
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">str</span><span class="p">(</span><span class="n">non_ascii</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;abcdé&#39;</span><span class="p">)</span></div>
+
+
+    <span class="c1"># TODO: check the read() unit tests.</span>
+<div class="viewcode-block" id="LoaderTests.test_read">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_read">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test read().</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_path</span><span class="p">(</span><span class="s1">&#39;ascii.mustache&#39;</span><span class="p">)</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;ascii: abc&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LoaderTests.test_read__file_encoding__attribute">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_read__file_encoding__attribute">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_read__file_encoding__attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test read(): file_encoding attribute respected.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_path</span><span class="p">(</span><span class="s1">&#39;non_ascii.mustache&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">UnicodeDecodeError</span><span class="p">,</span> <span class="n">loader</span><span class="o">.</span><span class="n">read</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+        <span class="n">loader</span><span class="o">.</span><span class="n">file_encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;non-ascii: é&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LoaderTests.test_read__encoding__argument">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_read__encoding__argument">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_read__encoding__argument</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test read(): encoding argument respected.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_path</span><span class="p">(</span><span class="s1">&#39;non_ascii.mustache&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">UnicodeDecodeError</span><span class="p">,</span> <span class="n">loader</span><span class="o">.</span><span class="n">read</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;non-ascii: é&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LoaderTests.test_read__to_unicode__attribute">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_read__to_unicode__attribute">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_read__to_unicode__attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test read(): to_unicode attribute respected.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_path</span><span class="p">(</span><span class="s1">&#39;non_ascii.mustache&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">UnicodeDecodeError</span><span class="p">,</span> <span class="n">loader</span><span class="o">.</span><span class="n">read</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span></div>
+
+
+        <span class="c1">#loader.decode_errors = &#39;ignore&#39;</span>
+        <span class="c1">#actual = loader.read(path)</span>
+        <span class="c1">#self.assertString(actual, u&#39;non-ascii: &#39;)</span>
+
+<div class="viewcode-block" id="LoaderTests.test_load_file">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_load_file">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_load_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">search_dirs</span><span class="o">=</span><span class="p">[</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">LOADER_DATA_DIR</span><span class="p">])</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s1">&#39;template.txt&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="s1">&#39;Test template file</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LoaderTests.test_load_name">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests.test_load_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_load_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">search_dirs</span><span class="o">=</span><span class="p">[</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">LOADER_DATA_DIR</span><span class="p">],</span>
+                        <span class="n">extension</span><span class="o">=</span><span class="s1">&#39;txt&#39;</span><span class="p">)</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load_name</span><span class="p">(</span><span class="s1">&#39;template&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="s1">&#39;Test template file</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

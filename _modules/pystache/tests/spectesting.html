@@ -1,0 +1,407 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.tests.spectesting &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.tests.spectesting</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.tests.spectesting</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Exposes a get_spec_tests() function for the project&#39;s test harness.</span>
+
+<span class="sd">Creates a unittest.TestCase for the tests defined in the mustache spec.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># TODO: this module can be cleaned up somewhat.</span>
+<span class="c1"># TODO: move all of this code to pystache/tests/spectesting.py and</span>
+<span class="c1">#   have it expose a get_spec_tests(spec_test_dir) function.</span>
+
+<span class="n">FILE_ENCODING</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>  <span class="c1"># the encoding of the spec test files.</span>
+
+<span class="n">yaml</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># We try yaml first since it is more convenient when adding and modifying</span>
+    <span class="c1"># test cases by hand (since the YAML is human-readable and is the master</span>
+    <span class="c1"># from which the JSON format is generated).</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="c1"># The module json is not available prior to Python 2.6, whereas</span>
+        <span class="c1"># simplejson is.  The simplejson package dropped support for Python 2.4</span>
+        <span class="c1"># in simplejson v2.1.0, so Python 2.4 requires a simplejson install</span>
+        <span class="c1"># older than the most recent version.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">simplejson</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">json</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="c1"># Raise an error with a type different from ImportError as a hack around</span>
+            <span class="c1"># this issue:</span>
+            <span class="c1">#   http://bugs.python.org/issue7559</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">sys</span><span class="w"> </span><span class="kn">import</span> <span class="n">exc_info</span>
+            <span class="n">ex_type</span><span class="p">,</span> <span class="n">ex_value</span><span class="p">,</span> <span class="n">tb</span> <span class="o">=</span> <span class="n">exc_info</span><span class="p">()</span>
+            <span class="n">new_ex</span> <span class="o">=</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ex_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">ex_value</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">new_ex</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">new_ex</span><span class="p">)</span><span class="o">.</span><span class="n">with_traceback</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
+    <span class="n">file_extension</span> <span class="o">=</span> <span class="s1">&#39;json&#39;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">json</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">file_extension</span> <span class="o">=</span> <span class="s1">&#39;yml&#39;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">yaml</span>
+
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">ast</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">codecs</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os.path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">unittest</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pystache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache</span><span class="w"> </span><span class="kn">import</span> <span class="n">common</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.renderer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Renderer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.tests.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">AssertStringMixin</span>
+
+
+<div class="viewcode-block" id="get_spec_tests">
+<a class="viewcode-back" href="../../../api/pystache.tests.spectesting.html#pystache.tests.spectesting.get_spec_tests">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_spec_tests</span><span class="p">(</span><span class="n">spec_test_dir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a list of unittest.TestCase instances.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO: use logging module instead.</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pystache: spec tests: using </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">_get_parser_info</span><span class="p">())</span>
+
+    <span class="n">cases</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Make this absolute for easier diagnosis in case of error.</span>
+    <span class="n">spec_test_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">spec_test_dir</span><span class="p">)</span>
+    <span class="n">spec_paths</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">spec_test_dir</span><span class="p">,</span> <span class="s1">&#39;*.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">file_extension</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">spec_paths</span><span class="p">:</span>
+        <span class="n">new_cases</span> <span class="o">=</span> <span class="n">_read_spec_tests</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">cases</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">new_cases</span><span class="p">)</span>
+
+    <span class="c1"># Store this as a value so that CheckSpecTestsFound is not checking</span>
+    <span class="c1"># a reference to cases that contains itself.</span>
+    <span class="n">spec_test_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cases</span><span class="p">)</span>
+
+    <span class="c1"># This test case lets us alert the user that spec tests are missing.</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">CheckSpecTestsFound</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">runTest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">spec_test_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Spec tests not found--</span><span class="se">\n</span><span class="s2">  in </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot; Consult the README file on how to add the Mustache spec tests.&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">spec_test_dir</span><span class="p">))</span>
+
+    <span class="n">case</span> <span class="o">=</span> <span class="n">CheckSpecTestsFound</span><span class="p">()</span>
+    <span class="n">cases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">case</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cases</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_parser_info</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> (version </span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">parser</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_spec_tests</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a list of unittest.TestCase instances.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">FILE_ENCODING</span><span class="p">)</span>
+    <span class="n">spec_data</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    <span class="n">tests</span> <span class="o">=</span> <span class="n">spec_data</span><span class="p">[</span><span class="s1">&#39;tests&#39;</span><span class="p">]</span>
+
+    <span class="n">cases</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">tests</span><span class="p">:</span>
+        <span class="n">case</span> <span class="o">=</span> <span class="n">_deserialize_spec_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="n">cases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">case</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cases</span>
+
+
+<span class="c1"># TODO: simplify the implementation of this function.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_convert_children</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recursively convert to functions all &quot;code strings&quot; below the node.</span>
+
+<span class="sd">    This function is needed only for the json format.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+        <span class="c1"># Then there is nothing to iterate over and recurse.</span>
+        <span class="k">return</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+            <span class="n">_convert_children</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="c1"># Otherwise, node is a dict, so attempt the conversion.</span>
+
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> <span class="n">val</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__tag__&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;code&#39;</span><span class="p">:</span>
+            <span class="n">_convert_children</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="c1"># Otherwise, we are at a &quot;leaf&quot; node.</span>
+
+        <span class="n">val</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="s1">&#39;python&#39;</span><span class="p">])</span>
+        <span class="n">node</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="k">continue</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_deserialize_spec_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a unittest.TestCase instance representing a spec test.</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">      data: the dictionary of attributes for a single test.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;desc&#39;</span><span class="p">]</span>
+    <span class="c1"># PyYAML seems to leave ASCII strings as byte strings.</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;expected&#39;</span><span class="p">])</span>
+    <span class="c1"># TODO: switch to using dict.get().</span>
+    <span class="n">partials</span> <span class="o">=</span> <span class="s1">&#39;partials&#39;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;partials&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="p">{}</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;template&#39;</span><span class="p">]</span>
+    <span class="n">test_name</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+
+    <span class="n">_convert_children</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+
+    <span class="n">test_case</span> <span class="o">=</span> <span class="n">_make_spec_test</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">partials</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">test_name</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">test_case</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_make_spec_test</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">partials</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">test_name</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a unittest.TestCase instance representing a spec test.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file_name</span>  <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="n">test_method_name</span> <span class="o">=</span> <span class="s2">&quot;Mustache spec (</span><span class="si">%s</span><span class="s2">): </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">test_name</span><span class="p">))</span>
+
+    <span class="c1"># We subclass SpecTestBase in order to control the test method name (for</span>
+    <span class="c1"># the purposes of improved reporting).</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">SpecTest</span><span class="p">(</span><span class="n">SpecTestBase</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_runTest</span><span class="p">()</span>
+
+    <span class="c1"># TODO: should we restore this logic somewhere?</span>
+    <span class="c1"># If we don&#39;t convert unicode to str, we get the following error:</span>
+    <span class="c1">#   &quot;TypeError: __name__ must be set to a string object&quot;</span>
+    <span class="c1"># test.__name__ = str(name)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">SpecTest</span><span class="p">,</span> <span class="n">test_method_name</span><span class="p">,</span> <span class="n">run_test</span><span class="p">)</span>
+    <span class="n">case</span> <span class="o">=</span> <span class="n">SpecTest</span><span class="p">(</span><span class="n">test_method_name</span><span class="p">)</span>
+
+    <span class="k">case</span><span class="o">.</span><span class="n">_context</span> <span class="o">=</span> <span class="n">context</span>
+    <span class="k">case</span><span class="o">.</span><span class="n">_description</span> <span class="o">=</span> <span class="n">description</span>
+    <span class="k">case</span><span class="o">.</span><span class="n">_expected</span> <span class="o">=</span> <span class="n">expected</span>
+    <span class="k">case</span><span class="o">.</span><span class="n">_file_path</span> <span class="o">=</span> <span class="n">file_path</span>
+    <span class="k">case</span><span class="o">.</span><span class="n">_partials</span> <span class="o">=</span> <span class="n">partials</span>
+    <span class="k">case</span><span class="o">.</span><span class="n">_template</span> <span class="o">=</span> <span class="n">template</span>
+    <span class="k">case</span><span class="o">.</span><span class="n">_test_name</span> <span class="o">=</span> <span class="n">test_name</span>
+
+    <span class="k">return</span> <span class="n">case</span>
+
+
+<div class="viewcode-block" id="parse">
+<a class="viewcode-back" href="../../../api/pystache.tests.spectesting.html#pystache.tests.spectesting.parse">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse the contents of a spec test file, and return a dict.</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">      u: a unicode string.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO: find a cleaner mechanism for choosing between the two.</span>
+    <span class="k">if</span> <span class="n">yaml</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Then use json.</span>
+
+        <span class="c1"># The only way to get the simplejson module to return unicode strings</span>
+        <span class="c1"># is to pass it unicode.  See, for example--</span>
+        <span class="c1">#</span>
+        <span class="c1">#   http://code.google.com/p/simplejson/issues/detail?id=40</span>
+        <span class="c1">#</span>
+        <span class="c1"># and the documentation of simplejson.loads():</span>
+        <span class="c1">#</span>
+        <span class="c1">#   &quot;If s is a str then decoded JSON strings that contain only ASCII</span>
+        <span class="c1">#    characters may be parsed as str for performance and memory reasons.</span>
+        <span class="c1">#    If your code expects only unicode the appropriate solution is</span>
+        <span class="c1">#    decode s to unicode prior to calling loads.&quot;</span>
+        <span class="c1">#</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    <span class="c1"># Otherwise, yaml.</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">code_constructor</span><span class="p">(</span><span class="n">loader</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">construct_mapping</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="c1"># ast.literal_eval will not work here =&gt; lambda expression</span>
+        <span class="c1"># plus this a test, and spec tests are optional =&gt; #nosec ?</span>
+        <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s1">&#39;python&#39;</span><span class="p">],</span> <span class="p">{})</span>
+
+    <span class="n">yaml</span><span class="o">.</span><span class="n">add_constructor</span><span class="p">(</span><span class="s1">&#39;!code&#39;</span><span class="p">,</span> <span class="n">code_constructor</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">full_load</span><span class="p">(</span><span class="n">u</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="SpecTestBase">
+<a class="viewcode-back" href="../../../api/pystache.tests.spectesting.html#pystache.tests.spectesting.SpecTestBase">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SpecTestBase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">,</span> <span class="n">AssertStringMixin</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_runTest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_context</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_description</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expected</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_file_path</span>
+        <span class="n">partials</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_partials</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_template</span>
+        <span class="n">test_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_test_name</span>
+
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">partials</span><span class="o">=</span><span class="n">partials</span><span class="p">)</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+        <span class="c1"># We need to escape the strings that occur in our format string because</span>
+        <span class="c1"># they can contain % symbols, for example (in delimiters.yml)--</span>
+        <span class="c1">#</span>
+        <span class="c1">#   &quot;template: &#39;{{=&lt;% %&gt;=}}(&lt;%text%&gt;)&#39;&quot;</span>
+        <span class="c1">#</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">escape</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%%</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">parser_info</span> <span class="o">=</span> <span class="n">_get_parser_info</span><span class="p">()</span>
+        <span class="n">subs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">repr</span><span class="p">(</span><span class="n">test_name</span><span class="p">),</span> <span class="n">description</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">file_path</span><span class="p">),</span>
+                <span class="n">template</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">context</span><span class="p">),</span> <span class="n">parser_info</span><span class="p">]</span>
+        <span class="n">subs</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">escape</span><span class="p">(</span><span class="n">sub</span><span class="p">)</span> <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">subs</span><span class="p">])</span>
+        <span class="c1"># We include the parsing module version info to help with troubleshooting</span>
+        <span class="c1"># yaml/json/simplejson issues.</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span>
+
+<span class="s2">  File: </span><span class="si">%s</span>
+
+<span class="s2">  Template: </span><span class="se">\&quot;</span><span class="s2">&quot;&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">&quot;&quot;</span>
+
+<span class="s2">  Context: </span><span class="si">%s</span>
+
+<span class="s2">  </span><span class="si">%%</span><span class="s2">s</span>
+
+<span class="s2">  [using </span><span class="si">%s</span><span class="s2">]</span>
+<span class="s2">  &quot;&quot;&quot;</span> <span class="o">%</span> <span class="n">subs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">message</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

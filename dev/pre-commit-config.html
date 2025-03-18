@@ -1,0 +1,241 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contents of the .pre-commit-config.yaml file &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Using Pre-Commit" href="pre-commit-usage.html" />
+    <link rel="prev" title="Changelog Generation" href="generate-changelog.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hook-descriptions">Hook Descriptions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#end-of-file-fixer"><code class="docutils literal notranslate"><span class="pre">end-of-file-fixer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#trailing-whitespace"><code class="docutils literal notranslate"><span class="pre">trailing-whitespace</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mixed-line-ending"><code class="docutils literal notranslate"><span class="pre">mixed-line-ending</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#check-yaml"><code class="docutils literal notranslate"><span class="pre">check-yaml</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ffffff"><code class="docutils literal notranslate"><span class="pre">ffffff</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flake8"><code class="docutils literal notranslate"><span class="pre">flake8</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#autoflake"><code class="docutils literal notranslate"><span class="pre">autoflake</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pylint"><code class="docutils literal notranslate"><span class="pre">pylint</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bandit"><code class="docutils literal notranslate"><span class="pre">bandit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#beautysh"><code class="docutils literal notranslate"><span class="pre">beautysh</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#doc-formatting-rst-files">Doc formatting (.rst files)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/dev/pre-commit-config.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="contents-of-the-pre-commit-config-yaml-file">
+<h1>Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file<a class="headerlink" href="#contents-of-the-pre-commit-config-yaml-file" title="Link to this heading"></a></h1>
+<p>The file <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> is used to configure the program
+<code class="docutils literal notranslate"><span class="pre">pre-commit</span></code>, which controls the setup and execution of <a class="reference external" href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">Git hooks</a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file has a list of git repos, each repo may
+define one or more hooks.</p>
+<p>In this document we will review the various hooks. Some of the hooks will
+modify files, some will not.</p>
+<section id="hook-descriptions">
+<h2>Hook Descriptions<a class="headerlink" href="#hook-descriptions" title="Link to this heading"></a></h2>
+<p>Basic warning checks include:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">check-added-large-files</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">check-case-conflict</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">check-executables-have-shebangs</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">check-shebang-scripts-are-executable</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">check-merge-conflict</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">detect-private-key</span></code></p></li>
+</ul>
+<section id="end-of-file-fixer">
+<h3><code class="docutils literal notranslate"><span class="pre">end-of-file-fixer</span></code><a class="headerlink" href="#end-of-file-fixer" title="Link to this heading"></a></h3>
+<p>This will modify files by making sure that each file ends in a blank line.</p>
+<p>If a commit fails due to this hook, just commit again.</p>
+</section>
+<section id="trailing-whitespace">
+<h3><code class="docutils literal notranslate"><span class="pre">trailing-whitespace</span></code><a class="headerlink" href="#trailing-whitespace" title="Link to this heading"></a></h3>
+<p>This will modify files by ensuring there is no trailing whitespace on any line.</p>
+<p>If a commit fails due to this hook, just commit again.</p>
+</section>
+<section id="mixed-line-ending">
+<h3><code class="docutils literal notranslate"><span class="pre">mixed-line-ending</span></code><a class="headerlink" href="#mixed-line-ending" title="Link to this heading"></a></h3>
+<p>This will modify files by ensuring there are no mixed line endings in any file.</p>
+<p>If a commit fails due to this hook, just commit again.</p>
+</section>
+<section id="check-yaml">
+<h3><code class="docutils literal notranslate"><span class="pre">check-yaml</span></code><a class="headerlink" href="#check-yaml" title="Link to this heading"></a></h3>
+<p>This will NOT modify files. It will examine YAML files and report any
+issues. The rules for its configuration are defined in
+<code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> in the <code class="docutils literal notranslate"><span class="pre">exclude</span></code> section.</p>
+<p>If a commit fails due to this hook, all reported issues must be manually
+fixed before committing again.</p>
+</section>
+<section id="ffffff">
+<h3><code class="docutils literal notranslate"><span class="pre">ffffff</span></code><a class="headerlink" href="#ffffff" title="Link to this heading"></a></h3>
+<p>(fork of <code class="docutils literal notranslate"><span class="pre">black</span></code> with single-quote normalization)</p>
+<p>This will modify Python files by re-formatting the code. The rules
+for the formatting are defined in <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> in the
+<code class="docutils literal notranslate"><span class="pre">args</span></code> section, and should match the rules in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> (for
+example the line-length must be the same).</p>
+<p>If a commit fails due to this hook, just commit again.</p>
+</section>
+<section id="flake8">
+<h3><code class="docutils literal notranslate"><span class="pre">flake8</span></code><a class="headerlink" href="#flake8" title="Link to this heading"></a></h3>
+<p>This will NOT modify files. It will examine Python files for adherence to
+PEP8 and report any issues. Typically <code class="docutils literal notranslate"><span class="pre">black</span></code> will correct any issues that
+<code class="docutils literal notranslate"><span class="pre">flake8</span></code> may find.  The rules for this are defined in <code class="docutils literal notranslate"><span class="pre">.flake8</span></code>, and must
+be carefully selected to be compatible with <code class="docutils literal notranslate"><span class="pre">black</span></code>.</p>
+<p>If a commit fails due to this hook, all reported issues must be manually
+fixed before committing again (if not corrected by black/ffffff).</p>
+</section>
+<section id="autoflake">
+<h3><code class="docutils literal notranslate"><span class="pre">autoflake</span></code><a class="headerlink" href="#autoflake" title="Link to this heading"></a></h3>
+<p>This will modify Python files by re-formatting the code. The rules
+for the formatting are defined in <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> in the
+<code class="docutils literal notranslate"><span class="pre">args</span></code> section.</p>
+</section>
+<section id="pylint">
+<h3><code class="docutils literal notranslate"><span class="pre">pylint</span></code><a class="headerlink" href="#pylint" title="Link to this heading"></a></h3>
+<p>This will NOT modify files. It will examine Python files for errors and code
+smells, and offer suggestions for refactoring.  The rules for the formatting
+and minimum score are defined in <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> in the <code class="docutils literal notranslate"><span class="pre">args</span></code>
+section.  If the score falls below the minimum, the commit will fail and you
+must correct it manually before committing again.</p>
+</section>
+<section id="bandit">
+<h3><code class="docutils literal notranslate"><span class="pre">bandit</span></code><a class="headerlink" href="#bandit" title="Link to this heading"></a></h3>
+<p>This will NOT modify files. It will examine Python files for security issues
+and report any potential problems.  There is currently one allowed issue (in
+the baseline.json file) in the spec testing code.  Any issues found in
+non-test code must be resolved manually before committing again.</p>
+</section>
+<section id="beautysh">
+<h3><code class="docutils literal notranslate"><span class="pre">beautysh</span></code><a class="headerlink" href="#beautysh" title="Link to this heading"></a></h3>
+<p>This will modify files. It will examine shell files and fix some
+formatting issues. The rules for its configuration are defined in
+<code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> in the <code class="docutils literal notranslate"><span class="pre">args</span></code> section.</p>
+<p>If a commit fails due to this hook, review the proposed changes in the
+console, and check the files using <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">diff</span> <span class="pre">&lt;file1&gt;</span> <span class="pre">&lt;file2&gt;</span> <span class="pre">...</span></code></p>
+</section>
+<section id="doc-formatting-rst-files">
+<h3>Doc formatting (.rst files)<a class="headerlink" href="#doc-formatting-rst-files" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>blacken-docs</p></li>
+<li><p>doc8</p></li>
+<li><p>pygrep</p>
+<ul>
+<li><p>rst-backticks</p></li>
+<li><p>rst-directive-colons</p></li>
+<li><p>rst-inline-touching-normal</p></li>
+</ul>
+</li>
+</ul>
+<p>The blacken-docs tool will check for (and correct) any issues with python code
+blocks in documentation files; the latter checks will NOT modify files. They
+will examine all RST files (except ChangeLog.rst) and report any issues.</p>
+<p>If a commit fails due to the (non)blacken-docs hooks, all reported issues must be
+manually fixed before committing again.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="generate-changelog.html" class="btn btn-neutral float-left" title="Changelog Generation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pre-commit-usage.html" class="btn btn-neutral float-right" title="Using Pre-Commit" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

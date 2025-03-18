@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.tests.common &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.tests.common</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.tests.common</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Provides test-related code that can be used by all tests.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pystache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaults</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.tests</span><span class="w"> </span><span class="kn">import</span> <span class="n">examples</span>
+
+<span class="c1"># Save a reference to the original function to avoid recursion.</span>
+<span class="n">_DEFAULT_TAG_ESCAPE</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">TAG_ESCAPE</span>
+<span class="n">_TESTS_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">pystache</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span>
+
+<span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_TESTS_DIR</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>  <span class="c1"># i.e. &#39;pystache/tests/data&#39;.</span>
+<span class="n">EXAMPLES_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">PACKAGE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">pystache</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">PROJECT_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PACKAGE_DIR</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span class="c1"># TEXT_DOCTEST_PATHS: the paths to text files (i.e. non-module files)</span>
+<span class="c1"># containing doctests.  The paths should be relative to the project directory.</span>
+<span class="n">TEXT_DOCTEST_PATHS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;README.md&#39;</span><span class="p">]</span>
+
+<span class="n">UNITTEST_FILE_PREFIX</span> <span class="o">=</span> <span class="s2">&quot;test_&quot;</span>
+
+
+<div class="viewcode-block" id="get_spec_test_dir">
+<a class="viewcode-back" href="../../../api/pystache.tests.common.html#pystache.tests.common.get_spec_test_dir">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_spec_test_dir</span><span class="p">(</span><span class="n">project_dir</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s1">&#39;ext&#39;</span><span class="p">,</span> <span class="s1">&#39;spec&#39;</span><span class="p">,</span> <span class="s1">&#39;specs&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="html_escape">
+<a class="viewcode-back" href="../../../api/pystache.tests.common.html#pystache.tests.common.html_escape">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">html_escape</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An html escape function that behaves the same in both Python 2 and 3.</span>
+
+<span class="sd">    This function is needed because single quotes are escaped in Python 3</span>
+<span class="sd">    (to &#39;&amp;#x27;&#39;), but not in Python 2.</span>
+
+<span class="sd">    The global defaults.TAG_ESCAPE can be set to this function in the</span>
+<span class="sd">    setUp() and tearDown() of unittest test cases, for example, for</span>
+<span class="sd">    consistent test results.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">_DEFAULT_TAG_ESCAPE</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s1">&#39;&amp;#x27;&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_data_path">
+<a class="viewcode-back" href="../../../api/pystache.tests.common.html#pystache.tests.common.get_data_path">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_data_path</span><span class="p">(</span><span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the path to a file in the test data directory.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># Functions related to get_module_names().</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_files</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">should_include</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a list of paths to all modules below the given directory.</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">      should_include: a function that accepts a file path and returns True or False.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">paths</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Return value.</span>
+
+    <span class="n">is_module</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">path</span><span class="p">:</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.py&quot;</span><span class="p">)</span>
+
+    <span class="c1"># os.walk() is new in Python 2.3</span>
+    <span class="c1">#   http://docs.python.org/library/os.html#os.walk</span>
+    <span class="k">for</span> <span class="n">dir_path</span><span class="p">,</span> <span class="n">dir_names</span><span class="p">,</span> <span class="n">file_names</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">root_dir</span><span class="p">):</span>
+        <span class="n">new_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_path</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span> <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">file_names</span><span class="p">]</span>
+        <span class="n">new_paths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">is_module</span><span class="p">,</span> <span class="n">new_paths</span><span class="p">))</span>
+        <span class="n">new_paths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">should_include</span><span class="p">,</span> <span class="n">new_paths</span><span class="p">))</span>
+        <span class="n">paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">new_paths</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">paths</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_make_module_names</span><span class="p">(</span><span class="n">package_dir</span><span class="p">,</span> <span class="n">paths</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a list of fully-qualified module names given a list of module paths.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">package_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">package_dir</span><span class="p">)</span>
+    <span class="n">package_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">package_dir</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">prefix_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">package_dir</span><span class="p">)</span>
+
+    <span class="n">module_names</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>  <span class="c1"># for example &lt;path_to_package&gt;/subpackage/module.py</span>
+        <span class="n">rel_path</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="n">prefix_length</span><span class="p">:]</span>  <span class="c1"># for example /subpackage/module.py</span>
+        <span class="n">rel_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">rel_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># for example /subpackage/module</span>
+
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">rel_path</span><span class="p">,</span> <span class="n">tail</span><span class="p">)</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">rel_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">tail</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tail</span><span class="p">)</span>
+        <span class="c1"># We now have, for example, [&#39;subpackage&#39;, &#39;module&#39;].</span>
+        <span class="n">parts</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">package_name</span><span class="p">)</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+        <span class="n">module_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">module_names</span>
+
+
+<div class="viewcode-block" id="get_module_names">
+<a class="viewcode-back" href="../../../api/pystache.tests.common.html#pystache.tests.common.get_module_names">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_module_names</span><span class="p">(</span><span class="n">package_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">should_include</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a list of fully-qualified module names in the given package.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">package_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">package_dir</span> <span class="o">=</span> <span class="n">PACKAGE_DIR</span>
+
+    <span class="k">if</span> <span class="n">should_include</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">should_include</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">path</span><span class="p">:</span> <span class="kc">True</span>
+
+    <span class="n">paths</span> <span class="o">=</span> <span class="n">_find_files</span><span class="p">(</span><span class="n">package_dir</span><span class="p">,</span> <span class="n">should_include</span><span class="p">)</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="n">_make_module_names</span><span class="p">(</span><span class="n">package_dir</span><span class="p">,</span> <span class="n">paths</span><span class="p">)</span>
+    <span class="n">names</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">names</span></div>
+
+
+
+<div class="viewcode-block" id="AssertStringMixin">
+<a class="viewcode-back" href="../../../api/pystache.tests.common.html#pystache.tests.common.AssertStringMixin">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AssertStringMixin</span><span class="p">:</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A unittest.TestCase mixin to check string equality.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AssertStringMixin.assertString">
+<a class="viewcode-back" href="../../../api/pystache.tests.common.html#pystache.tests.common.AssertStringMixin.assertString">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">assertString</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assert that the given strings are equal and have the same type.</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          format: a format string containing a single conversion specifier %s.</span>
+<span class="sd">            Defaults to &quot;%s&quot;.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">format</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span>
+
+        <span class="c1"># Show both friendly and literal versions.</span>
+        <span class="n">details</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;String mismatch: </span><span class="si">%%</span><span class="s2">s</span>
+
+<span class="s2">        Expected: </span><span class="se">\&quot;</span><span class="s2">&quot;&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">&quot;&quot;</span>
+<span class="s2">        Actual:   </span><span class="se">\&quot;</span><span class="s2">&quot;&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">&quot;&quot;</span>
+
+<span class="s2">        Expected: </span><span class="si">%s</span>
+<span class="s2">        Actual:   </span><span class="si">%s</span><span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">expected</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="n">actual</span><span class="p">))</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">make_message</span><span class="p">(</span><span class="n">reason</span><span class="p">):</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="n">details</span> <span class="o">%</span> <span class="n">reason</span>
+            <span class="k">return</span> <span class="nb">format</span> <span class="o">%</span> <span class="n">description</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">make_message</span><span class="p">(</span><span class="s2">&quot;different characters&quot;</span><span class="p">))</span>
+
+        <span class="n">reason</span> <span class="o">=</span> <span class="s2">&quot;types different: </span><span class="si">%s</span><span class="s2"> != </span><span class="si">%s</span><span class="s2"> (actual)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">expected</span><span class="p">)),</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">actual</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">expected</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">actual</span><span class="p">),</span> <span class="n">make_message</span><span class="p">(</span><span class="n">reason</span><span class="p">))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="AssertIsMixin">
+<a class="viewcode-back" href="../../../api/pystache.tests.common.html#pystache.tests.common.AssertIsMixin">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AssertIsMixin</span><span class="p">:</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A unittest.TestCase mixin adding assertIs().&quot;&quot;&quot;</span>
+
+    <span class="c1"># unittest.assertIs() is not available until Python 2.7:</span>
+    <span class="c1">#   http://docs.python.org/library/unittest.html#unittest.TestCase.assertIsNone</span>
+<div class="viewcode-block" id="AssertIsMixin.assertIs">
+<a class="viewcode-back" href="../../../api/pystache.tests.common.html#pystache.tests.common.AssertIsMixin.assertIs">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">assertIs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">first</span> <span class="ow">is</span> <span class="n">second</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">first</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="n">second</span><span class="p">)))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="AssertExceptionMixin">
+<a class="viewcode-back" href="../../../api/pystache.tests.common.html#pystache.tests.common.AssertExceptionMixin">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AssertExceptionMixin</span><span class="p">:</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A unittest.TestCase mixin adding assertException().&quot;&quot;&quot;</span>
+
+    <span class="c1"># unittest.assertRaisesRegexp() is not available until Python 2.7:</span>
+    <span class="c1">#   http://docs.python.org/library/unittest.html#unittest.TestCase.assertRaisesRegexp</span>
+<div class="viewcode-block" id="AssertExceptionMixin.assertException">
+<a class="viewcode-back" href="../../../api/pystache.tests.common.html#pystache.tests.common.AssertExceptionMixin.assertException">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">assertException</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exception_type</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="nb">callable</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">callable</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Expected exception: </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">exception_type</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+        <span class="k">except</span> <span class="n">exception_type</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">),</span> <span class="n">msg</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SetupDefaults">
+<a class="viewcode-back" href="../../../api/pystache.tests.common.html#pystache.tests.common.SetupDefaults">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SetupDefaults</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Mix this class in to a unittest.TestCase for standard defaults.</span>
+
+<span class="sd">    This class allows for consistent test results across Python 2/3.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SetupDefaults.setup_defaults">
+<a class="viewcode-back" href="../../../api/pystache.tests.common.html#pystache.tests.common.SetupDefaults.setup_defaults">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original_decode_errors</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">DECODE_ERRORS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original_file_encoding</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">FILE_ENCODING</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original_string_encoding</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">STRING_ENCODING</span>
+
+        <span class="n">defaults</span><span class="o">.</span><span class="n">DECODE_ERRORS</span> <span class="o">=</span> <span class="s1">&#39;strict&#39;</span>
+        <span class="n">defaults</span><span class="o">.</span><span class="n">FILE_ENCODING</span> <span class="o">=</span> <span class="s1">&#39;ascii&#39;</span>
+        <span class="n">defaults</span><span class="o">.</span><span class="n">STRING_ENCODING</span> <span class="o">=</span> <span class="s1">&#39;ascii&#39;</span></div>
+
+
+<div class="viewcode-block" id="SetupDefaults.teardown_defaults">
+<a class="viewcode-back" href="../../../api/pystache.tests.common.html#pystache.tests.common.SetupDefaults.teardown_defaults">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">teardown_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">defaults</span><span class="o">.</span><span class="n">DECODE_ERRORS</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_decode_errors</span>
+        <span class="n">defaults</span><span class="o">.</span><span class="n">FILE_ENCODING</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_file_encoding</span>
+        <span class="n">defaults</span><span class="o">.</span><span class="n">STRING_ENCODING</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_string_encoding</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Attachable">
+<a class="viewcode-back" href="../../../api/pystache.tests.common.html#pystache.tests.common.Attachable">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Attachable</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class that attaches all constructor named parameters as attributes.</span>
+
+<span class="sd">    For example--</span>
+
+<span class="sd">    &gt;&gt;&gt; obj = Attachable(foo=42, size=&quot;of the universe&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; repr(obj)</span>
+<span class="sd">    &quot;Attachable(foo=42, size=&#39;of the universe&#39;)&quot;</span>
+<span class="sd">    &gt;&gt;&gt; obj.foo</span>
+<span class="sd">    42</span>
+<span class="sd">    &gt;&gt;&gt; obj.size</span>
+<span class="sd">    &#39;of the universe&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__args__</span> <span class="o">=</span> <span class="n">kwargs</span>
+        <span class="k">for</span> <span class="n">arg</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">(</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                           <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+                                     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__args__</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,241 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.tests.common module &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pystache.tests.doctesting module" href="pystache.tests.doctesting.html" />
+    <link rel="prev" title="pystache.tests.benchmark module" href="pystache.tests.benchmark.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pystache</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pystache.html">pystache package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pystache.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pystache.commands.html">pystache.commands package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="pystache.tests.html">pystache.tests package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.html#module-pystache">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pystache</a></li>
+          <li class="breadcrumb-item"><a href="pystache.html">pystache package</a></li>
+          <li class="breadcrumb-item"><a href="pystache.tests.html">pystache.tests package</a></li>
+      <li class="breadcrumb-item active">pystache.tests.common module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/pystache.tests.common.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pystache.tests.common">
+<span id="pystache-tests-common-module"></span><h1>pystache.tests.common module<a class="headerlink" href="#module-pystache.tests.common" title="Link to this heading"></a></h1>
+<p>Provides test-related code that can be used by all tests.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.tests.common.AssertExceptionMixin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.tests.common.</span></span><span class="sig-name descname"><span class="pre">AssertExceptionMixin</span></span><a class="reference internal" href="../_modules/pystache/tests/common.html#AssertExceptionMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.common.AssertExceptionMixin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A unittest.TestCase mixin adding assertException().</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.common.AssertExceptionMixin.assertException">
+<span class="sig-name descname"><span class="pre">assertException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exception_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/common.html#AssertExceptionMixin.assertException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.common.AssertExceptionMixin.assertException" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.tests.common.AssertIsMixin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.tests.common.</span></span><span class="sig-name descname"><span class="pre">AssertIsMixin</span></span><a class="reference internal" href="../_modules/pystache/tests/common.html#AssertIsMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.common.AssertIsMixin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A unittest.TestCase mixin adding assertIs().</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.common.AssertIsMixin.assertIs">
+<span class="sig-name descname"><span class="pre">assertIs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/common.html#AssertIsMixin.assertIs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.common.AssertIsMixin.assertIs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.tests.common.AssertStringMixin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.tests.common.</span></span><span class="sig-name descname"><span class="pre">AssertStringMixin</span></span><a class="reference internal" href="../_modules/pystache/tests/common.html#AssertStringMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.common.AssertStringMixin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A unittest.TestCase mixin to check string equality.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.common.AssertStringMixin.assertString">
+<span class="sig-name descname"><span class="pre">assertString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actual</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/common.html#AssertStringMixin.assertString"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.common.AssertStringMixin.assertString" title="Link to this definition"></a></dt>
+<dd><p>Assert that the given strings are equal and have the same type.</p>
+<p>Arguments:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>format: a format string containing a single conversion specifier %s.</dt><dd><p>Defaults to “%s”.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.tests.common.Attachable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.tests.common.</span></span><span class="sig-name descname"><span class="pre">Attachable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/common.html#Attachable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.common.Attachable" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class that attaches all constructor named parameters as attributes.</p>
+<p>For example–</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">Attachable</span><span class="p">(</span><span class="n">foo</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s2">&quot;of the universe&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<span class="go">&quot;Attachable(foo=42, size=&#39;of the universe&#39;)&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">foo</span>
+<span class="go">42</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">size</span>
+<span class="go">&#39;of the universe&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.tests.common.SetupDefaults">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.tests.common.</span></span><span class="sig-name descname"><span class="pre">SetupDefaults</span></span><a class="reference internal" href="../_modules/pystache/tests/common.html#SetupDefaults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.common.SetupDefaults" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Mix this class in to a unittest.TestCase for standard defaults.</p>
+<p>This class allows for consistent test results across Python 2/3.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.common.SetupDefaults.setup_defaults">
+<span class="sig-name descname"><span class="pre">setup_defaults</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/common.html#SetupDefaults.setup_defaults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.common.SetupDefaults.setup_defaults" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.tests.common.SetupDefaults.teardown_defaults">
+<span class="sig-name descname"><span class="pre">teardown_defaults</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/common.html#SetupDefaults.teardown_defaults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.common.SetupDefaults.teardown_defaults" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pystache.tests.common.get_data_path">
+<span class="sig-prename descclassname"><span class="pre">pystache.tests.common.</span></span><span class="sig-name descname"><span class="pre">get_data_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/common.html#get_data_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.common.get_data_path" title="Link to this definition"></a></dt>
+<dd><p>Return the path to a file in the test data directory.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pystache.tests.common.get_module_names">
+<span class="sig-prename descclassname"><span class="pre">pystache.tests.common.</span></span><span class="sig-name descname"><span class="pre">get_module_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">should_include</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/common.html#get_module_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.common.get_module_names" title="Link to this definition"></a></dt>
+<dd><p>Return a list of fully-qualified module names in the given package.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pystache.tests.common.get_spec_test_dir">
+<span class="sig-prename descclassname"><span class="pre">pystache.tests.common.</span></span><span class="sig-name descname"><span class="pre">get_spec_test_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/common.html#get_spec_test_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.common.get_spec_test_dir" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pystache.tests.common.html_escape">
+<span class="sig-prename descclassname"><span class="pre">pystache.tests.common.</span></span><span class="sig-name descname"><span class="pre">html_escape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/tests/common.html#html_escape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.tests.common.html_escape" title="Link to this definition"></a></dt>
+<dd><p>An html escape function that behaves the same in both Python 2 and 3.</p>
+<p>This function is needed because single quotes are escaped in Python 3
+(to ‘&amp;#x27;’), but not in Python 2.</p>
+<p>The global defaults.TAG_ESCAPE can be set to this function in the
+setUp() and tearDown() of unittest test cases, for example, for
+consistent test results.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pystache.tests.benchmark.html" class="btn btn-neutral float-left" title="pystache.tests.benchmark module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pystache.tests.doctesting.html" class="btn btn-neutral float-right" title="pystache.tests.doctesting module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

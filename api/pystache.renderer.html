@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.renderer module &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pystache.specloader module" href="pystache.specloader.html" />
+    <link rel="prev" title="pystache.renderengine module" href="pystache.renderengine.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pystache</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pystache.html">pystache package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pystache.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="pystache.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pystache.common.html">pystache.common module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.context.html">pystache.context module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.defaults.html">pystache.defaults module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.init.html">pystache.init module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.loader.html">pystache.loader module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.locator.html">pystache.locator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.parsed.html">pystache.parsed module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.parser.html">pystache.parser module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.renderengine.html">pystache.renderengine module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pystache.renderer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.specloader.html">pystache.specloader module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.template_spec.html">pystache.template_spec module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.html#module-pystache">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pystache</a></li>
+          <li class="breadcrumb-item"><a href="pystache.html">pystache package</a></li>
+      <li class="breadcrumb-item active">pystache.renderer module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/pystache.renderer.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pystache.renderer">
+<span id="pystache-renderer-module"></span><h1>pystache.renderer module<a class="headerlink" href="#module-pystache.renderer" title="Link to this heading"></a></h1>
+<p>This module provides a Renderer class to render templates.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.renderer.Renderer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.renderer.</span></span><span class="sig-name descname"><span class="pre">Renderer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">string_encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decode_errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_dirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">escape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/renderer.html#Renderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.renderer.Renderer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class for rendering mustache templates.</p>
+<p>This class supports several rendering options which are described in
+the constructor’s docstring.  Other behavior can be customized by
+subclassing this class.</p>
+<p>For example, one can pass a string-string dictionary to the constructor
+to bypass loading partials from the file system:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">partials</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;partial&#39;</span><span class="p">:</span> <span class="s1">&#39;Hello, {{thing}}!&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">partials</span><span class="o">=</span><span class="n">partials</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># We apply print to make the test work in Python 3 after 2to3.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;{{&gt;partial}}&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;thing&#39;</span><span class="p">:</span> <span class="s1">&#39;world&#39;</span><span class="p">}))</span>
+<span class="go">Hello, world!</span>
+</pre></div>
+</div>
+<p>To customize string coercion (e.g. to render False values as <code class="docutils literal notranslate"><span class="pre">''</span></code>), one can
+subclass this class.  For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyRenderer</span><span class="p">(</span><span class="n">Renderer</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">str_coerce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">val</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="pystache.renderer.Renderer.context">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">context</span></span><a class="headerlink" href="#pystache.renderer.Renderer.context" title="Link to this definition"></a></dt>
+<dd><p>Return the current rendering context [experimental].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.renderer.Renderer.load_template">
+<span class="sig-name descname"><span class="pre">load_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/renderer.html#Renderer.load_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.renderer.Renderer.load_template" title="Link to this definition"></a></dt>
+<dd><p>Load a template by name from the file system.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.renderer.Renderer.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/renderer.html#Renderer.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.renderer.Renderer.render" title="Link to this definition"></a></dt>
+<dd><p>Render the given template string, view template, or parsed template.</p>
+<p>Returns a unicode string.</p>
+<p>Prior to rendering, this method will convert a template that is a
+byte string (type str in Python 2) to unicode using the string_encoding
+and decode_errors attributes.  See the constructor docstring for
+more information.</p>
+<p>Arguments:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">template<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a template string that is unicode or a byte string,
+a ParsedTemplate instance, or another object instance.  In the
+final case, the function first looks for the template associated
+to the object by calling this class’s get_associated_template()
+method.  The rendering process also uses the passed object as
+the first element of the context stack when rendering.</p>
+</dd>
+<dt class="field-even">context<span class="colon">:</span></dt>
+<dd class="field-even"><p>zero or more dictionaries, ContextStack instances, or objects
+with which to populate the initial context stack.  None
+arguments are skipped.  Items in the context list are added to
+the context stack in order so that later items in the argument
+list take precedence over earlier items.</p>
+</dd>
+<dt class="field-odd">kwargs<span class="colon">:</span></dt>
+<dd class="field-odd"><p>additional key-value data to add to the context stack.
+As these arguments appear after all items in the context list,
+in the case of key conflicts these values take precedence over
+all items in the context list.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.renderer.Renderer.render_name">
+<span class="sig-name descname"><span class="pre">render_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/renderer.html#Renderer.render_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.renderer.Renderer.render_name" title="Link to this definition"></a></dt>
+<dd><p>Render the template with the given name using the given context.</p>
+<p>See the render() docstring for more information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.renderer.Renderer.render_path">
+<span class="sig-name descname"><span class="pre">render_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/renderer.html#Renderer.render_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.renderer.Renderer.render_path" title="Link to this definition"></a></dt>
+<dd><p>Render the template at the given path using the given context.</p>
+<p>Read the render() docstring for more information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.renderer.Renderer.str">
+<span class="sig-name descname"><span class="pre">str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/renderer.html#Renderer.str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.renderer.Renderer.str" title="Link to this definition"></a></dt>
+<dd><p>Convert a byte string to unicode, using string_encoding and decode_errors.</p>
+<p>Arguments:</p>
+<blockquote>
+<div><p>b: a byte string.</p>
+<dl class="simple">
+<dt>encoding: the name of an encoding.  Defaults to the string_encoding</dt><dd><p>attribute for this instance.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Raises:</p>
+<blockquote>
+<div><dl>
+<dt>TypeError: Because this method calls Python’s built-in unicode()</dt><dd><p>function, this method raises the following exception if the
+given string is already unicode:</p>
+<blockquote>
+<div><p>TypeError: decoding Unicode is not supported</p>
+</div></blockquote>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.renderer.Renderer.str_coerce">
+<span class="sig-name descname"><span class="pre">str_coerce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/renderer.html#Renderer.str_coerce"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.renderer.Renderer.str_coerce" title="Link to this definition"></a></dt>
+<dd><p>Coerce a non-string value to a string.</p>
+<p>This method is called whenever a non-string is encountered during the
+rendering process when a string is needed (e.g. if a context value
+for string interpolation is not a string).  To customize string
+coercion, you can override this method.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pystache.renderengine.html" class="btn btn-neutral float-left" title="pystache.renderengine module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pystache.specloader.html" class="btn btn-neutral float-right" title="pystache.specloader module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

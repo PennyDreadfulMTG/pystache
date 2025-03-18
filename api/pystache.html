@@ -1,0 +1,639 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache package &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pystache.commands package" href="pystache.commands.html" />
+    <link rel="prev" title="pystache" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pystache</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pystache package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.commands.html">pystache.commands package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.html">pystache.tests package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.common.html">pystache.common module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.context.html">pystache.context module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.defaults.html">pystache.defaults module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.init.html">pystache.init module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.loader.html">pystache.loader module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.locator.html">pystache.locator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.parsed.html">pystache.parsed module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.parser.html">pystache.parser module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.renderengine.html">pystache.renderengine module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.renderer.html">pystache.renderer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.specloader.html">pystache.specloader module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.template_spec.html">pystache.template_spec module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pystache">Module contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pystache.Renderer"><code class="docutils literal notranslate"><span class="pre">Renderer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pystache.TemplateSpec"><code class="docutils literal notranslate"><span class="pre">TemplateSpec</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pystache.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pystache.render"><code class="docutils literal notranslate"><span class="pre">render()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pystache</a></li>
+      <li class="breadcrumb-item active">pystache package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/pystache.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pystache-package">
+<h1>pystache package<a class="headerlink" href="#pystache-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pystache.commands.html">pystache.commands package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.commands.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.commands.render.html">pystache.commands.render module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.commands.render.html#pystache.commands.render.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.commands.render.html#pystache.commands.render.parse_args"><code class="docutils literal notranslate"><span class="pre">parse_args()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.commands.test.html">pystache.commands.test module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.commands.test.html#pystache.commands.test.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.commands.html#module-pystache.commands">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.tests.html">pystache.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.data.html">pystache.tests.data package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.data.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.data.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.data.html#module-pystache.tests.data">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.examples.html">pystache.tests.examples package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.examples.html#module-pystache.tests.examples">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.benchmark.html">pystache.tests.benchmark module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.benchmark.html#pystache.tests.benchmark.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.benchmark.html#pystache.tests.benchmark.make_test_function"><code class="docutils literal notranslate"><span class="pre">make_test_function()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.common.html">pystache.tests.common module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.AssertExceptionMixin"><code class="docutils literal notranslate"><span class="pre">AssertExceptionMixin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.AssertIsMixin"><code class="docutils literal notranslate"><span class="pre">AssertIsMixin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.AssertStringMixin"><code class="docutils literal notranslate"><span class="pre">AssertStringMixin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.Attachable"><code class="docutils literal notranslate"><span class="pre">Attachable</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.SetupDefaults"><code class="docutils literal notranslate"><span class="pre">SetupDefaults</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.get_data_path"><code class="docutils literal notranslate"><span class="pre">get_data_path()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.get_module_names"><code class="docutils literal notranslate"><span class="pre">get_module_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.get_spec_test_dir"><code class="docutils literal notranslate"><span class="pre">get_spec_test_dir()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.common.html#pystache.tests.common.html_escape"><code class="docutils literal notranslate"><span class="pre">html_escape()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.doctesting.html">pystache.tests.doctesting module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.doctesting.html#pystache.tests.doctesting.get_doctests"><code class="docutils literal notranslate"><span class="pre">get_doctests()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.main.html">pystache.tests.main module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.main.html#pystache.tests.main.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.main.html#pystache.tests.main.make_extra_tests"><code class="docutils literal notranslate"><span class="pre">make_extra_tests()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.main.html#pystache.tests.main.make_test_program_class"><code class="docutils literal notranslate"><span class="pre">make_test_program_class()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.spectesting.html">pystache.tests.spectesting module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.spectesting.html#pystache.tests.spectesting.SpecTestBase"><code class="docutils literal notranslate"><span class="pre">SpecTestBase</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.spectesting.html#pystache.tests.spectesting.get_spec_tests"><code class="docutils literal notranslate"><span class="pre">get_spec_tests()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.spectesting.html#pystache.tests.spectesting.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test___init__.html">pystache.tests.test___init__ module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test___init__.html#pystache.tests.test___init__.InitTests"><code class="docutils literal notranslate"><span class="pre">InitTests</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_commands.html">pystache.tests.test_commands module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_commands.html#pystache.tests.test_commands.CommandsTestCase"><code class="docutils literal notranslate"><span class="pre">CommandsTestCase</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_commands.html#pystache.tests.test_commands.MockStdout"><code class="docutils literal notranslate"><span class="pre">MockStdout</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_context.html">pystache.tests.test_context module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.ContextStackTestCase"><code class="docutils literal notranslate"><span class="pre">ContextStackTestCase</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.DictLike"><code class="docutils literal notranslate"><span class="pre">DictLike</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.GetValueTestCase"><code class="docutils literal notranslate"><span class="pre">GetValueTestCase</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_context.html#pystache.tests.test_context.SimpleObject"><code class="docutils literal notranslate"><span class="pre">SimpleObject</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_defaults.html">pystache.tests.test_defaults module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_defaults.html#pystache.tests.test_defaults.DefaultsConfigurableTestCase"><code class="docutils literal notranslate"><span class="pre">DefaultsConfigurableTestCase</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_examples.html">pystache.tests.test_examples module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_examples.html#pystache.tests.test_examples.TestView"><code class="docutils literal notranslate"><span class="pre">TestView</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_loader.html">pystache.tests.test_loader module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_loader.html#pystache.tests.test_loader.LoaderTests"><code class="docutils literal notranslate"><span class="pre">LoaderTests</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_locator.html">pystache.tests.test_locator module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_locator.html#pystache.tests.test_locator.LocatorTests"><code class="docutils literal notranslate"><span class="pre">LocatorTests</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_parser.html">pystache.tests.test_parser module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_parser.html#pystache.tests.test_parser.ParseTestCase"><code class="docutils literal notranslate"><span class="pre">ParseTestCase</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_parser.html#pystache.tests.test_parser.RegularExpressionTestCase"><code class="docutils literal notranslate"><span class="pre">RegularExpressionTestCase</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_pystache.html">pystache.tests.test_pystache module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_pystache.html#pystache.tests.test_pystache.PystacheTests"><code class="docutils literal notranslate"><span class="pre">PystacheTests</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderengine.html">pystache.tests.test_renderengine module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderEngineTestCase"><code class="docutils literal notranslate"><span class="pre">RenderEngineTestCase</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests"><code class="docutils literal notranslate"><span class="pre">RenderTests</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.mock_literal"><code class="docutils literal notranslate"><span class="pre">mock_literal()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_renderer.html">pystache.tests.test_renderer module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererInitTestCase"><code class="docutils literal notranslate"><span class="pre">RendererInitTestCase</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.RendererTests"><code class="docutils literal notranslate"><span class="pre">RendererTests</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.Renderer_MakeRenderEngineTests"><code class="docutils literal notranslate"><span class="pre">Renderer_MakeRenderEngineTests</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_renderer.html#pystache.tests.test_renderer.mock_unicode"><code class="docutils literal notranslate"><span class="pre">mock_unicode()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_simple.html">pystache.tests.test_simple module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple"><code class="docutils literal notranslate"><span class="pre">TestSimple</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.tests.test_specloader.html">pystache.tests.test_specloader module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.AssertPathsMixin"><code class="docutils literal notranslate"><span class="pre">AssertPathsMixin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests"><code class="docutils literal notranslate"><span class="pre">SpecLoaderTests</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests"><code class="docutils literal notranslate"><span class="pre">TemplateSpecTests</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.Thing"><code class="docutils literal notranslate"><span class="pre">Thing</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase"><code class="docutils literal notranslate"><span class="pre">ViewTestCase</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.tests.html#module-pystache.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pystache.common.html">pystache.common module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.common.html#pystache.common.MissingTags"><code class="docutils literal notranslate"><span class="pre">MissingTags</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.common.html#pystache.common.MissingTags.ignore"><code class="docutils literal notranslate"><span class="pre">MissingTags.ignore</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.common.html#pystache.common.MissingTags.strict"><code class="docutils literal notranslate"><span class="pre">MissingTags.strict</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.common.html#pystache.common.PystacheError"><code class="docutils literal notranslate"><span class="pre">PystacheError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.common.html#pystache.common.TemplateNotFoundError"><code class="docutils literal notranslate"><span class="pre">TemplateNotFoundError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.common.html#pystache.common.is_string"><code class="docutils literal notranslate"><span class="pre">is_string()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.common.html#pystache.common.read"><code class="docutils literal notranslate"><span class="pre">read()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.context.html">pystache.context module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.context.html#pystache.context.ContextStack"><code class="docutils literal notranslate"><span class="pre">ContextStack</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.context.html#pystache.context.ContextStack.copy"><code class="docutils literal notranslate"><span class="pre">ContextStack.copy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.context.html#pystache.context.ContextStack.create"><code class="docutils literal notranslate"><span class="pre">ContextStack.create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.context.html#pystache.context.ContextStack.get"><code class="docutils literal notranslate"><span class="pre">ContextStack.get()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.context.html#pystache.context.ContextStack.pop"><code class="docutils literal notranslate"><span class="pre">ContextStack.pop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.context.html#pystache.context.ContextStack.push"><code class="docutils literal notranslate"><span class="pre">ContextStack.push()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.context.html#pystache.context.ContextStack.top"><code class="docutils literal notranslate"><span class="pre">ContextStack.top()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.context.html#pystache.context.KeyNotFoundError"><code class="docutils literal notranslate"><span class="pre">KeyNotFoundError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.context.html#pystache.context.NotFound"><code class="docutils literal notranslate"><span class="pre">NotFound</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.defaults.html">pystache.defaults module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.defaults.html#pystache.defaults.TAG_ESCAPE"><code class="docutils literal notranslate"><span class="pre">TAG_ESCAPE()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.init.html">pystache.init module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.init.html#pystache.init.render"><code class="docutils literal notranslate"><span class="pre">render()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.loader.html">pystache.loader module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.loader.html#pystache.loader.Loader"><code class="docutils literal notranslate"><span class="pre">Loader</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.loader.html#pystache.loader.Loader.load_file"><code class="docutils literal notranslate"><span class="pre">Loader.load_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.loader.html#pystache.loader.Loader.load_name"><code class="docutils literal notranslate"><span class="pre">Loader.load_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.loader.html#pystache.loader.Loader.load_object"><code class="docutils literal notranslate"><span class="pre">Loader.load_object()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.loader.html#pystache.loader.Loader.read"><code class="docutils literal notranslate"><span class="pre">Loader.read()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.loader.html#pystache.loader.Loader.str"><code class="docutils literal notranslate"><span class="pre">Loader.str()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.locator.html">pystache.locator module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.locator.html#pystache.locator.Locator"><code class="docutils literal notranslate"><span class="pre">Locator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.locator.html#pystache.locator.Locator.find_file"><code class="docutils literal notranslate"><span class="pre">Locator.find_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.locator.html#pystache.locator.Locator.find_name"><code class="docutils literal notranslate"><span class="pre">Locator.find_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.locator.html#pystache.locator.Locator.find_object"><code class="docutils literal notranslate"><span class="pre">Locator.find_object()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.locator.html#pystache.locator.Locator.get_object_directory"><code class="docutils literal notranslate"><span class="pre">Locator.get_object_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.locator.html#pystache.locator.Locator.make_file_name"><code class="docutils literal notranslate"><span class="pre">Locator.make_file_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.locator.html#pystache.locator.Locator.make_template_name"><code class="docutils literal notranslate"><span class="pre">Locator.make_template_name()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.parsed.html">pystache.parsed module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.parsed.html#pystache.parsed.ParsedTemplate"><code class="docutils literal notranslate"><span class="pre">ParsedTemplate</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.parsed.html#pystache.parsed.ParsedTemplate.add"><code class="docutils literal notranslate"><span class="pre">ParsedTemplate.add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.parsed.html#pystache.parsed.ParsedTemplate.render"><code class="docutils literal notranslate"><span class="pre">ParsedTemplate.render()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.parser.html">pystache.parser module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.parser.html#pystache.parser.ParsingError"><code class="docutils literal notranslate"><span class="pre">ParsingError</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.parser.html#pystache.parser.ParsingError.info"><code class="docutils literal notranslate"><span class="pre">ParsingError.info</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.parser.html#pystache.parser.ParsingErrorDetails"><code class="docutils literal notranslate"><span class="pre">ParsingErrorDetails</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.parser.html#pystache.parser.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.renderengine.html">pystache.renderengine module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.renderengine.html#pystache.renderengine.RenderEngine"><code class="docutils literal notranslate"><span class="pre">RenderEngine</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.renderengine.html#pystache.renderengine.RenderEngine.fetch_section_data"><code class="docutils literal notranslate"><span class="pre">RenderEngine.fetch_section_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.renderengine.html#pystache.renderengine.RenderEngine.fetch_string"><code class="docutils literal notranslate"><span class="pre">RenderEngine.fetch_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.renderengine.html#pystache.renderengine.RenderEngine.render"><code class="docutils literal notranslate"><span class="pre">RenderEngine.render()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pystache.renderengine.html#pystache.renderengine.context_get"><code class="docutils literal notranslate"><span class="pre">context_get()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.renderer.html">pystache.renderer module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.renderer.html#pystache.renderer.Renderer"><code class="docutils literal notranslate"><span class="pre">Renderer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.renderer.html#pystache.renderer.Renderer.context"><code class="docutils literal notranslate"><span class="pre">Renderer.context</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.renderer.html#pystache.renderer.Renderer.load_template"><code class="docutils literal notranslate"><span class="pre">Renderer.load_template()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.renderer.html#pystache.renderer.Renderer.render"><code class="docutils literal notranslate"><span class="pre">Renderer.render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.renderer.html#pystache.renderer.Renderer.render_name"><code class="docutils literal notranslate"><span class="pre">Renderer.render_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.renderer.html#pystache.renderer.Renderer.render_path"><code class="docutils literal notranslate"><span class="pre">Renderer.render_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.renderer.html#pystache.renderer.Renderer.str"><code class="docutils literal notranslate"><span class="pre">Renderer.str()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.renderer.html#pystache.renderer.Renderer.str_coerce"><code class="docutils literal notranslate"><span class="pre">Renderer.str_coerce()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.specloader.html">pystache.specloader module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.specloader.html#pystache.specloader.SpecLoader"><code class="docutils literal notranslate"><span class="pre">SpecLoader</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.specloader.html#pystache.specloader.SpecLoader.load"><code class="docutils literal notranslate"><span class="pre">SpecLoader.load()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pystache.template_spec.html">pystache.template_spec module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pystache.template_spec.html#pystache.template_spec.TemplateSpec"><code class="docutils literal notranslate"><span class="pre">TemplateSpec</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pystache.template_spec.html#pystache.template_spec.TemplateSpec.template"><code class="docutils literal notranslate"><span class="pre">TemplateSpec.template</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.template_spec.html#pystache.template_spec.TemplateSpec.template_encoding"><code class="docutils literal notranslate"><span class="pre">TemplateSpec.template_encoding</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.template_spec.html#pystache.template_spec.TemplateSpec.template_extension"><code class="docutils literal notranslate"><span class="pre">TemplateSpec.template_extension</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.template_spec.html#pystache.template_spec.TemplateSpec.template_name"><code class="docutils literal notranslate"><span class="pre">TemplateSpec.template_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.template_spec.html#pystache.template_spec.TemplateSpec.template_path"><code class="docutils literal notranslate"><span class="pre">TemplateSpec.template_path</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.template_spec.html#pystache.template_spec.TemplateSpec.template_rel_directory"><code class="docutils literal notranslate"><span class="pre">TemplateSpec.template_rel_directory</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pystache.template_spec.html#pystache.template_spec.TemplateSpec.template_rel_path"><code class="docutils literal notranslate"><span class="pre">TemplateSpec.template_rel_path</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-pystache">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pystache" title="Link to this heading"></a></h2>
+<p>TODO: add a docstring.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.Renderer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.</span></span><span class="sig-name descname"><span class="pre">Renderer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">string_encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decode_errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_dirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">escape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/renderer.html#Renderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.Renderer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class for rendering mustache templates.</p>
+<p>This class supports several rendering options which are described in
+the constructor’s docstring.  Other behavior can be customized by
+subclassing this class.</p>
+<p>For example, one can pass a string-string dictionary to the constructor
+to bypass loading partials from the file system:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">partials</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;partial&#39;</span><span class="p">:</span> <span class="s1">&#39;Hello, {{thing}}!&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">partials</span><span class="o">=</span><span class="n">partials</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># We apply print to make the test work in Python 3 after 2to3.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;{{&gt;partial}}&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;thing&#39;</span><span class="p">:</span> <span class="s1">&#39;world&#39;</span><span class="p">}))</span>
+<span class="go">Hello, world!</span>
+</pre></div>
+</div>
+<p>To customize string coercion (e.g. to render False values as <code class="docutils literal notranslate"><span class="pre">''</span></code>), one can
+subclass this class.  For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyRenderer</span><span class="p">(</span><span class="n">Renderer</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">str_coerce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">val</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="pystache.Renderer.context">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">context</span></span><a class="headerlink" href="#pystache.Renderer.context" title="Link to this definition"></a></dt>
+<dd><p>Return the current rendering context [experimental].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.Renderer.load_template">
+<span class="sig-name descname"><span class="pre">load_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/renderer.html#Renderer.load_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.Renderer.load_template" title="Link to this definition"></a></dt>
+<dd><p>Load a template by name from the file system.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.Renderer.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/renderer.html#Renderer.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.Renderer.render" title="Link to this definition"></a></dt>
+<dd><p>Render the given template string, view template, or parsed template.</p>
+<p>Returns a unicode string.</p>
+<p>Prior to rendering, this method will convert a template that is a
+byte string (type str in Python 2) to unicode using the string_encoding
+and decode_errors attributes.  See the constructor docstring for
+more information.</p>
+<p>Arguments:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">template<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a template string that is unicode or a byte string,
+a ParsedTemplate instance, or another object instance.  In the
+final case, the function first looks for the template associated
+to the object by calling this class’s get_associated_template()
+method.  The rendering process also uses the passed object as
+the first element of the context stack when rendering.</p>
+</dd>
+<dt class="field-even">context<span class="colon">:</span></dt>
+<dd class="field-even"><p>zero or more dictionaries, ContextStack instances, or objects
+with which to populate the initial context stack.  None
+arguments are skipped.  Items in the context list are added to
+the context stack in order so that later items in the argument
+list take precedence over earlier items.</p>
+</dd>
+<dt class="field-odd">kwargs<span class="colon">:</span></dt>
+<dd class="field-odd"><p>additional key-value data to add to the context stack.
+As these arguments appear after all items in the context list,
+in the case of key conflicts these values take precedence over
+all items in the context list.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.Renderer.render_name">
+<span class="sig-name descname"><span class="pre">render_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/renderer.html#Renderer.render_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.Renderer.render_name" title="Link to this definition"></a></dt>
+<dd><p>Render the template with the given name using the given context.</p>
+<p>See the render() docstring for more information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.Renderer.render_path">
+<span class="sig-name descname"><span class="pre">render_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/renderer.html#Renderer.render_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.Renderer.render_path" title="Link to this definition"></a></dt>
+<dd><p>Render the template at the given path using the given context.</p>
+<p>Read the render() docstring for more information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.Renderer.str">
+<span class="sig-name descname"><span class="pre">str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/renderer.html#Renderer.str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.Renderer.str" title="Link to this definition"></a></dt>
+<dd><p>Convert a byte string to unicode, using string_encoding and decode_errors.</p>
+<p>Arguments:</p>
+<blockquote>
+<div><p>b: a byte string.</p>
+<dl class="simple">
+<dt>encoding: the name of an encoding.  Defaults to the string_encoding</dt><dd><p>attribute for this instance.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Raises:</p>
+<blockquote>
+<div><dl>
+<dt>TypeError: Because this method calls Python’s built-in unicode()</dt><dd><p>function, this method raises the following exception if the
+given string is already unicode:</p>
+<blockquote>
+<div><p>TypeError: decoding Unicode is not supported</p>
+</div></blockquote>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pystache.Renderer.str_coerce">
+<span class="sig-name descname"><span class="pre">str_coerce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/renderer.html#Renderer.str_coerce"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.Renderer.str_coerce" title="Link to this definition"></a></dt>
+<dd><p>Coerce a non-string value to a string.</p>
+<p>This method is called whenever a non-string is encountered during the
+rendering process when a string is needed (e.g. if a context value
+for string interpolation is not a string).  To customize string
+coercion, you can override this method.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pystache.TemplateSpec">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pystache.</span></span><span class="sig-name descname"><span class="pre">TemplateSpec</span></span><a class="reference internal" href="../_modules/pystache/template_spec.html#TemplateSpec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.TemplateSpec" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A mixin or interface for specifying custom template information.</p>
+<p>The “spec” in TemplateSpec can be taken to mean that the template
+information is either “specified” or “special.”</p>
+<p>A view should subclass this class only if customized template loading
+is needed.  The following attributes allow one to customize/override
+template information on a per view basis.  A None value means to use
+default behavior for that value and perform no customization.  All
+attributes are initialized to None.</p>
+<p>Attributes:</p>
+<blockquote>
+<div><p>template: the template as a string.</p>
+<p>template_encoding: the encoding used by the template.</p>
+<dl class="simple">
+<dt>template_extension: the template file extension.  Defaults to “mustache”.</dt><dd><p>Pass False for no extension (i.e. extensionless template files).</p>
+</dd>
+</dl>
+<p>template_name: the name of the template.</p>
+<p>template_path: absolute path to the template.</p>
+<dl class="simple">
+<dt>template_rel_directory: the directory containing the template file,</dt><dd><p>relative to the directory containing the module defining the class.</p>
+</dd>
+<dt>template_rel_path: the path to the template file, relative to the</dt><dd><p>directory containing the module defining the class.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pystache.TemplateSpec.template">
+<span class="sig-name descname"><span class="pre">template</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pystache.TemplateSpec.template" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pystache.TemplateSpec.template_encoding">
+<span class="sig-name descname"><span class="pre">template_encoding</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pystache.TemplateSpec.template_encoding" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pystache.TemplateSpec.template_extension">
+<span class="sig-name descname"><span class="pre">template_extension</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pystache.TemplateSpec.template_extension" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pystache.TemplateSpec.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pystache.TemplateSpec.template_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pystache.TemplateSpec.template_path">
+<span class="sig-name descname"><span class="pre">template_path</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pystache.TemplateSpec.template_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pystache.TemplateSpec.template_rel_directory">
+<span class="sig-name descname"><span class="pre">template_rel_directory</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pystache.TemplateSpec.template_rel_directory" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pystache.TemplateSpec.template_rel_path">
+<span class="sig-name descname"><span class="pre">template_rel_path</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pystache.TemplateSpec.template_rel_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pystache.parse">
+<span class="sig-prename descclassname"><span class="pre">pystache.</span></span><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_on_mismatch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/parser.html#parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.parse" title="Link to this definition"></a></dt>
+<dd><p>Parse a unicode template string and return a ParsedTemplate instance.</p>
+<dl class="simple">
+<dt>Arguments:</dt><dd><p>template: a unicode template string.
+delimiters: a 2-tuple of delimiters.  Defaults to the package default.
+raise_on_mismatch: a boolean indicating whether to raise an exception when parsing fails.</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parsed</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="s2">&quot;Hey {{#who}}{{name}}!{{/who}}&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">parsed</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>  <span class="c1"># This is an old hack.</span>
+<span class="go">[&#39;Hey &#39;, _SectionNode(key=&#39;who&#39;, index_begin=12, index_end=21, parsed=[_EscapeNode(key=&#39;name&#39;), &#39;!&#39;])]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pystache.render">
+<span class="sig-prename descclassname"><span class="pre">pystache.</span></span><span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pystache/init.html#render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pystache.render" title="Link to this definition"></a></dt>
+<dd><p>Return the given template string rendered using the given context.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="pystache" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pystache.commands.html" class="btn btn-neutral float-right" title="pystache.commands package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

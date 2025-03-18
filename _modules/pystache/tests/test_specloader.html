@@ -1,0 +1,659 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.tests.test_specloader &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.tests.test_specloader</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.tests.test_specloader</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Unit tests for template_spec.py.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os.path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">unittest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache</span><span class="w"> </span><span class="kn">import</span> <span class="n">Renderer</span><span class="p">,</span> <span class="n">TemplateSpec</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemplateNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">Loader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.locator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Locator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.specloader</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpecLoader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.tests.common</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DATA_DIR</span><span class="p">,</span>
+    <span class="n">EXAMPLES_DIR</span><span class="p">,</span>
+    <span class="n">AssertIsMixin</span><span class="p">,</span>
+    <span class="n">AssertStringMixin</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.tests.data.views</span><span class="w"> </span><span class="kn">import</span> <span class="n">NonAscii</span><span class="p">,</span> <span class="n">SampleView</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">examples</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.examples.complex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Complex</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.examples.inverted</span><span class="w"> </span><span class="kn">import</span> <span class="n">Inverted</span><span class="p">,</span> <span class="n">InvertedLists</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.examples.lambdas</span><span class="w"> </span><span class="kn">import</span> <span class="n">Lambdas</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.examples.simple</span><span class="w"> </span><span class="kn">import</span> <span class="n">Simple</span>
+
+
+<div class="viewcode-block" id="Thing">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.Thing">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Thing</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="AssertPathsMixin">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.AssertPathsMixin">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AssertPathsMixin</span><span class="p">:</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A unittest.TestCase mixin to check path equality.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AssertPathsMixin.assertPaths">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.AssertPathsMixin.assertPaths">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">assertPaths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ViewTestCase">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ViewTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">,</span> <span class="n">AssertStringMixin</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ViewTestCase.test_template_rel_directory">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_template_rel_directory">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_template_rel_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that View.template_rel_directory is respected.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">Tagless</span><span class="p">(</span><span class="n">TemplateSpec</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="n">view</span> <span class="o">=</span> <span class="n">Tagless</span><span class="p">()</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">TemplateNotFoundError</span><span class="p">,</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">,</span> <span class="n">view</span><span class="p">)</span>
+
+        <span class="c1"># TODO: change this test to remove the following brittle line.</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template_rel_directory</span> <span class="o">=</span> <span class="s2">&quot;examples&quot;</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;No tags...&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ViewTestCase.test_template_path_for_partials">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_template_path_for_partials">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_template_path_for_partials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that View.template_rel_path is respected for partials.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">TemplateSpec</span><span class="p">()</span>
+        <span class="n">spec</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;Partial: {{&gt;tagless}}&quot;</span>
+
+        <span class="n">renderer1</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">renderer2</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">search_dirs</span><span class="o">=</span><span class="n">EXAMPLES_DIR</span><span class="p">)</span>
+
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer1</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;Partial: &quot;</span><span class="p">)</span>
+
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer2</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;Partial: No tags...&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ViewTestCase.test_basic_method_calls">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_basic_method_calls">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_basic_method_calls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">Simple</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;Hi pizza!&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ViewTestCase.test_non_callable_attributes">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_non_callable_attributes">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_non_callable_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">Simple</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">thing</span> <span class="o">=</span> <span class="s1">&#39;Chris&#39;</span>
+
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;Hi Chris!&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ViewTestCase.test_complex">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_complex">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_complex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">Complex</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">&lt;h1&gt;Colors&lt;/h1&gt;</span>
+<span class="s2">&lt;ul&gt;</span>
+<span class="s2">&lt;li&gt;&lt;strong&gt;red&lt;/strong&gt;&lt;/li&gt;</span>
+<span class="s2">&lt;li&gt;&lt;a href=&quot;#Green&quot;&gt;green&lt;/a&gt;&lt;/li&gt;</span>
+<span class="s2">&lt;li&gt;&lt;a href=&quot;#Blue&quot;&gt;blue&lt;/a&gt;&lt;/li&gt;</span>
+<span class="s2">&lt;/ul&gt;&quot;&quot;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ViewTestCase.test_higher_order_replace">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_higher_order_replace">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_higher_order_replace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">Lambdas</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;bar != bar. oh, it does!&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ViewTestCase.test_higher_order_rot13">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_higher_order_rot13">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_higher_order_rot13</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">Lambdas</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#rot13}}abcdefghijklm{{/rot13}}&#39;</span>
+
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;nopqrstuvwxyz&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ViewTestCase.test_higher_order_lambda">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_higher_order_lambda">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_higher_order_lambda</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">Lambdas</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#sort}}zyxwvutsrqponmlkjihgfedcba{{/sort}}&#39;</span>
+
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;abcdefghijklmnopqrstuvwxyz&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ViewTestCase.test_partials_with_lambda">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_partials_with_lambda">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_partials_with_lambda</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">Lambdas</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{&gt;partial_with_lambda}}&#39;</span>
+
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">search_dirs</span><span class="o">=</span><span class="n">EXAMPLES_DIR</span><span class="p">)</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;nopqrstuvwxyz&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ViewTestCase.test_hierarchical_partials_with_lambdas">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_hierarchical_partials_with_lambdas">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_hierarchical_partials_with_lambdas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">Lambdas</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{&gt;partial_with_partial_and_lambda}}&#39;</span>
+
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">search_dirs</span><span class="o">=</span><span class="n">EXAMPLES_DIR</span><span class="p">)</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;nopqrstuvwxyznopqrstuvwxyz&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ViewTestCase.test_inverted">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_inverted">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_inverted</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">Inverted</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;&quot;&quot;one, two, three, empty list&quot;&quot;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ViewTestCase.test_accessing_properties_on_parent_object_from_child_objects">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_accessing_properties_on_parent_object_from_child_objects">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_accessing_properties_on_parent_object_from_child_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Thing</span><span class="p">()</span>
+        <span class="n">parent</span><span class="o">.</span><span class="n">this</span> <span class="o">=</span> <span class="s1">&#39;derp&#39;</span>
+        <span class="n">parent</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="n">Thing</span><span class="p">()]</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">Simple</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;{{#parent}}{{#children}}{{this}}{{/children}}{{/parent}}&quot;</span>
+
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;parent&#39;</span><span class="p">:</span> <span class="n">parent</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;derp&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ViewTestCase.test_inverted_lists">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.ViewTestCase.test_inverted_lists">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_inverted_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">InvertedLists</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;&quot;&quot;one, two, three, empty list&quot;&quot;&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_make_specloader</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a default SpecLoader instance for testing purposes.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Python 2 and 3 have different default encodings.  Thus, to have</span>
+    <span class="c1"># consistent test results across both versions, we need to specify</span>
+    <span class="c1"># the string and file encodings explicitly rather than relying on</span>
+    <span class="c1"># the defaults.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_unicode</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raises a TypeError exception if the given string is already unicode.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">encoding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;ascii&#39;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">encoding</span><span class="p">,</span> <span class="s1">&#39;strict&#39;</span><span class="p">)</span>
+
+    <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">file_encoding</span><span class="o">=</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="n">to_unicode</span><span class="o">=</span><span class="n">to_unicode</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">SpecLoader</span><span class="p">(</span><span class="n">loader</span><span class="o">=</span><span class="n">loader</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SpecLoaderTests">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SpecLoaderTests</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">,</span> <span class="n">AssertIsMixin</span><span class="p">,</span> <span class="n">AssertStringMixin</span><span class="p">,</span>
+                      <span class="n">AssertPathsMixin</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests template_spec.SpecLoader.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_specloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_make_specloader</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SpecLoaderTests.test_init__defaults">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_init__defaults">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_init__defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">spec_loader</span> <span class="o">=</span> <span class="n">SpecLoader</span><span class="p">()</span>
+
+        <span class="c1"># Check the loader attribute.</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">spec_loader</span><span class="o">.</span><span class="n">loader</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">extension</span><span class="p">,</span> <span class="s1">&#39;mustache&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">file_encoding</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">getdefaultencoding</span><span class="p">())</span>
+        <span class="c1"># TODO: finish testing the other Loader attributes.</span>
+        <span class="n">to_unicode</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">to_unicode</span></div>
+
+
+<div class="viewcode-block" id="SpecLoaderTests.test_init__loader">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_init__loader">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_init__loader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
+        <span class="n">custom</span> <span class="o">=</span> <span class="n">SpecLoader</span><span class="p">(</span><span class="n">loader</span><span class="o">=</span><span class="n">loader</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIs</span><span class="p">(</span><span class="n">custom</span><span class="o">.</span><span class="n">loader</span><span class="p">,</span> <span class="n">loader</span><span class="p">)</span></div>
+
+
+    <span class="c1"># TODO: rename to something like _assert_load().</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_assert_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">custom</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">custom</span><span class="p">),</span> <span class="n">expected</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SpecLoaderTests.test_load__template__type_str">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_load__template__type_str">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_load__template__type_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the template attribute: str string.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">custom</span> <span class="o">=</span> <span class="n">TemplateSpec</span><span class="p">()</span>
+        <span class="n">custom</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;abc&quot;</span>
+
+        <span class="n">spec_loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_specloader</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_template</span><span class="p">(</span><span class="n">spec_loader</span><span class="p">,</span> <span class="n">custom</span><span class="p">,</span> <span class="s2">&quot;abc&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SpecLoaderTests.test_load__template__type_unicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_load__template__type_unicode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_load__template__type_unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the template attribute: unicode string.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">custom</span> <span class="o">=</span> <span class="n">TemplateSpec</span><span class="p">()</span>
+        <span class="n">custom</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;abc&quot;</span>
+
+        <span class="n">spec_loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_specloader</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_template</span><span class="p">(</span><span class="n">spec_loader</span><span class="p">,</span> <span class="n">custom</span><span class="p">,</span> <span class="s2">&quot;abc&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SpecLoaderTests.test_load__template__unicode_non_ascii">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_load__template__unicode_non_ascii">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_load__template__unicode_non_ascii</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the template attribute: non-ascii unicode string.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">custom</span> <span class="o">=</span> <span class="n">TemplateSpec</span><span class="p">()</span>
+        <span class="n">custom</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;é&quot;</span>
+
+        <span class="n">spec_loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_specloader</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_template</span><span class="p">(</span><span class="n">spec_loader</span><span class="p">,</span> <span class="n">custom</span><span class="p">,</span> <span class="s2">&quot;é&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SpecLoaderTests.test_load__template__with_template_encoding">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_load__template__with_template_encoding">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_load__template__with_template_encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the template attribute: with template encoding attribute.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">custom</span> <span class="o">=</span> <span class="n">TemplateSpec</span><span class="p">()</span>
+        <span class="n">custom</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;é&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="n">spec_loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_specloader</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">UnicodeDecodeError</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_assert_template</span><span class="p">,</span> <span class="n">spec_loader</span><span class="p">,</span> <span class="n">custom</span><span class="p">,</span> <span class="s1">&#39;é&#39;</span><span class="p">)</span>
+
+        <span class="n">custom</span><span class="o">.</span><span class="n">template_encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_template</span><span class="p">(</span><span class="n">spec_loader</span><span class="p">,</span> <span class="n">custom</span><span class="p">,</span> <span class="s1">&#39;é&#39;</span><span class="p">)</span></div>
+
+
+    <span class="c1"># TODO: make this test complete.</span>
+<div class="viewcode-block" id="SpecLoaderTests.test_load__template__correct_loader">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_load__template__correct_loader">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_load__template__correct_loader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that reader.unicode() is called correctly.</span>
+
+<span class="sd">        This test tests that the correct reader is called with the correct</span>
+<span class="sd">        arguments.  This is a catch-all test to supplement the other</span>
+<span class="sd">        test cases.  It tests SpecLoader.load() independent of reader.unicode()</span>
+<span class="sd">        being implemented correctly (and tested).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">MockLoader</span><span class="p">(</span><span class="n">Loader</span><span class="p">):</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="c1"># Overrides the existing method.</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">encoding</span>
+                <span class="k">return</span> <span class="s2">&quot;foo&quot;</span>
+
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">MockLoader</span><span class="p">()</span>
+        <span class="n">custom_loader</span> <span class="o">=</span> <span class="n">SpecLoader</span><span class="p">()</span>
+        <span class="n">custom_loader</span><span class="o">.</span><span class="n">loader</span> <span class="o">=</span> <span class="n">loader</span>
+
+        <span class="n">view</span> <span class="o">=</span> <span class="n">TemplateSpec</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;template-foo&quot;</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template_encoding</span> <span class="o">=</span> <span class="s2">&quot;encoding-foo&quot;</span>
+
+        <span class="c1"># Check that our unicode() above was called.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_template</span><span class="p">(</span><span class="n">custom_loader</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;template-foo&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">encoding</span><span class="p">,</span> <span class="s2">&quot;encoding-foo&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SpecLoaderTests.test_find__template_path">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.SpecLoaderTests.test_find__template_path">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_find__template_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test _find() with TemplateSpec.template_path.&quot;&quot;&quot;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_specloader</span><span class="p">()</span>
+        <span class="n">custom</span> <span class="o">=</span> <span class="n">TemplateSpec</span><span class="p">()</span>
+        <span class="n">custom</span><span class="o">.</span><span class="n">template_path</span> <span class="o">=</span> <span class="s2">&quot;path/foo&quot;</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">_find</span><span class="p">(</span><span class="n">custom</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertPaths</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;path/foo&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="c1"># TODO: migrate these tests into the SpecLoaderTests class.</span>
+<span class="c1"># TODO: rename the get_template() tests to test load().</span>
+<span class="c1"># TODO: condense, reorganize, and rename the tests so that it is</span>
+<span class="c1">#   clear whether we have full test coverage (e.g. organized by</span>
+<span class="c1">#   TemplateSpec attributes or something).</span>
+<div class="viewcode-block" id="TemplateSpecTests">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TemplateSpecTests</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">,</span> <span class="n">AssertPathsMixin</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_loader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_make_specloader</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_assert_template_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_loader</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">_find_relative</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TemplateSpecTests.test_find_relative">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_find_relative</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test _find_relative(): default behavior (no attributes set).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">SampleView</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_template_location</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;sample_view.mustache&#39;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="TemplateSpecTests.test_find_relative__template_rel_path__file_name_only">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_rel_path__file_name_only">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_find_relative__template_rel_path__file_name_only</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test _find_relative(): template_rel_path attribute.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">SampleView</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template_rel_path</span> <span class="o">=</span> <span class="s1">&#39;template.txt&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_template_location</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;template.txt&#39;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="TemplateSpecTests.test_find_relative__template_rel_path__file_name_with_directory">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_rel_path__file_name_with_directory">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_find_relative__template_rel_path__file_name_with_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test _find_relative(): template_rel_path attribute.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">SampleView</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template_rel_path</span> <span class="o">=</span> <span class="s1">&#39;foo/bar/template.txt&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_template_location</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;foo/bar&#39;</span><span class="p">,</span> <span class="s1">&#39;template.txt&#39;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="TemplateSpecTests.test_find_relative__template_rel_directory">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_rel_directory">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_find_relative__template_rel_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test _find_relative(): template_rel_directory attribute.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">SampleView</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template_rel_directory</span> <span class="o">=</span> <span class="s1">&#39;foo&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_template_location</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;sample_view.mustache&#39;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="TemplateSpecTests.test_find_relative__template_name">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_find_relative__template_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test _find_relative(): template_name attribute.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">SampleView</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;new_name&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_template_location</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;new_name.mustache&#39;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="TemplateSpecTests.test_find_relative__template_extension">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find_relative__template_extension">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_find_relative__template_extension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test _find_relative(): template_extension attribute.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">SampleView</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template_extension</span> <span class="o">=</span> <span class="s1">&#39;txt&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_template_location</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;sample_view.txt&#39;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="TemplateSpecTests.test_find__with_directory">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find__with_directory">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_find__with_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test _find() with a view that has a directory specified.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_loader</span><span class="p">()</span>
+
+        <span class="n">view</span> <span class="o">=</span> <span class="n">SampleView</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template_rel_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar.txt&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">_find_relative</span><span class="p">(</span><span class="n">view</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">_find</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar.txt&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertPaths</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TemplateSpecTests.test_find__without_directory">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_find__without_directory">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_find__without_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test _find() with a view that doesn&#39;t have a directory specified.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_loader</span><span class="p">()</span>
+
+        <span class="n">view</span> <span class="o">=</span> <span class="n">SampleView</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">_find_relative</span><span class="p">(</span><span class="n">view</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">_find</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="s1">&#39;sample_view.mustache&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertPaths</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_assert_get_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">custom</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_loader</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">custom</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">actual</span><span class="p">),</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TemplateSpecTests.test_get_template">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_get_template">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_get_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test get_template(): default behavior (no attributes set).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">SampleView</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_get_template</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="s2">&quot;ascii: abc&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TemplateSpecTests.test_get_template__template_encoding">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_specloader.html#pystache.tests.test_specloader.TemplateSpecTests.test_get_template__template_encoding">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_get_template__template_encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test get_template(): template_encoding attribute.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">NonAscii</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">UnicodeDecodeError</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_assert_get_template</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+
+        <span class="n">view</span><span class="o">.</span><span class="n">template_encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_get_template</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="s2">&quot;non-ascii: é&quot;</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

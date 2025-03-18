@@ -1,0 +1,7 @@
+pystache.tests.benchmark module
+===============================
+
+.. automodule:: pystache.tests.benchmark
+   :members:
+   :undoc-members:
+   :show-inheritance:

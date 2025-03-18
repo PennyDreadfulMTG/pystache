@@ -1,0 +1,216 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.tests.test_simple &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.tests.test_simple</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.tests.test_simple</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">unittest</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pystache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache</span><span class="w"> </span><span class="kn">import</span> <span class="n">Renderer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.tests.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">EXAMPLES_DIR</span><span class="p">,</span> <span class="n">AssertStringMixin</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.examples.complex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Complex</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.examples.lambdas</span><span class="w"> </span><span class="kn">import</span> <span class="n">Lambdas</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.examples.nested_context</span><span class="w"> </span><span class="kn">import</span> <span class="n">NestedContext</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.examples.simple</span><span class="w"> </span><span class="kn">import</span> <span class="n">Simple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.examples.template_partial</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemplatePartial</span>
+
+
+<div class="viewcode-block" id="TestSimple">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestSimple</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">,</span> <span class="n">AssertStringMixin</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestSimple.test_nested_context">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple.test_nested_context">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_nested_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">NestedContext</span><span class="p">(</span><span class="n">renderer</span><span class="p">)</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#foo}}{{thing1}} and {{thing2}} and {{outer_thing}}{{/foo}}{{^foo}}Not foo!{{/foo}}&#39;</span>
+
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;one and foo and two&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestSimple.test_looping_and_negation_context">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple.test_looping_and_negation_context">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_looping_and_negation_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#item}}{{header}}: {{name}} {{/item}}{{^item}} Shouldnt see me{{/item}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">Complex</span><span class="p">()</span>
+
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;Colors: red Colors: green Colors: blue &quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestSimple.test_empty_context">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple.test_empty_context">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_empty_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#empty_list}}Shouldnt see me {{/empty_list}}{{^empty_list}}Should see me{{/empty_list}}&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pystache</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template</span><span class="p">),</span> <span class="s2">&quot;Should see me&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestSimple.test_callables">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple.test_callables">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_callables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">Lambdas</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#replace_foo_with_bar}}foo != bar. oh, it does!{{/replace_foo_with_bar}}&#39;</span>
+
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;bar != bar. oh, it does!&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestSimple.test_rendering_partial">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple.test_rendering_partial">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_rendering_partial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">search_dirs</span><span class="o">=</span><span class="n">EXAMPLES_DIR</span><span class="p">)</span>
+
+        <span class="n">view</span> <span class="o">=</span> <span class="n">TemplatePartial</span><span class="p">(</span><span class="n">renderer</span><span class="o">=</span><span class="n">renderer</span><span class="p">)</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{&gt;inner_partial}}&#39;</span>
+
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s1">&#39;Again, Welcome!&#39;</span><span class="p">)</span>
+
+        <span class="n">view</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#looping}}{{&gt;inner_partial}} {{/looping}}&#39;</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;Again, Welcome! Again, Welcome! Again, Welcome! &quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestSimple.test_non_existent_value_renders_blank">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple.test_non_existent_value_renders_blank">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_non_existent_value_renders_blank</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">Simple</span><span class="p">()</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{not_set}} {{blank}}&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pystache</span><span class="o">.</span><span class="n">Renderer</span><span class="p">()</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">template</span><span class="p">),</span> <span class="s1">&#39; &#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="TestSimple.test_template_partial_extension">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_simple.html#pystache.tests.test_simple.TestSimple.test_template_partial_extension">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_template_partial_extension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Side note:</span>
+
+<span class="sd">        From the spec--</span>
+
+<span class="sd">            Partial tags SHOULD be treated as standalone when appropriate.</span>
+
+<span class="sd">        In particular, this means that trailing newlines should be removed.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">search_dirs</span><span class="o">=</span><span class="n">EXAMPLES_DIR</span><span class="p">,</span> <span class="n">file_extension</span><span class="o">=</span><span class="s1">&#39;txt&#39;</span><span class="p">)</span>
+
+        <span class="n">view</span> <span class="o">=</span> <span class="n">TemplatePartial</span><span class="p">(</span><span class="n">renderer</span><span class="o">=</span><span class="n">renderer</span><span class="p">)</span>
+
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="s2">&quot;&quot;&quot;Welcome</span>
+<span class="s2">-------</span></div>
+</div>
+
+
+<span class="s2">## Again, Welcome! ##&quot;&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

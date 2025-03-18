@@ -1,0 +1,7 @@
+pystache.tests.examples.unicode\_output module
+==============================================
+
+.. automodule:: pystache.tests.examples.unicode_output
+   :members:
+   :undoc-members:
+   :show-inheritance:

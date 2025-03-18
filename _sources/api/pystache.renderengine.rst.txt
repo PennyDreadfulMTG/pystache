@@ -1,0 +1,7 @@
+pystache.renderengine module
+============================
+
+.. automodule:: pystache.renderengine
+   :members:
+   :undoc-members:
+   :show-inheritance:

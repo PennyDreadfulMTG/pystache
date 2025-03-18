@@ -1,0 +1,32 @@
+pystache.tests.examples package
+===============================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pystache.tests.examples.comments
+   pystache.tests.examples.complex
+   pystache.tests.examples.delimiters
+   pystache.tests.examples.double_section
+   pystache.tests.examples.escaped
+   pystache.tests.examples.inverted
+   pystache.tests.examples.lambdas
+   pystache.tests.examples.nested_context
+   pystache.tests.examples.partials_with_lambdas
+   pystache.tests.examples.readme
+   pystache.tests.examples.simple
+   pystache.tests.examples.template_partial
+   pystache.tests.examples.unescaped
+   pystache.tests.examples.unicode_input
+   pystache.tests.examples.unicode_output
+
+Module contents
+---------------
+
+.. automodule:: pystache.tests.examples
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.locator &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.locator</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.locator</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides a Locator class for finding template files.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaults</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemplateNotFoundError</span>
+
+
+<div class="viewcode-block" id="Locator">
+<a class="viewcode-back" href="../../api/pystache.locator.html#pystache.locator.Locator">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Locator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct a template locator.</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          extension: the template file extension, without the leading dot.</span>
+<span class="sd">            Pass False for no extension (e.g. to use extensionless template</span>
+<span class="sd">            files).  Defaults to the package default.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">extension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">extension</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">TEMPLATE_EXTENSION</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">template_extension</span> <span class="o">=</span> <span class="n">extension</span>
+
+<div class="viewcode-block" id="Locator.get_object_directory">
+<a class="viewcode-back" href="../../api/pystache.locator.html#pystache.locator.Locator.get_object_directory">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_object_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the directory containing an object&#39;s defining class.</span>
+
+<span class="sd">        Returns None if there is no such directory, for example if the</span>
+<span class="sd">        class was defined in an interactive Python session, or in a</span>
+<span class="sd">        doctest that appears in a text file (rather than a Python file).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;__module__&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">module</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="vm">__module__</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s1">&#39;__file__&#39;</span><span class="p">):</span>
+            <span class="c1"># TODO: add a unit test for this case.</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="vm">__file__</span>
+
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Locator.make_template_name">
+<a class="viewcode-back" href="../../api/pystache.locator.html#pystache.locator.Locator.make_template_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_template_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the canonical template name for an object instance.</span>
+
+<span class="sd">        This method converts Python-style class names (PEP 8&#39;s recommended</span>
+<span class="sd">        CamelCase, aka CapWords) to lower_case_with_underscords.  Here</span>
+<span class="sd">        is an example with code:</span>
+
+<span class="sd">        &gt;&gt;&gt; class HelloWorld(object):</span>
+<span class="sd">        ...     pass</span>
+<span class="sd">        &gt;&gt;&gt; hi = HelloWorld()</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; locator = Locator()</span>
+<span class="sd">        &gt;&gt;&gt; locator.make_template_name(hi)</span>
+<span class="sd">        &#39;hello_world&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template_name</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">repl</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;[A-Z]&#39;</span><span class="p">,</span> <span class="n">repl</span><span class="p">,</span> <span class="n">template_name</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span></div>
+
+
+<div class="viewcode-block" id="Locator.make_file_name">
+<a class="viewcode-back" href="../../api/pystache.locator.html#pystache.locator.Locator.make_file_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_file_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_name</span><span class="p">,</span> <span class="n">template_extension</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate and return the file name for the given template name.</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          template_extension: defaults to the instance&#39;s extension.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">file_name</span> <span class="o">=</span> <span class="n">template_name</span>
+
+        <span class="k">if</span> <span class="n">template_extension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">template_extension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">template_extension</span>
+
+        <span class="k">if</span> <span class="n">template_extension</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">file_name</span> <span class="o">+=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extsep</span> <span class="o">+</span> <span class="n">template_extension</span>
+
+        <span class="k">return</span> <span class="n">file_name</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_dirs</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Search for the given file, and return the path.</span>
+
+<span class="sd">        Returns None if the file is not found.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">dir_path</span> <span class="ow">in</span> <span class="n">search_dirs</span><span class="p">:</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_path</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">file_path</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_path_required</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_dirs</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the path to a template with the given file name.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_path</span><span class="p">(</span><span class="n">search_dirs</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TemplateNotFoundError</span><span class="p">(</span>
+                <span class="s1">&#39;File </span><span class="si">%s</span><span class="s1"> not found in dirs: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">file_name</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="n">search_dirs</span><span class="p">))</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">path</span>
+
+<div class="viewcode-block" id="Locator.find_file">
+<a class="viewcode-back" href="../../api/pystache.locator.html#pystache.locator.Locator.find_file">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">search_dirs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the path to a template with the given file name.</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          file_name: the file name of the template.</span>
+
+<span class="sd">          search_dirs: the list of directories in which to search.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_path_required</span><span class="p">(</span><span class="n">search_dirs</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Locator.find_name">
+<a class="viewcode-back" href="../../api/pystache.locator.html#pystache.locator.Locator.find_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_name</span><span class="p">,</span> <span class="n">search_dirs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the path to a template with the given name.</span>
+
+<span class="sd">        Arguments:</span>
+
+<span class="sd">          template_name: the name of the template.</span>
+
+<span class="sd">          search_dirs: the list of directories in which to search.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_file_name</span><span class="p">(</span><span class="n">template_name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_path_required</span><span class="p">(</span><span class="n">search_dirs</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Locator.find_object">
+<a class="viewcode-back" href="../../api/pystache.locator.html#pystache.locator.Locator.find_object">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">search_dirs</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the path to a template associated with the given object.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># TODO: should we define a make_file_name() method?</span>
+            <span class="n">template_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_template_name</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_file_name</span><span class="p">(</span><span class="n">template_name</span><span class="p">)</span>
+
+        <span class="n">dir_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object_directory</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">dir_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">search_dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">dir_path</span><span class="p">]</span> <span class="o">+</span> <span class="n">search_dirs</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_path_required</span><span class="p">(</span><span class="n">search_dirs</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">path</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,1053 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystache.tests.test_renderengine &mdash; pystache 0.6.8.dev9+g531a0ec documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c38ed6e9"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pystache
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html">Pystache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#quick-start">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#develop">Develop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html#change-history-recent">Change history (recent)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">pystache</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pystache</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystache.tests.test_renderengine</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystache.tests.test_renderengine</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Unit tests of renderengine.py.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">unittest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaults</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContextStack</span><span class="p">,</span> <span class="n">KeyNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.parser</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParsingError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.renderengine</span><span class="w"> </span><span class="kn">import</span> <span class="n">RenderEngine</span><span class="p">,</span> <span class="n">context_get</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.renderer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Renderer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystache.tests.common</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AssertExceptionMixin</span><span class="p">,</span>
+    <span class="n">AssertStringMixin</span><span class="p">,</span>
+    <span class="n">Attachable</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_unicode_char</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;u&#39;</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+<span class="n">_UNICODE_CHAR</span> <span class="o">=</span> <span class="n">_get_unicode_char</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="mock_literal">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.mock_literal">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">mock_literal</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For use as the literal keyword argument to the RenderEngine constructor.</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">      s: a byte string or unicode string.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="c1"># Strip off unicode super classes, if present.</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+
+    <span class="c1"># We apply upper() to make sure we are actually using our custom</span>
+    <span class="c1"># function in the tests</span>
+    <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span></div>
+
+
+
+
+<div class="viewcode-block" id="RenderEngineTestCase">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderEngineTestCase">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RenderEngineTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the RenderEngine class.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RenderEngineTestCase.test_init">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderEngineTestCase.test_init">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that __init__() stores all of the arguments correctly.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># In real-life, these arguments would be functions</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">RenderEngine</span><span class="p">(</span><span class="n">resolve_partial</span><span class="o">=</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="n">literal</span><span class="o">=</span><span class="s2">&quot;literal&quot;</span><span class="p">,</span>
+                              <span class="n">escape</span><span class="o">=</span><span class="s2">&quot;escape&quot;</span><span class="p">,</span> <span class="n">to_str</span><span class="o">=</span><span class="s2">&quot;str&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">escape</span><span class="p">,</span> <span class="s2">&quot;escape&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">literal</span><span class="p">,</span> <span class="s2">&quot;literal&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">resolve_partial</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">to_str</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="RenderTests">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RenderTests</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">,</span> <span class="n">AssertStringMixin</span><span class="p">,</span> <span class="n">AssertExceptionMixin</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests RenderEngine.render().</span>
+
+<span class="sd">    Explicit spec-test-like tests best go in this class since the</span>
+<span class="sd">    RenderEngine class contains all parsing logic.  This way, the unit tests</span>
+<span class="sd">    will be more focused and fail &quot;closer to the code&quot;.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_engine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create and return a default RenderEngine for testing.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">string_encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">missing_tags</span><span class="o">=</span><span class="s1">&#39;strict&#39;</span><span class="p">)</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_make_render_engine</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">engine</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_assert_render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="o">*</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test rendering the given template using the given context.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">partials</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;partials&#39;</span><span class="p">)</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;engine&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">partials</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">engine</span><span class="o">.</span><span class="n">resolve_partial</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">partials</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+        <span class="n">context</span> <span class="o">=</span> <span class="n">ContextStack</span><span class="p">(</span><span class="o">*</span><span class="n">context</span><span class="p">)</span>
+
+        <span class="c1"># RenderEngine.render() only accepts unicode template strings.</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">template</span><span class="p">),</span> <span class="n">context</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertString</span><span class="p">(</span><span class="n">actual</span><span class="o">=</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="o">=</span><span class="n">expected</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RenderTests.test_render">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_render">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;Hi Mom&#39;</span><span class="p">,</span> <span class="s1">&#39;Hi {{person}}&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;person&#39;</span><span class="p">:</span> <span class="s1">&#39;Mom&#39;</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test__resolve_partial">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test__resolve_partial">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__resolve_partial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that render() uses the load_template attribute.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="p">()</span>
+        <span class="n">partials</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;partial&#39;</span><span class="p">:</span> <span class="s2">&quot;{{person}}&quot;</span><span class="p">}</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">resolve_partial</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="n">partials</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;Hi Mom&#39;</span><span class="p">,</span> <span class="s1">&#39;Hi {{&gt;partial}}&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;person&#39;</span><span class="p">:</span> <span class="s1">&#39;Mom&#39;</span><span class="p">},</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test__literal">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test__literal">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__literal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that render() uses the literal attribute.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="p">()</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">literal</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;BAR&#39;</span><span class="p">,</span> <span class="s1">&#39;{{</span><span class="si">{foo}</span><span class="s1">}}&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">},</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_literal__sigil">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_literal__sigil">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_literal__sigil</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;&lt;h1&gt;{{&amp; thing}}&lt;/h1&gt;&quot;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;thing&#39;</span><span class="p">:</span> <span class="s1">&#39;Bear &gt; Giraffe&#39;</span><span class="p">}</span>
+
+        <span class="n">expected</span> <span class="o">=</span> <span class="s2">&quot;&lt;h1&gt;Bear &gt; Giraffe&lt;/h1&gt;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test__escape">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test__escape">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__escape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that render() uses the escape attribute.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="p">()</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">escape</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="s2">&quot;**&quot;</span> <span class="o">+</span> <span class="n">s</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;**bar&#39;</span><span class="p">,</span> <span class="s1">&#39;{{foo}}&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">},</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test__escape_does_not_call_literal">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test__escape_does_not_call_literal">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__escape_does_not_call_literal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that render() does not call literal before or after calling escape.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="p">()</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">literal</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>  <span class="c1"># a test version</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">escape</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="s2">&quot;**&quot;</span> <span class="o">+</span> <span class="n">s</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;literal: {{</span><span class="si">{foo}</span><span class="s1">}} escaped: {{foo}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;literal: BAR escaped: **bar&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test__escape_preserves_unicode_subclasses">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test__escape_preserves_unicode_subclasses">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__escape_preserves_unicode_subclasses</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that render() preserves unicode subclasses when passing to escape.</span>
+
+<span class="sd">        This is useful, for example, if one wants to respect whether a</span>
+<span class="sd">        variable value is markupsafe.Markup when escaping.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">MyUnicode</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">escape</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">is</span> <span class="n">MyUnicode</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;**&quot;</span> <span class="o">+</span> <span class="n">s</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">s</span> <span class="o">+</span> <span class="s2">&quot;**&quot;</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="p">()</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">escape</span> <span class="o">=</span> <span class="n">escape</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{foo1}} {{foo2}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;foo1&#39;</span><span class="p">:</span> <span class="n">MyUnicode</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">),</span> <span class="s1">&#39;foo2&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;**bar bar**&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+    <span class="c1"># Custom to_str for testing purposes.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">val</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RenderTests.test_to_str">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_to_str">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test the to_str attribute.&quot;&quot;&quot;</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="p">()</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{value}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">to_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_str</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_to_str__lambda">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_to_str__lambda">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_to_str__lambda</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test the to_str attribute for a lambda.&quot;&quot;&quot;</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="p">()</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{value}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">to_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_str</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_to_str__section_list">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_to_str__section_list">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_to_str__section_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test the to_str attribute for a section list.&quot;&quot;&quot;</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="p">()</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#list}}{{.}}{{/list}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;NoneNone&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">to_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_str</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_to_str__section_lambda">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_to_str__section_lambda">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_to_str__section_lambda</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># TODO: add a test for a &quot;method with an arity of 1&quot;.</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test__non_basestring__literal_and_escaped">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test__non_basestring__literal_and_escaped">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test__non_basestring__literal_and_escaped</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test a context value that is not a basestring instance.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="p">()</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">escape</span> <span class="o">=</span> <span class="n">mock_literal</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">literal</span> <span class="o">=</span> <span class="n">mock_literal</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="n">engine</span><span class="o">.</span><span class="n">literal</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{text}} {{int}} {{</span><span class="si">{int}</span><span class="s1">}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;int&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39;foo&#39;</span><span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;FOO 100 100&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_tag__output_not_interpolated">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_tag__output_not_interpolated">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_tag__output_not_interpolated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Context values should not be treated as templates (issue #44).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{template}}: {{planet}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;template&#39;</span><span class="p">:</span> <span class="s1">&#39;{{planet}}&#39;</span><span class="p">,</span> <span class="s1">&#39;planet&#39;</span><span class="p">:</span> <span class="s1">&#39;Earth&#39;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;{{planet}}: Earth&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_tag__output_not_interpolated__section">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_tag__output_not_interpolated__section">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_tag__output_not_interpolated__section</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Context values should not be treated as templates (issue #44).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{test}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="s1">&#39;{{#hello}}&#39;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;{{#hello}}&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+    <span class="c1">## Test interpolation with &quot;falsey&quot; values</span>
+    <span class="c1">#</span>
+    <span class="c1"># In these test cases, we test the part of the spec that says that</span>
+    <span class="c1"># &quot;data should be coerced into a string (and escaped, if appropriate)</span>
+    <span class="c1"># before interpolation.&quot;  We test this for data that is &quot;falsey.&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_interpolation__falsey__zero</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{.}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RenderTests.test_interpolation__falsey__none">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_interpolation__falsey__none">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_interpolation__falsey__none</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{.}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_interpolation__falsey__zero">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_interpolation__falsey__zero">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_interpolation__falsey__zero</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{.}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;False&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+    <span class="c1"># Built-in types:</span>
+    <span class="c1">#</span>
+    <span class="c1">#   Confirm that we not treat instances of built-in types as objects,</span>
+    <span class="c1">#   for example by calling a method on a built-in type instance when it</span>
+    <span class="c1">#   has a method whose name matches the current key.</span>
+    <span class="c1">#</span>
+    <span class="c1">#   Each test case puts an instance of a built-in type on top of the</span>
+    <span class="c1">#   context stack before interpolating a tag whose key matches an</span>
+    <span class="c1">#   attribute (method or property) of the instance.</span>
+    <span class="c1">#</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_assert_builtin_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">expected_attr</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">))</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">actual</span><span class="p">):</span>
+            <span class="n">actual</span> <span class="o">=</span> <span class="n">actual</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected_attr</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_assert_builtin_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">expected_attr</span><span class="p">,</span> <span class="n">expected_template</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_builtin_attr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">expected_attr</span><span class="p">)</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#section}}{{</span><span class="si">%s</span><span class="s1">}}{{/section}}&#39;</span> <span class="o">%</span> <span class="n">attr_name</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;section&#39;</span><span class="p">:</span> <span class="n">item</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">:</span> <span class="n">expected_template</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="n">expected_template</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RenderTests.test_interpolation__built_in_type__string">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_interpolation__built_in_type__string">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_interpolation__built_in_type__string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check tag interpolation with a built-in type: string.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_builtin_type</span><span class="p">(</span><span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="s1">&#39;upper&#39;</span><span class="p">,</span> <span class="s1">&#39;ABC&#39;</span><span class="p">,</span> <span class="s1">&#39;xyz&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_interpolation__built_in_type__integer">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_interpolation__built_in_type__integer">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_interpolation__built_in_type__integer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check tag interpolation with a built-in type: integer.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Since public attributes weren&#39;t added to integers until Python 2.6</span>
+        <span class="c1"># (for example the &quot;real&quot; attribute of the numeric type hierarchy)--</span>
+        <span class="c1">#</span>
+        <span class="c1">#   http://docs.python.org/library/numbers.html</span>
+        <span class="c1">#</span>
+        <span class="c1"># we need to resort to built-in attributes (double-underscored) on</span>
+        <span class="c1"># the integer type.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_builtin_type</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;__neg__&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;999&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_interpolation__built_in_type__list">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_interpolation__built_in_type__list">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_interpolation__built_in_type__list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check tag interpolation with a built-in type: list.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span>
+        <span class="n">attr_name</span> <span class="o">=</span> <span class="s1">&#39;pop&#39;</span>
+        <span class="c1"># Make a copy to prevent changes to item[0].</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_builtin_attr</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">attr_name</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#section}}{{</span><span class="si">%s</span><span class="s1">}}{{/section}}&#39;</span> <span class="o">%</span> <span class="n">attr_name</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;section&#39;</span><span class="p">:</span> <span class="n">item</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">:</span> <span class="mi">7</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+    <span class="c1"># This test is also important for testing 2to3.</span>
+<div class="viewcode-block" id="RenderTests.test_interpolation__nonascii_nonunicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_interpolation__nonascii_nonunicode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_interpolation__nonascii_nonunicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test a tag whose value is a non-ascii, non-unicode string.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{nonascii}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;nonascii&#39;</span><span class="p">:</span> <span class="s1">&#39;abcdé&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;abcdé&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_implicit_iterator__literal">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_implicit_iterator__literal">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_implicit_iterator__literal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test an implicit iterator in a literal tag.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;{{#test}}{{{.}}}{{/test}}&quot;&quot;&quot;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">]}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;&lt;&gt;&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_implicit_iterator__escaped">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_implicit_iterator__escaped">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_implicit_iterator__escaped</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test an implicit iterator in a normal tag.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;{{#test}}{{.}}{{/test}}&quot;&quot;&quot;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">]}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;&amp;lt;&amp;gt;&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_literal__in_section">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_literal__in_section">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_literal__in_section</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that literals work in sections.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#test}}1 {{</span><span class="si">{less_than}</span><span class="s1">}} 2{{/test}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;less_than&#39;</span><span class="p">:</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">}}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;1 &lt; 2&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_literal__in_partial">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_literal__in_partial">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_literal__in_partial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that literals work in partials.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{&gt;partial}}&#39;</span>
+        <span class="n">partials</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;partial&#39;</span><span class="p">:</span> <span class="s1">&#39;1 {{</span><span class="si">{less_than}</span><span class="s1">}} 2&#39;</span><span class="p">}</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;less_than&#39;</span><span class="p">:</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;1 &lt; 2&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">partials</span><span class="o">=</span><span class="n">partials</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_partial">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_partial">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_partial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">partials</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;partial&#39;</span><span class="p">:</span> <span class="s2">&quot;{{person}}&quot;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;Hi Mom&#39;</span><span class="p">,</span> <span class="s1">&#39;Hi {{&gt;partial}}&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;person&#39;</span><span class="p">:</span> <span class="s1">&#39;Mom&#39;</span><span class="p">},</span> <span class="n">partials</span><span class="o">=</span><span class="n">partials</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_partial__context_values">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_partial__context_values">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_partial__context_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that escape and literal work on context values in partials.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="p">()</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{&gt;partial}}&#39;</span>
+        <span class="n">partials</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;partial&#39;</span><span class="p">:</span> <span class="s1">&#39;unescaped: {{</span><span class="si">{foo}</span><span class="s1">}} escaped: {{foo}}&#39;</span><span class="p">}</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span>
+            <span class="s1">&#39;unescaped: &lt; escaped: &amp;lt;&#39;</span><span class="p">,</span>
+            <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">partials</span><span class="o">=</span><span class="n">partials</span><span class="p">)</span></div>
+
+
+    <span class="c1">## Test cases related specifically to lambdas.</span>
+
+    <span class="c1"># This test is also important for testing 2to3.</span>
+<div class="viewcode-block" id="RenderTests.test_section__nonascii_nonunicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__nonascii_nonunicode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__nonascii_nonunicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test a section whose value is a non-ascii, non-unicode string.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#nonascii}}{{.}}{{/nonascii}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;nonascii&#39;</span><span class="p">:</span> <span class="s1">&#39;abcdé&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;abcdé&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+    <span class="c1"># This test is also important for testing 2to3.</span>
+<div class="viewcode-block" id="RenderTests.test_lambda__returning_nonascii_nonunicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_lambda__returning_nonascii_nonunicode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_lambda__returning_nonascii_nonunicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test a lambda tag value returning a non-ascii, non-unicode string.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{lambda}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;lambda&#39;</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="s1">&#39;abcdé&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;abcdé&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+    <span class="c1">## Test cases related specifically to sections.</span>
+
+<div class="viewcode-block" id="RenderTests.test_section__end_tag_with_no_start_tag">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__end_tag_with_no_start_tag">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__end_tag_with_no_start_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check what happens if there is an end tag with no start tag.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{/section}}&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ParsingError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;Section end tag mismatch&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_section__end_tag_mismatch">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__end_tag_mismatch">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__end_tag_mismatch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check what happens if the end tag doesn&#39;t match.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#section_start}}{{/section_end}}&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ParsingError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;Section end tag mismatch&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_section__context_values">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__context_values">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__context_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that escape and literal work on context values in sections.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="p">()</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#test}}unescaped: {{</span><span class="si">{foo}</span><span class="s1">}} escaped: {{foo}}{{/test}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">}}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;unescaped: &lt; escaped: &amp;lt;&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_section__context_precedence">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__context_precedence">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__context_precedence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that items higher in the context stack take precedence.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{entree}} : {{#vegetarian}}{{entree}}{{/vegetarian}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;entree&#39;</span><span class="p">:</span> <span class="s1">&#39;chicken&#39;</span><span class="p">,</span> <span class="s1">&#39;vegetarian&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;entree&#39;</span><span class="p">:</span> <span class="s1">&#39;beans and rice&#39;</span><span class="p">}}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;chicken : beans and rice&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_section__list_referencing_outer_context">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__list_referencing_outer_context">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__list_referencing_outer_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that list items can access the parent context.</span>
+
+<span class="sd">        For sections whose value is a list, check that items in the list</span>
+<span class="sd">        have access to the values inherited from the parent context</span>
+<span class="sd">        when rendering.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;greeting&quot;</span><span class="p">:</span> <span class="s2">&quot;Hi&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;list&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Al&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Bob&quot;</span><span class="p">}],</span>
+        <span class="p">}</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;{{#list}}{{greeting}} {{name}}, {{/list}}&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s2">&quot;Hi Al, Hi Bob, &quot;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_section__output_not_interpolated">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__output_not_interpolated">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__output_not_interpolated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that rendered section output is not interpolated.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#section}}{{template}}{{/section}}: {{planet}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;section&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;template&#39;</span><span class="p">:</span> <span class="s1">&#39;{{planet}}&#39;</span><span class="p">,</span> <span class="s1">&#39;planet&#39;</span><span class="p">:</span> <span class="s1">&#39;Earth&#39;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;{{planet}}: Earth&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+    <span class="c1"># TODO: have this test case added to the spec.</span>
+<div class="viewcode-block" id="RenderTests.test_section__string_values_not_lists">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__string_values_not_lists">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__string_values_not_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that string section values are not interpreted as lists.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#section}}foo{{/section}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;section&#39;</span><span class="p">:</span> <span class="s1">&#39;123&#39;</span><span class="p">}</span>
+        <span class="c1"># If strings were interpreted as lists, this would give &quot;foofoofoo&quot;.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_section__nested_truthy">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__nested_truthy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__nested_truthy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that &quot;nested truthy&quot; sections get rendered.</span>
+
+<span class="sd">        Test case for issue #24: https://github.com/defunkt/pystache/issues/24</span>
+
+<span class="sd">        This test is copied from the spec.  We explicitly include it to</span>
+<span class="sd">        prevent regressions for those who don&#39;t pull down the spec tests.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;| A {{#bool}}B {{#bool}}C{{/bool}} D{{/bool}} E |&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;bool&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;| A B C D E |&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_section__nested_with_same_keys">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__nested_with_same_keys">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__nested_with_same_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check a doubly-nested section with the same context key.</span>
+
+<span class="sd">        Test case for issue #36: https://github.com/defunkt/pystache/issues/36</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Start with an easier, working case.</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#x}}{{#z}}{{y}}{{/z}}{{/x}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}}}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#x}}{{#x}}{{y}}{{/x}}{{/x}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}}}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_section__lambda">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__lambda</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#test}}Mom{{/test}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">text</span><span class="p">:</span> <span class="s1">&#39;Hi </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">text</span><span class="p">)}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;Hi Mom&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+    <span class="c1"># This test is also important for testing 2to3.</span>
+<div class="viewcode-block" id="RenderTests.test_section__lambda__returning_nonascii_nonunicode">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda__returning_nonascii_nonunicode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__lambda__returning_nonascii_nonunicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test a lambda section value returning a non-ascii, non-unicode string.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#lambda}}{{/lambda}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;lambda&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">text</span><span class="p">:</span> <span class="s1">&#39;abcdé&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;abcdé&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_section__lambda__returning_nonstring">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda__returning_nonstring">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__lambda__returning_nonstring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test a lambda section value returning a non-string.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#lambda}}foo{{/lambda}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;lambda&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">text</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_section__iterable">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__iterable">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__iterable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that objects supporting iteration (aside from dicts) behave like lists.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#iterable}}{{.}}{{/iterable}}&#39;</span>
+
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;iterable&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">))}</span>  <span class="c1"># type &#39;generator&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;012&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;iterable&#39;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)}</span>  <span class="c1"># type &#39;xrange&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;0123&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+        <span class="c1"># We don&#39;t know what order of keys we&#39;ll be given, but from the</span>
+        <span class="c1"># Python documentation:</span>
+        <span class="c1">#  &quot;If items(), keys(), values(), iteritems(), iterkeys(), and</span>
+        <span class="c1">#   itervalues() are called with no intervening modifications to</span>
+        <span class="c1">#   the dictionary, the lists will directly correspond.&quot;</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;iterable&#39;</span><span class="p">:</span> <span class="nb">iter</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">())}</span>  <span class="c1"># type &#39;dictionary-keyiterator&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_section__lambda__tag_in_output">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda__tag_in_output">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__lambda__tag_in_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that callable output is treated as a template string (issue #46).</span>
+
+<span class="sd">        The spec says--</span>
+
+<span class="sd">            When used as the data value for a Section tag, the lambda MUST</span>
+<span class="sd">            be treatable as an arity 1 function, and invoked as such (passing</span>
+<span class="sd">            a String containing the unprocessed section contents).  The</span>
+<span class="sd">            returned value MUST be rendered against the current delimiters,</span>
+<span class="sd">            then interpolated in place of the section.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#test}}Hi {{person}}{{/test}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;person&#39;</span><span class="p">:</span> <span class="s1">&#39;Mom&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">text</span><span class="p">:</span> <span class="n">text</span> <span class="o">+</span> <span class="s2">&quot; :)&quot;</span><span class="p">)}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;Hi Mom :)&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_section__lambda__list">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda__list">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__lambda__list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that lists of lambdas are processed correctly for sections.</span>
+
+<span class="sd">        This test case is equivalent to a test submitted to the Mustache spec here:</span>
+
+<span class="sd">          https://github.com/mustache/spec/pull/47 .</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;&lt;{{#lambdas}}foo{{/lambdas}}&gt;&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;lambdas&#39;</span><span class="p">:</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;~{{</span><span class="si">%s</span><span class="s2">}}~&quot;</span> <span class="o">%</span> <span class="n">text</span><span class="p">,</span>
+                               <span class="k">lambda</span> <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;#{{</span><span class="si">%s</span><span class="s2">}}#&quot;</span> <span class="o">%</span> <span class="n">text</span><span class="p">]}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;&lt;~bar~#bar#&gt;&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_section__lambda__mixed_list">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda__mixed_list">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__lambda__mixed_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test a mixed list of lambdas and non-lambdas as a section value.</span>
+
+<span class="sd">        This test case is equivalent to a test submitted to the Mustache spec here:</span>
+
+<span class="sd">          https://github.com/mustache/spec/pull/47 .</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;&lt;{{#lambdas}}foo{{/lambdas}}&gt;&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;lambdas&#39;</span><span class="p">:</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;~{{</span><span class="si">%s</span><span class="s2">}}~&quot;</span> <span class="o">%</span> <span class="n">text</span><span class="p">,</span> <span class="mi">1</span><span class="p">]}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;&lt;~bar~foo&gt;&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_section__lambda__not_on_context_stack">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda__not_on_context_stack">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__lambda__not_on_context_stack</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that section lambdas are not pushed onto the context stack.</span>
+
+<span class="sd">        Even though the sections spec says that section data values should be</span>
+<span class="sd">        pushed onto the context stack prior to rendering, this does not apply</span>
+<span class="sd">        to lambdas.  Lambdas obey their own special case.</span>
+
+<span class="sd">        This test case is equivalent to a test submitted to the Mustache spec here:</span>
+
+<span class="sd">          https://github.com/mustache/spec/pull/47 .</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;lambda&#39;</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;{{.}}&quot;</span><span class="p">)}</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#foo}}{{#lambda}}blah{{/lambda}}{{/foo}}&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_section__lambda__no_reinterpolation">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_section__lambda__no_reinterpolation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_section__lambda__no_reinterpolation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that section lambda return values are not re-interpolated.</span>
+
+<span class="sd">        This test is a sanity check that the rendered lambda return value</span>
+<span class="sd">        is not re-interpolated as could be construed by reading the</span>
+<span class="sd">        section part of the Mustache spec.</span>
+
+<span class="sd">        This test case is equivalent to a test submitted to the Mustache spec here:</span>
+
+<span class="sd">          https://github.com/mustache/spec/pull/47 .</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#planet}}{{#lambda}}dot{{/lambda}}{{/planet}}&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;planet&#39;</span><span class="p">:</span> <span class="s1">&#39;Earth&#39;</span><span class="p">,</span> <span class="s1">&#39;dot&#39;</span><span class="p">:</span> <span class="s1">&#39;~{{.}}~&#39;</span><span class="p">,</span> <span class="s1">&#39;lambda&#39;</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;#{{</span><span class="si">%s</span><span class="s2">}}#&quot;</span> <span class="o">%</span> <span class="n">text</span><span class="p">)}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;#~{{.}}~#&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_comment__multiline">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_comment__multiline">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_comment__multiline</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that multiline comments are permitted.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;foobar&#39;</span><span class="p">,</span> <span class="s1">&#39;foo{{! baz }}bar&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;foobar&#39;</span><span class="p">,</span> <span class="s1">&#39;foo{{! </span><span class="se">\n</span><span class="s1">baz }}bar&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_custom_delimiters__sections">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_custom_delimiters__sections">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_custom_delimiters__sections</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that custom delimiters can be used to start a section.</span>
+
+<span class="sd">        Test case for issue #20: https://github.com/defunkt/pystache/issues/20</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{=[[ ]]=}}[[#foo]]bar[[/foo]]&#39;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_custom_delimiters__not_retroactive">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_custom_delimiters__not_retroactive">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_custom_delimiters__not_retroactive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that changing custom delimiters back is not &quot;retroactive.&quot;</span>
+
+<span class="sd">        Test case for issue #35: https://github.com/defunkt/pystache/issues/35</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="s1">&#39; {{foo}} &#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="s1">&#39;{{=$ $=}} {{foo}} &#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="s1">&#39;{{=$ $=}} {{foo}} $={{ }}=$&#39;</span><span class="p">)</span>  <span class="c1"># was yielding u&#39;  &#39;.</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_dot_notation">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_dot_notation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_dot_notation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test simple dot notation cases.</span>
+
+<span class="sd">        Check that we can use dot notation when the variable is a dict,</span>
+<span class="sd">        user-defined object, or combination of both.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;Hello, {{person.name}}. I see you are {{person.details.age}}.&#39;</span>
+        <span class="n">person</span> <span class="o">=</span> <span class="n">Attachable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Biggles&#39;</span><span class="p">,</span> <span class="n">details</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">})</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;person&#39;</span><span class="p">:</span> <span class="n">person</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;Hello, Biggles. I see you are 42.&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_dot_notation__multiple_levels">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_dot_notation__multiple_levels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_dot_notation__multiple_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test dot notation with multiple levels.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Hello, Mr. {{person.name.lastname}}.</span>
+<span class="s2">        I see you&#39;re back from {{person.travels.last.country.city}}.&quot;&quot;&quot;</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Hello, Mr. Pither.</span>
+<span class="s2">        I see you&#39;re back from Cornwall.&quot;&quot;&quot;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;person&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;firstname&#39;</span><span class="p">:</span> <span class="s1">&#39;unknown&#39;</span><span class="p">,</span> <span class="s1">&#39;lastname&#39;</span><span class="p">:</span> <span class="s1">&#39;Pither&#39;</span><span class="p">},</span>
+                            <span class="s1">&#39;travels&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;last&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;country&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;city&#39;</span><span class="p">:</span> <span class="s1">&#39;Cornwall&#39;</span><span class="p">}}},</span>
+                            <span class="s1">&#39;details&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;public&#39;</span><span class="p">:</span> <span class="s1">&#39;likes cycling&#39;</span><span class="p">}}}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+        <span class="c1"># It should also work with user-defined objects</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;person&#39;</span><span class="p">:</span> <span class="n">Attachable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;firstname&#39;</span><span class="p">:</span> <span class="s1">&#39;unknown&#39;</span><span class="p">,</span> <span class="s1">&#39;lastname&#39;</span><span class="p">:</span> <span class="s1">&#39;Pither&#39;</span><span class="p">},</span>
+                                        <span class="n">travels</span><span class="o">=</span><span class="n">Attachable</span><span class="p">(</span><span class="n">last</span><span class="o">=</span><span class="n">Attachable</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="n">Attachable</span><span class="p">(</span><span class="n">city</span><span class="o">=</span><span class="s1">&#39;Cornwall&#39;</span><span class="p">))),</span>
+                                        <span class="n">details</span><span class="o">=</span><span class="n">Attachable</span><span class="p">())}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RenderTests.test_dot_notation__missing_part_terminates_search">
+<a class="viewcode-back" href="../../../api/pystache.tests.test_renderengine.html#pystache.tests.test_renderengine.RenderTests.test_dot_notation__missing_part_terminates_search">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_dot_notation__missing_part_terminates_search</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test that dotted name resolution terminates on a later part not found.</span>
+
+<span class="sd">        Check that if a later dotted name part is not found in the result from</span>
+<span class="sd">        the former resolution, then name resolution terminates rather than</span>
+<span class="sd">        starting the search over with the next element of the context stack.</span>
+<span class="sd">        From the spec (interpolation section)--</span>
+
+<span class="sd">          5) If any name parts were retained in step 1, each should be resolved</span>
+<span class="sd">          against a context stack containing only the result from the former</span>
+<span class="sd">          resolution.  If any part fails resolution, the result should be considered</span>
+<span class="sd">          falsey, and should interpolate as the empty string.</span>
+
+<span class="sd">        This test case is equivalent to the test case in the following pull</span>
+<span class="sd">        request:</span>
+
+<span class="sd">          https://github.com/mustache/spec/pull/48</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="s1">&#39;A.B&#39;</span><span class="p">},</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="s1">&#39;A&#39;</span><span class="p">}</span> <span class="p">}</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{a.b}}&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;A.B&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#c}}{{a}}{{/c}}&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;{{#c}}{{a.b}}{{/c}}&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertException</span><span class="p">(</span><span class="n">KeyNotFoundError</span><span class="p">,</span> <span class="s2">&quot;Key </span><span class="si">%(unicode)s</span><span class="s2">&#39;a.b&#39; not found: missing </span><span class="si">%(unicode)s</span><span class="s2">&#39;b&#39;&quot;</span> <span class="o">%</span>
+                             <span class="p">{</span><span class="s1">&#39;unicode&#39;</span><span class="p">:</span> <span class="n">_UNICODE_CHAR</span><span class="p">},</span>
+                             <span class="bp">self</span><span class="o">.</span><span class="n">_assert_render</span><span class="p">,</span> <span class="s1">&#39;A.B :: (A :: )&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, PennyDreadfulMTG.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

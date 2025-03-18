@@ -1,0 +1,38 @@
+pystache package
+================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pystache.commands
+   pystache.tests
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pystache.common
+   pystache.context
+   pystache.defaults
+   pystache.init
+   pystache.loader
+   pystache.locator
+   pystache.parsed
+   pystache.parser
+   pystache.renderengine
+   pystache.renderer
+   pystache.specloader
+   pystache.template_spec
+
+Module contents
+---------------
+
+.. automodule:: pystache
+   :members:
+   :undoc-members:
+   :show-inheritance:
